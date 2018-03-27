@@ -39,7 +39,7 @@ starts_with(const std::string & str, const std::string & prefix)
 }
 
 bool
-starts_with_any(const std::string & str, const std::vector<const std::string> & prefixes)
+starts_with_any(const std::string & str, const std::vector<std::string> & prefixes)
 {
   for (auto prefix : prefixes) {
     if (starts_with(str, prefix)) {
@@ -149,12 +149,25 @@ main(int argc, char const * argv[])
 
     // Append the PATH-like environment variables.
   for (auto pair : append_env_variables) {
+#if defined(_WIN32)
+	char * dup_env_value = nullptr;
+	size_t dup_env_value_len = 0;
+	errno_t ret = _dupenv_s(&dup_env_value, &dup_env_value_len, pair.first.c_str());
+	if (ret) {
+	  fprintf(stderr, "failed to get environment variable '%s'\n", pair.first.c_str());
+	  return 1;
+	}
+	const char * env_value = dup_env_value;
+#else
     const char * env_value = std::getenv(pair.first.c_str());
+#endif
     if (!env_value) {
       env_value = "";
     }
     std::string new_value = env_value;
 #if defined(_WIN32)
+    // also done with env_value, so free dup_env_value
+    free(dup_env_value);
     auto path_sep = ";";
 #else
     auto path_sep = ":";
@@ -194,7 +207,7 @@ main(int argc, char const * argv[])
   FILE * pipe = popen(command_str.c_str(), "r");
 
   if (pipe == nullptr) {
-    fprintf(stderr, "Failed to execute command '%s': %s\n", command_str.c_str(), strerror(errno));
+    fprintf(stderr, "Failed to execute command '%s'\n", command_str.c_str());
     return 1;
   }
 

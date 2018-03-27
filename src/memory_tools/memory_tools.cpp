@@ -107,7 +107,7 @@ void stop_memory_checking()
 #else
 // Default case: do nothing.
 
-#include "./memory_tools.hpp"
+#include "osrf_testing_tools_cpp/memory_tools/memory_tools.hpp"
 
 #include <stdio.h>
 
