@@ -17,6 +17,8 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   # endif()
 endif()
 
+add_executable(test_runner src/test_runner/main.cpp)
+
 add_library(osrf_testing_tools_cpp_memory_tools
   src/memory_tools/memory_tools.cpp
 )
@@ -67,6 +69,13 @@ if(BUILD_TESTING)
     COMMAND ${CMAKE_COMMAND} -P "test/cmake/test_osrf_testing_tools_cpp_filter_versions.cmake"
   )
 
+  # Test test_runner
+  add_executable(test_parse_environment_variable
+    test/test_runner/test_parse_environment_variable.cpp)
+  target_link_libraries(test_parse_environment_variable gtest_main)
+  add_test(
+    NAME "test_parse_environment_variable"
+    COMMAND "$<TARGET_FILE:test_parse_environment_variable>")
 
   # Create tests for the memory tools library.
   add_executable(test_memory_tools test/osrf_testing_tools_cpp/memory_tools/test_memory_tools.cpp)
