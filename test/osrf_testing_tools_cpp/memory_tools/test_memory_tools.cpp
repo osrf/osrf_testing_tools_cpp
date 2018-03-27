@@ -14,7 +14,7 @@
 
 #include <gtest/gtest.h>
 
-#include "./memory_tools.hpp"
+#include "osrf_testing_tools_cpp/memory_tools/memory_tools.hpp"
 
 /* Tests the allocation checking tools.
  */
