@@ -57,7 +57,30 @@ target_compile_definitions(osrf_testing_tools_cpp_memory_tools
 list(APPEND extra_test_libraries osrf_testing_tools_cpp_memory_tools)
 
 if(BUILD_TESTING)
+  include(CTest)
+  include(cmake/osrf_testing_tools_cpp_require_googletest.cmake)
+  osrf_testing_tools_cpp_require_googletest(VERSION_GTE 1.7)
 
+  # Test logic for version filtering when selecting googletest version.
+  add_test(
+    NAME "test_osrf_testing_tools_cpp_filter_versions_cmake"
+    COMMAND ${CMAKE_COMMAND} -P "test/cmake/test_osrf_testing_tools_cpp_filter_versions.cmake"
+  )
+
+
+  # Create tests for the memory tools library.
+  add_executable(test_memory_tools test/osrf_testing_tools_cpp/memory_tools/test_memory_tools.cpp)
+  target_link_libraries(test_memory_tools ${extra_test_libraries} gtest_main)
+
+  set(test_memory_tools_cmd "$<TARGET_FILE:test_memory_tools>")
+  if(WIN32)  # (memory tools isn't implemented on Windows)
+    list(APPEND test_memory_tools_cmd "--skip-test")
+  endif()
+
+  add_test(
+    NAME "test_memory_tools"
+    COMMAND ${test_memory_tools_cmd}
+  )
 endif()
 
 # ament_add_gtest(test_memory_tools test_memory_tools.cpp
