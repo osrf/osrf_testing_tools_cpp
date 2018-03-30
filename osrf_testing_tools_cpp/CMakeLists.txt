@@ -21,14 +21,7 @@ if(BUILD_TESTING)
   add_subdirectory(test)
 endif()
 
-# ament_add_gtest(test_memory_tools test_memory_tools.cpp
-#   ENV ${extra_test_env}
-#   ${SKIP_TEST}
-# )
-# if(TARGET test_memory_tools)
-#   target_link_libraries(test_memory_tools ${extra_test_libraries})
-# endif()
-
-# set(extra_test_libraries ${extra_test_libraries} PARENT_SCOPE)
-# set(extra_test_env ${extra_test_env} PARENT_SCOPE)
-# set(extra_lib_dirs ${extra_lib_dirs} PARENT_SCOPE)
+install(
+  DIRECTORY include/
+  DESTINATION include
+)
