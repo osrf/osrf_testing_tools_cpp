@@ -9,87 +9,16 @@ endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic -Werror)
-  # # TODO(wjwwood): try to remove this -- currently needed to pass on CI
-  # include(CheckCXXCompilerFlag)
-  # check_cxx_compiler_flag(-Wno-gnu-zero-variadic-macro-arguments HAS_W_FLAG)
-  # if(HAS_W_FLAG)
-  #   add_compile_options(-Wno-gnu-zero-variadic-macro-arguments)
-  # endif()
 endif()
 
-add_executable(test_runner src/test_runner/main.cpp)
-
-add_library(osrf_testing_tools_cpp_memory_tools
-  src/memory_tools/memory_tools.cpp
-)
-target_include_directories(osrf_testing_tools_cpp_memory_tools
-  PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-)
-if(NOT WIN32)
-  # otherwise the compiler will error since the allocator functions have
-  # different exception specifiers
-  set_target_properties(osrf_testing_tools_cpp_memory_tools
-    PROPERTIES COMPILE_FLAGS "-Wno-pedantic")
-endif()
-if(APPLE)
-  # Create an OS X specific version of the memory tools that does interposing.
-  # See: http://toves.freeshell.org/interpose/
-  add_library(osrf_testing_tools_cpp_memory_tools_interpose
-    src/memory_tools/memory_tools_osx_interpose.cpp
-  )
-  target_include_directories(osrf_testing_tools_cpp_memory_tools_interpose
-    PUBLIC
-      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-      $<INSTALL_INTERFACE:include>
-  )
-  list(APPEND extra_test_libraries osrf_testing_tools_cpp_memory_tools_interpose)
-  list(APPEND extra_test_env
-    DYLD_INSERT_LIBRARIES=$<TARGET_FILE:osrf_testing_tools_cpp_memory_tools_interpose>)
-elseif(UNIX)
-  # On Linux like systems, add dl and use the normal library and DL_PRELOAD.
-  list(APPEND extra_test_libraries dl)
-  list(APPEND extra_test_env DL_PRELOAD=$<TARGET_FILE:osrf_testing_tools_cpp_memory_tools>)
-endif()
-list(APPEND extra_lib_dirs $<TARGET_FILE_DIR:osrf_testing_tools_cpp_memory_tools>)
-target_link_libraries(osrf_testing_tools_cpp_memory_tools ${extra_test_libraries})
-target_compile_definitions(osrf_testing_tools_cpp_memory_tools
-  PRIVATE "RCUTILS_MEMORY_TOOLS_BUILDING_DLL")
-list(APPEND extra_test_libraries osrf_testing_tools_cpp_memory_tools)
+add_subdirectory(src)
 
 if(BUILD_TESTING)
   include(CTest)
   include(cmake/osrf_testing_tools_cpp_require_googletest.cmake)
-  osrf_testing_tools_cpp_require_googletest(VERSION_GTE 1.7)
+  osrf_testing_tools_cpp_require_googletest(VERSION_GTE 1.7)  # ensures target gtest_main exists
 
-  # Test logic for version filtering when selecting googletest version.
-  add_test(
-    NAME "test_osrf_testing_tools_cpp_filter_versions_cmake"
-    COMMAND ${CMAKE_COMMAND} -P "test/cmake/test_osrf_testing_tools_cpp_filter_versions.cmake"
-  )
-
-  # Test test_runner
-  add_executable(test_parse_environment_variable
-    test/test_runner/test_parse_environment_variable.cpp)
-  target_link_libraries(test_parse_environment_variable gtest_main)
-  add_test(
-    NAME "test_parse_environment_variable"
-    COMMAND "$<TARGET_FILE:test_parse_environment_variable>")
-
-  # Create tests for the memory tools library.
-  add_executable(test_memory_tools test/osrf_testing_tools_cpp/memory_tools/test_memory_tools.cpp)
-  target_link_libraries(test_memory_tools ${extra_test_libraries} gtest_main)
-
-  set(test_memory_tools_cmd "$<TARGET_FILE:test_memory_tools>")
-  if(WIN32)  # (memory tools isn't implemented on Windows)
-    list(APPEND test_memory_tools_cmd "--skip-test")
-  endif()
-
-  add_test(
-    NAME "test_memory_tools"
-    COMMAND ${test_memory_tools_cmd}
-  )
+  add_subdirectory(test)
 endif()
 
 # ament_add_gtest(test_memory_tools test_memory_tools.cpp

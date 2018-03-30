@@ -16,7 +16,8 @@
 
 #include "osrf_testing_tools_cpp/memory_tools/memory_tools.hpp"
 
-/* Tests the allocation checking tools.
+/**
+ * Tests the dynamic memory checking tools.
  */
 TEST(TestMemoryTools, test_allocation_checking_tools) {
   size_t unexpected_mallocs = 0;

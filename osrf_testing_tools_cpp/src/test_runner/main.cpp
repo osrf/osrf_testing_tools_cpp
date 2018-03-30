@@ -20,6 +20,9 @@
 #include <string>
 #include <vector>
 
+#include "./execute_process.hpp"
+#include "./get_environment_variable.hpp"
+#include "./starts_with.hpp"
 #include "./parse_environment_variable.hpp"
 
 void
@@ -30,23 +33,6 @@ usage(const std::string & program_name)
     "[--env ENV=VALUE [ENV2=VALUE [...]]] "
     "[--append-env ENV=VALUE [ENV2=VALUE [...]]] "
     "-- <command>\n", program_name.c_str());
-}
-
-bool
-starts_with(const std::string & str, const std::string & prefix)
-{
-  return !str.compare(0, prefix.size(), prefix);
-}
-
-bool
-starts_with_any(const std::string & str, const std::vector<std::string> & prefixes)
-{
-  for (auto prefix : prefixes) {
-    if (starts_with(str, prefix)) {
-      return true;
-    }
-  }
-  return false;
 }
 
 int
@@ -63,7 +49,7 @@ main(int argc, char const * argv[])
 
   bool should_show_usage_and_exit = (args.size() <= 1);
   for (auto arg : args) {
-    should_show_usage_and_exit |= starts_with_any(arg, {"-h", "--help"});
+    should_show_usage_and_exit |= test_runner::starts_with_any(arg, {"-h", "--help"});
   }
   if (should_show_usage_and_exit) {
     usage(argv[0]);
@@ -87,11 +73,11 @@ main(int argc, char const * argv[])
     }
 
     // determine if the mode needs to change
-    if (starts_with(arg, "--env")) {
+    if (test_runner::starts_with(arg, "--env")) {
       mode = "env";
       continue;
     }
-    if (starts_with(arg, "--append-env")) {
+    if (test_runner::starts_with(arg, "--append-env")) {
       mode = "append_env";
       continue;
     }
@@ -147,27 +133,16 @@ main(int argc, char const * argv[])
     }
   }
 
-    // Append the PATH-like environment variables.
+  // Append the PATH-like environment variables.
   for (auto pair : append_env_variables) {
-#if defined(_WIN32)
-	char * dup_env_value = nullptr;
-	size_t dup_env_value_len = 0;
-	errno_t ret = _dupenv_s(&dup_env_value, &dup_env_value_len, pair.first.c_str());
-	if (ret) {
-	  fprintf(stderr, "failed to get environment variable '%s'\n", pair.first.c_str());
-	  return 1;
-	}
-	const char * env_value = dup_env_value;
-#else
-    const char * env_value = std::getenv(pair.first.c_str());
-#endif
-    if (!env_value) {
-      env_value = "";
+    std::string new_value;
+    try {
+      new_value = test_runner::get_environment_variable(pair.first.c_str());
+    } catch (const std::runtime_error &) {
+      fprintf(stderr, "failed to get environment variable '%s'\n", pair.first.c_str());
+      return 1;
     }
-    std::string new_value = env_value;
 #if defined(_WIN32)
-    // also done with env_value, so free dup_env_value
-    free(dup_env_value);
     auto path_sep = ";";
 #else
     auto path_sep = ":";
@@ -189,38 +164,5 @@ main(int argc, char const * argv[])
   }
 
   // Run the command.
-  std::string command_str = "";
-  for (auto command : commands) {
-    command_str += command + " ";
-  }
-  if (!command_str.empty()) {
-    command_str = command_str.substr(0, command_str.size() - 1);
-  }
-  int subprocess_return_code = 0;
-
-#if defined(_WIN32)
-  #define popen _popen
-  #define pclose _pclose
-#endif
-
-  char buffer[256];
-  FILE * pipe = popen(command_str.c_str(), "r");
-
-  if (pipe == nullptr) {
-    fprintf(stderr, "Failed to execute command '%s'\n", command_str.c_str());
-    return 1;
-  }
-
-  while (fgets(buffer, sizeof(buffer), pipe)) {
-    printf("%s", buffer);
-  }
-
-  if (feof(pipe)) {
-    subprocess_return_code = pclose(pipe);
-  } else {
-    fprintf(stderr, "failed to read pipe until the end\n");
-    return 1;
-  }
-
-  return subprocess_return_code;
+  return test_runner::execute_process(commands);
 }

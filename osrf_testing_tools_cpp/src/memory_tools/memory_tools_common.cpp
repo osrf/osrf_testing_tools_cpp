@@ -25,7 +25,7 @@
 #endif  // defined(__APPLE__)
 
 #include "osrf_testing_tools_cpp/memory_tools/memory_tools.hpp"
-#include "osrf_testing_tools_cpp//scope_exit.hpp"
+#include "osrf_testing_tools_cpp/scope_exit.hpp"
 
 static std::atomic<bool> enabled(false);
 
