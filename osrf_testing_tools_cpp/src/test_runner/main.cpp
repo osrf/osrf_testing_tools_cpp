@@ -95,7 +95,7 @@ main(int argc, char const * argv[])
       try {
         auto env_pair = test_runner::parse_environment_variable(arg);
         env_variables[env_pair.first] = env_pair.second;
-      } catch(const std::invalid_argument & exc) {
+      } catch (const std::invalid_argument & exc) {
         fprintf(
           stderr,
           "invalid environment variable, expected ENV=VALUE, %s: %s\n",
@@ -106,7 +106,7 @@ main(int argc, char const * argv[])
       try {
         auto env_pair = test_runner::parse_environment_variable(arg);
         append_env_variables[env_pair.first] = env_pair.second;
-      } catch(const std::invalid_argument & exc) {
+      } catch (const std::invalid_argument & exc) {
         fprintf(
           stderr,
           "invalid environment variable, expected ENV=VALUE, %s: %s\n",

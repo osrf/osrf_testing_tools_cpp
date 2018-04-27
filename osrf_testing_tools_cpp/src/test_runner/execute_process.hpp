@@ -16,6 +16,7 @@
 #define TEST_RUNNER__EXECUTE_PROCESS_HPP_
 
 #include <cerrno>
+#include <cstring>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -28,9 +29,11 @@
 #include <unistd.h>
 #endif
 
-namespace test_runner {
+namespace test_runner
+{
 
-namespace impl {
+namespace impl
+{
 
 #if defined(WIN32)
 int execute_process_win32(const std::vector<std::string> & commands);
@@ -67,21 +70,21 @@ int impl::execute_process_win32(const std::vector<std::string> & commands)
   }
   LPSTR lpstr_command = _strdup(command_str.c_str());
 
-  STARTUPINFO info={sizeof(info)};
+  STARTUPINFO info = {sizeof(info)};
   PROCESS_INFORMATION processInfo;
   if (CreateProcess(
-    NULL, lpstr_command,
-    NULL, NULL, TRUE, 0, NULL, NULL,
-    &info, &processInfo))
+      NULL, lpstr_command,
+      NULL, NULL, TRUE, 0, NULL, NULL,
+      &info, &processInfo))
   {
-      WaitForSingleObject(processInfo.hProcess, INFINITE);
+    WaitForSingleObject(processInfo.hProcess, INFINITE);
 
-      DWORD dw_exit_code;
-      GetExitCodeProcess(processInfo.hProcess, &dw_exit_code);
-      exit_code = dw_exit_code;
+    DWORD dw_exit_code;
+    GetExitCodeProcess(processInfo.hProcess, &dw_exit_code);
+    exit_code = dw_exit_code;
 
-      CloseHandle(processInfo.hProcess);
-      CloseHandle(processInfo.hThread);
+    CloseHandle(processInfo.hProcess);
+    CloseHandle(processInfo.hThread);
   }
 
   free(lpstr_command);
@@ -119,7 +122,7 @@ int impl::execute_process_unix(const std::vector<std::string> & commands)
       fprintf(stderr, "failed to call execvp(): %s\n", strerror(errno));
     }
     _exit(127);
-  } else  {
+  } else {
     // parent
     int status;
     if (waitpid(pid, &status, 0) == -1) {

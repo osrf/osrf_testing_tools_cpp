@@ -18,7 +18,8 @@
 #include <stdexcept>
 #include <string>
 
-namespace test_runner {
+namespace test_runner
+{
 
 /// Return value for environment variable, or "" if not set.
 std::string
@@ -36,15 +37,15 @@ get_environment_variable(const std::string & env_var_name)
 #else
   env_value = std::getenv(env_var_name.c_str());
 #endif
-    if (!env_value) {
-      env_value = "";
-    }
-    std::string return_value = env_value;
+  if (!env_value) {
+    env_value = "";
+  }
+  std::string return_value = env_value;
 #if defined(_WIN32)
-    // also done with env_value, so free dup_env_value
-    free(dup_env_value);
+  // also done with env_value, so free dup_env_value
+  free(dup_env_value);
 #endif
-    return return_value;
+  return return_value;
 }
 
 }  // namespace test_runner

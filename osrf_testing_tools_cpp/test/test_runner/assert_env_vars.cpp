@@ -21,7 +21,7 @@
 #include <string>
 #include <vector>
 
-#include <gtest/gtest.h>
+#include <gtest/gtest.h>  // NOLINT(build/include_order)
 
 #include "../../src/test_runner/get_environment_variable.hpp"
 #include "../../src/test_runner/parse_environment_variable.hpp"
@@ -37,7 +37,6 @@ std::vector<std::string> g_args;
 
 TEST(TestTestRunner, environment_variables_set_correctly)
 {
-
   bool should_show_usage_and_exit = (g_args.size() <= 1);
   for (auto arg : g_args) {
     should_show_usage_and_exit |= test_runner::starts_with_any(arg, {"-h", "--help"});

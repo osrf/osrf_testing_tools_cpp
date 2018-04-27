@@ -1,4 +1,4 @@
-// Copyright 2015 Open Source Robotics Foundation, Inc.
+// Copyright 2018 Open Source Robotics Foundation, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,24 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "osrf_testing_tools_cpp/memory_tools/memory_tools.hpp"
-#include "osrf_testing_tools_cpp/scope_exit.hpp"
+#ifndef MEMORY_TOOLS__SAFE_FWRITE_HPP_
+#define MEMORY_TOOLS__SAFE_FWRITE_HPP_
 
-#if defined(__linux__)
-
-#include "./impl/linux.cpp"
-
-#elif defined(__APPLE__)
-
-#include "./impl/apple.cpp"
-
-// #elif defined(_WIN32)
-
-// TODO(wjwwood): install custom malloc (and others) for Windows.
-
+#if defined(_WIN32)
+// Limit the buffer size in the `fwrite` call to give an upper bound to buffer overrun in the case
+// of non-null terminated `msg`.
+#define SAFE_FWRITE(out, msg) fwrite(msg, sizeof(char), strnlen_s(msg, 4096), out)
 #else
-// Default case: do nothing.
+#define SAFE_FWRITE(out, msg) fwrite(msg, sizeof(char), strlen(msg), out)
+#endif
 
-#include "./impl/unsupported_os.cpp"
-
-#endif  // if defined(__linux__) elif defined(__APPLE__) elif defined(_WIN32) else ...
+#endif  // MEMORY_TOOLS__SAFE_FWRITE_HPP_

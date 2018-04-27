@@ -1,44 +1,49 @@
-add_library(osrf_testing_tools_cpp_memory_tools SHARED memory_tools.cpp)
-target_include_directories(osrf_testing_tools_cpp_memory_tools
+add_library(memory_tools SHARED
+  custom_memory_functions.cpp
+  implementation_monitoring_override.cpp
+  initialize.cpp
+  memory_tools.cpp
+  memory_tools_service.cpp
+  monitoring.cpp
+  register_hooks.cpp
+  testing_helpers.cpp
+)
+target_include_directories(memory_tools
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
 
-set(libraries_to_install osrf_testing_tools_cpp_memory_tools)
-
-if(NOT WIN32)
-  # otherwise the compiler will error since the allocator functions have
-  # different exception specifiers
-  set_target_properties(osrf_testing_tools_cpp_memory_tools
-    PROPERTIES COMPILE_FLAGS "-Wno-pedantic")
-endif()
+set(libraries_to_install memory_tools)
 
 if(APPLE)
-  # Create an OS X specific version of the memory tools that does interposing.
-  # See: http://toves.freeshell.org/interpose/
-  add_library(osrf_testing_tools_cpp_memory_tools_interpose SHARED memory_tools_osx_interpose.cpp)
-  target_include_directories(osrf_testing_tools_cpp_memory_tools_interpose
-    PUBLIC
-      $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-      $<INSTALL_INTERFACE:include>
-  )
+  # # Create a macOS specific version of the memory tools that does interposing.
+  # # See: http://toves.freeshell.org/interpose/
+  # add_library(memory_tools_interpose_macos SHARED memory_tools_osx_interpose.cpp)
+  # target_include_directories(memory_tools_interpose_macos
+  #   PUBLIC
+  #     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+  #     $<INSTALL_INTERFACE:include>
+  # )
+  # target_link_libraries(memory_tools_interpose_macos
+  #   memory_tools
+  # )
 
-  list(APPEND libraries_to_install osrf_testing_tools_cpp_memory_tools_interpose)
-  list(APPEND extra_test_libraries osrf_testing_tools_cpp_memory_tools_interpose)
-  list(APPEND extra_test_env
-    DYLD_INSERT_LIBRARIES=$<TARGET_FILE:osrf_testing_tools_cpp_memory_tools_interpose>)
+  # list(APPEND libraries_to_install memory_tools_interpose_macos)
+  # list(APPEND extra_test_env
+  #   DYLD_INSERT_LIBRARIES=$<TARGET_FILE:memory_tools_interpose_macos>)
+  list(APPEND extra_test_env DYLD_INSERT_LIBRARIES=$<TARGET_FILE:memory_tools>)
 elseif(UNIX)
-  # On Linux like systems, add dl and use the normal library and DL_PRELOAD.
+  # On Linux like systems, add dl and use the normal library and LD_PRELOAD.
   list(APPEND extra_test_libraries dl)
-  list(APPEND extra_test_env DL_PRELOAD=$<TARGET_FILE:osrf_testing_tools_cpp_memory_tools>)
+  list(APPEND extra_test_env LD_PRELOAD=$<TARGET_FILE:memory_tools>)
 endif()
 
-list(APPEND extra_lib_dirs $<TARGET_FILE_DIR:osrf_testing_tools_cpp_memory_tools>)
-target_link_libraries(osrf_testing_tools_cpp_memory_tools ${extra_test_libraries})
-target_compile_definitions(osrf_testing_tools_cpp_memory_tools
-  PRIVATE "OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_BUILDING_DLL")
-list(APPEND extra_test_libraries osrf_testing_tools_cpp_memory_tools)
+list(APPEND extra_lib_dirs $<TARGET_FILE_DIR:memory_tools>)
+target_link_libraries(memory_tools ${extra_test_libraries})
+target_compile_definitions(memory_tools
+  PRIVATE "TOOLS_CPP_MEMORY_TOOLS_BUILDING_DLL")
+list(APPEND extra_test_libraries memory_tools)
 
 install(
   TARGETS ${libraries_to_install}

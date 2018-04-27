@@ -1,4 +1,4 @@
-// Copyright 2015 Open Source Robotics Foundation, Inc.
+// Copyright 2018 Open Source Robotics Foundation, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,24 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "osrf_testing_tools_cpp/memory_tools/memory_tools.hpp"
-#include "osrf_testing_tools_cpp/scope_exit.hpp"
+#ifndef OSRF_TESTING_TOOLS_CPP__VARIANT_HELPER_HPP_
+#define OSRF_TESTING_TOOLS_CPP__VARIANT_HELPER_HPP_
 
-#if defined(__linux__)
+// This is a header-only version of std::variant (part of C++17) for C++14.
+// In the future this could be replaced with #include <variant>.
+#include "./vendor/mpark/variant/variant.hpp"
 
-#include "./impl/linux.cpp"
+namespace std
+{
 
-#elif defined(__APPLE__)
+using namespace mpark;  // NOLINT(build/namespaces)
 
-#include "./impl/apple.cpp"
+}  // namespace std
 
-// #elif defined(_WIN32)
-
-// TODO(wjwwood): install custom malloc (and others) for Windows.
-
-#else
-// Default case: do nothing.
-
-#include "./impl/unsupported_os.cpp"
-
-#endif  // if defined(__linux__) elif defined(__APPLE__) elif defined(_WIN32) else ...
+#endif  // OSRF_TESTING_TOOLS_CPP__VARIANT_HELPER_HPP_

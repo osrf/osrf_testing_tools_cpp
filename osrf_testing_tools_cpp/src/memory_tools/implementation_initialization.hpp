@@ -1,4 +1,4 @@
-// Copyright 2015 Open Source Robotics Foundation, Inc.
+// Copyright 2018 Open Source Robotics Foundation, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,24 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "osrf_testing_tools_cpp/memory_tools/memory_tools.hpp"
-#include "osrf_testing_tools_cpp/scope_exit.hpp"
+#ifndef MEMORY_TOOLS__IMPLEMENTATION_INITIALIZATION_HPP_
+#define MEMORY_TOOLS__IMPLEMENTATION_INITIALIZATION_HPP_
 
-#if defined(__linux__)
+namespace osrf_testing_tools_cpp
+{
+namespace memory_tools
+{
 
-#include "./impl/linux.cpp"
+/// Return true if initialized and hooks are working, otherwise false.
+bool
+implementation_specific_initialize();
 
-#elif defined(__APPLE__)
+void
+implementation_specific_uninitialize();
 
-#include "./impl/apple.cpp"
+}  // namespace memory_tools
+}  // namespace osrf_testing_tools_cpp
 
-// #elif defined(_WIN32)
-
-// TODO(wjwwood): install custom malloc (and others) for Windows.
-
-#else
-// Default case: do nothing.
-
-#include "./impl/unsupported_os.cpp"
-
-#endif  // if defined(__linux__) elif defined(__APPLE__) elif defined(_WIN32) else ...
+#endif  // MEMORY_TOOLS__IMPLEMENTATION_INITIALIZATION_HPP_

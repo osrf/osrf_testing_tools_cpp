@@ -19,7 +19,8 @@
 #include <string>
 #include <vector>
 
-namespace test_runner {
+namespace test_runner
+{
 
 /// Return true if a string starts with a prefix.
 bool

@@ -18,8 +18,10 @@
 #include <map>
 #include <stdexcept>
 #include <string>
+#include <utility>
 
-namespace test_runner {
+namespace test_runner
+{
 
 std::pair<std::string, std::string>
 parse_environment_variable(const std::string & argument)

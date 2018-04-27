@@ -1,7 +1,7 @@
 # Create tests for the memory tools library.
 add_executable(test_memory_tools test_memory_tools.cpp)
 target_link_libraries(test_memory_tools
-  osrf_testing_tools_cpp_memory_tools
+  memory_tools
   ${extra_test_libraries}
   gtest_main
 )

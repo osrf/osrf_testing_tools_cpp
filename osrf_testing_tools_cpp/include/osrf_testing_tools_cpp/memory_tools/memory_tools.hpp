@@ -19,59 +19,11 @@
 #ifndef OSRF_TESTING_TOOLS_CPP__MEMORY_TOOLS__MEMORY_TOOLS_HPP_
 #define OSRF_TESTING_TOOLS_CPP__MEMORY_TOOLS__MEMORY_TOOLS_HPP_
 
-#include <cstddef>
-#include <functional>
-
+#include "./initialize.hpp"
+#include "./memory_tools_service.hpp"
+#include "./monitoring.hpp"
+#include "./register_hooks.hpp"
+#include "./testing_helpers.hpp"
 #include "./visibility_control.hpp"
-
-typedef std::function<void ()> UnexpectedCallbackType;
-
-OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
-void
-start_memory_checking();
-
-#define ASSERT_NO_MALLOC(statements) \
-  assert_no_malloc_begin(); statements; assert_no_malloc_end();
-OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
-void
-assert_no_malloc_begin();
-OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
-void
-assert_no_malloc_end();
-OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
-void
-set_on_unexpected_malloc_callback(UnexpectedCallbackType callback);
-
-#define ASSERT_NO_REALLOC(statements) \
-  assert_no_realloc_begin(); statements; assert_no_realloc_end();
-OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
-void
-assert_no_realloc_begin();
-OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
-void
-assert_no_realloc_end();
-OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
-void
-set_on_unexpected_realloc_callback(UnexpectedCallbackType callback);
-
-#define ASSERT_NO_FREE(statements) \
-  assert_no_free_begin(); statements; assert_no_free_end();
-OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
-void
-assert_no_free_begin();
-OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
-void
-assert_no_free_end();
-OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
-void
-set_on_unexpected_free_callback(UnexpectedCallbackType callback);
-
-OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
-void
-stop_memory_checking();
-
-OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
-void
-memory_checking_thread_init();
 
 #endif  // OSRF_TESTING_TOOLS_CPP__MEMORY_TOOLS__MEMORY_TOOLS_HPP_

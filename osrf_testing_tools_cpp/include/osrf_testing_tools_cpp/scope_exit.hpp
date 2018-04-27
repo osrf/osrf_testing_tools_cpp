@@ -12,10 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef MEMORY_TOOLS__SCOPE_EXIT_HPP_
-#define MEMORY_TOOLS__SCOPE_EXIT_HPP_
+#ifndef OSRF_TESTING_TOOLS_CPP__SCOPE_EXIT_HPP_
+#define OSRF_TESTING_TOOLS_CPP__SCOPE_EXIT_HPP_
 
 #include <functional>
+
+namespace osrf_testing_tools_cpp
+{
 
 template<typename Callable>
 struct ScopeExit
@@ -35,6 +38,9 @@ make_scope_exit(Callable callable)
   return ScopeExit<Callable>(callable);
 }
 
-#define SCOPE_EXIT(code) make_scope_exit([&]() {code;})
+}  // namespace osrf_testing_tools_cpp
 
-#endif  // MEMORY_TOOLS__SCOPE_EXIT_HPP_
+#define OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT(code) \
+  osrf_testing_tools_cpp::make_scope_exit([&]() {code;})
+
+#endif  // OSRF_TESTING_TOOLS_CPP__SCOPE_EXIT_HPP_

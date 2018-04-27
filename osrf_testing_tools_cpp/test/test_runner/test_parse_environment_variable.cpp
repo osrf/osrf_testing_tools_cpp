@@ -15,7 +15,7 @@
 #include <stdexcept>
 #include <string>
 
-#include <gtest/gtest.h>
+#include <gtest/gtest.h>  // NOLINT(build/include_order)
 
 #include "../../src/test_runner/parse_environment_variable.hpp"
 

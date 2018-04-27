@@ -14,8 +14,10 @@
 
 #include <cstdlib>
 
-#include "./custom_memory_functions.hpp"
-#include "osrf_testing_tools_cpp/memory_tools/initialize.hpp"
+#include "../custom_memory_functions.hpp"
+#include "../implementation_initialization.hpp"
+
+#if defined(__APPLE__)
 
 // Pulled from:
 //  https://github.com/emeryberger/Heap-Layers/blob/
@@ -49,3 +51,23 @@ OSX_INTERPOSE(custom_malloc, malloc);
 OSX_INTERPOSE(custom_realloc, realloc);
 OSX_INTERPOSE(custom_calloc, calloc);
 OSX_INTERPOSE(custom_free, free);
+
+namespace osrf_testing_tools_cpp
+{
+namespace memory_tools
+{
+
+bool
+implementation_specific_initialize()
+{
+  return true;
+}
+
+void
+implementation_specific_uninitialize() {}
+
+
+}  // namespace memory_tools
+}  // namespace osrf_testing_tools_cpp
+
+#endif  // defined(__APPLE__)
