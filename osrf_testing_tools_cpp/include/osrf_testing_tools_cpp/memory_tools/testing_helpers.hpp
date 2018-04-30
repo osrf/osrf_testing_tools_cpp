@@ -36,7 +36,9 @@ on_unexpected_malloc(AnyMemoryToolsCallback callback);
 
 /// Call corresponding callback if the given statements call malloc.
 #define EXPECT_NO_MALLOC(statements) \
-  expect_no_malloc_begin(); statements; expect_no_malloc_end();
+  osrf_testing_tools_cpp::memory_tools::expect_no_malloc_begin(); \
+  statements; \
+  osrf_testing_tools_cpp::memory_tools::expect_no_malloc_end()
 
 /// Return true if malloc is expected.
 OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
@@ -66,7 +68,9 @@ on_unexpected_realloc(AnyMemoryToolsCallback callback);
 
 /// Call corresponding callback if the given statements call realloc.
 #define EXPECT_NO_REALLOC(statements) \
-  expect_no_realloc_begin(); statements; expect_no_realloc_end();
+  osrf_testing_tools_cpp::memory_tools::expect_no_realloc_begin(); \
+  statements; \
+  osrf_testing_tools_cpp::memory_tools::expect_no_realloc_end()
 
 /// Return true if realloc is expected.
 OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
@@ -96,7 +100,9 @@ on_unexpected_calloc(AnyMemoryToolsCallback callback);
 
 /// Call corresponding callback if the given statements call calloc.
 #define EXPECT_NO_CALLOC(statements) \
-  expect_no_calloc_begin(); statements; expect_no_calloc_end();
+  osrf_testing_tools_cpp::memory_tools::expect_no_calloc_begin(); \
+  statements; \
+  osrf_testing_tools_cpp::memory_tools::expect_no_calloc_end()
 
 /// Return true if calloc is expected.
 OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
@@ -126,7 +132,9 @@ on_unexpected_free(AnyMemoryToolsCallback callback);
 
 /// Call corresponding callback if the given statements call free.
 #define EXPECT_NO_FREE(statements) \
-  expect_no_free_begin(); statements; expect_no_free_end();
+  osrf_testing_tools_cpp::memory_tools::expect_no_free_begin(); \
+  statements; \
+  osrf_testing_tools_cpp::memory_tools::expect_no_free_end()
 
 /// Return true if free is expected.
 OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
@@ -145,9 +153,13 @@ expect_no_free_end();
 
 /// Call corresponding callback assert on any memory operation.
 #define EXPECT_NO_MEMORY_OPERATIONS(statements) \
-  expect_no_malloc_begin(); expect_no_realloc_begin(); expect_no_free_begin(); \
+  osrf_testing_tools_cpp::memory_tools::expect_no_malloc_begin(); \
+  osrf_testing_tools_cpp::memory_tools::expect_no_realloc_begin(); \
+  osrf_testing_tools_cpp::memory_tools::expect_no_free_begin(); \
   statements; \
-  expect_no_malloc_end(); expect_no_realloc_end(); expect_no_free_end();
+  osrf_testing_tools_cpp::memory_tools::expect_no_malloc_end(); \
+  osrf_testing_tools_cpp::memory_tools::expect_no_realloc_end(); \
+  osrf_testing_tools_cpp::memory_tools::expect_no_free_end()
 
 }  // namespace memory_tools
 }  // namespace osrf_testing_tools_cpp

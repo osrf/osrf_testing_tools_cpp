@@ -15,6 +15,9 @@
 #ifndef MEMORY_TOOLS__SAFE_FWRITE_HPP_
 #define MEMORY_TOOLS__SAFE_FWRITE_HPP_
 
+#include <cstdio>
+#include <cstring>
+
 #if defined(_WIN32)
 // Limit the buffer size in the `fwrite` call to give an upper bound to buffer overrun in the case
 // of non-null terminated `msg`.

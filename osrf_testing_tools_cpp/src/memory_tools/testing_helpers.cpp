@@ -32,9 +32,8 @@ on_unexpected_malloc(AnyMemoryToolsCallback callback)
   on_malloc(
     [callback](MemoryToolsService & service) {
       if (g_malloc_unexpected.load()) {
+        service.unignore();
         dispatch_callback(&callback, service);
-      } else {
-        service.ignore();
       }
     });
 }
@@ -63,9 +62,8 @@ on_unexpected_realloc(AnyMemoryToolsCallback callback)
   on_realloc(
     [callback](MemoryToolsService & service) {
       if (g_realloc_unexpected.load()) {
+        service.unignore();
         dispatch_callback(&callback, service);
-      } else {
-        service.ignore();
       }
     });
 }
@@ -94,9 +92,8 @@ on_unexpected_calloc(AnyMemoryToolsCallback callback)
   on_calloc(
     [callback](MemoryToolsService & service) {
       if (g_calloc_unexpected.load()) {
+        service.unignore();
         dispatch_callback(&callback, service);
-      } else {
-        service.ignore();
       }
     });
 }
@@ -125,9 +122,8 @@ on_unexpected_free(AnyMemoryToolsCallback callback)
   on_free(
     [callback](MemoryToolsService & service) {
       if (g_free_unexpected.load()) {
+        service.unignore();
         dispatch_callback(&callback, service);
-      } else {
-        service.ignore();
       }
     });
 }

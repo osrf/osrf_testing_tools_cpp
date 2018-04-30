@@ -15,6 +15,8 @@
 #include <gtest/gtest.h>
 #include <gtest/gtest-spi.h>
 
+#include <thread>
+
 #include "osrf_testing_tools_cpp/memory_tools/memory_tools.hpp"
 #include "osrf_testing_tools_cpp/scope_exit.hpp"
 
@@ -171,6 +173,7 @@ TEST(TestMemoryTools, test_example) {
   auto on_unexpected_malloc =
     [](osrf_testing_tools_cpp::memory_tools::MemoryToolsService & service) {
       ADD_FAILURE() << "unexpected malloc";
+      // this will cause a bracktrace to be printed for each unexpected malloc
       service.print_backtrace();
     };
   osrf_testing_tools_cpp::memory_tools::on_unexpected_malloc(on_unexpected_malloc);
@@ -188,8 +191,43 @@ TEST(TestMemoryTools, test_example) {
 
   // if you then tell memory tools that malloc is unexpected, then it will call
   // your above callback, at least until you indicate malloc is expected again
+  EXPECT_NONFATAL_FAILURE({
+    EXPECT_NO_MALLOC({
+      my_first_function();
+    });
+  }, "unexpected malloc");
+  // There are also explicit begin/end functions if you need variables to leave the scope
   osrf_testing_tools_cpp::memory_tools::expect_no_malloc_begin();
-  EXPECT_NONFATAL_FAILURE(my_first_function(), "unexpected malloc");
-  EXPECT_EQ(my_second_function(1, 2), 3);
+  int result = my_second_function(1, 2);
   osrf_testing_tools_cpp::memory_tools::expect_no_malloc_end();
+  EXPECT_EQ(result, 3);
+
+  // enable monitoring only works in the current thread, but you can enable it for all threads
+  osrf_testing_tools_cpp::memory_tools::enable_monitoring_in_all_threads();
+  std::thread t1([]() {
+    EXPECT_NONFATAL_FAILURE({
+      EXPECT_NO_MALLOC({
+        my_first_function();
+      });
+    }, "unexpected malloc");
+    osrf_testing_tools_cpp::memory_tools::expect_no_malloc_begin();
+    int result = my_second_function(1, 2);
+    osrf_testing_tools_cpp::memory_tools::expect_no_malloc_end();
+    EXPECT_EQ(result, 3);
+  });
+  t1.join();
+
+  // disabling monitoring in all threads should not catch the malloc in my_first_function()
+  osrf_testing_tools_cpp::memory_tools::disable_monitoring_in_all_threads();
+  osrf_testing_tools_cpp::memory_tools::enable_monitoring();
+  std::thread t2([]() {
+    EXPECT_NO_MALLOC({
+      my_first_function();
+    });
+    osrf_testing_tools_cpp::memory_tools::expect_no_malloc_begin();
+    int result = my_second_function(1, 2);
+    osrf_testing_tools_cpp::memory_tools::expect_no_malloc_end();
+    EXPECT_EQ(result, 3);
+  });
+  t2.join();
 }

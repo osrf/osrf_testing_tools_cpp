@@ -12,44 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef MEMORY_TOOLS__PRINT_BACKTRACE_HPP_
-#define MEMORY_TOOLS__PRINT_BACKTRACE_HPP_
+#ifndef OSRF_TESTING_TOOLS_CPP__MEMORY_TOOLS__VERBOSITY_HPP_
+#define OSRF_TESTING_TOOLS_CPP__MEMORY_TOOLS__VERBOSITY_HPP_
 
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# ifdef __clang__
-#  pragma clang diagnostic ignored "-Wgnu-include-next"
-#  pragma clang diagnostic ignored "-Wunused-parameter"
-# endif
-#else
-# pragma warning(push)
-// # pragma warning(disable : ####)
-#endif
-
-#include "./vendor/bombela/backward-cpp/backward.hpp"
-
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#else
-# pragma warning(pop)
-#endif
+#include "./visibility_control.hpp"
 
 namespace osrf_testing_tools_cpp
 {
 namespace memory_tools
 {
 
-template<int MaxStackDepth = 64>
-void
-print_backtrace(FILE * out = stderr)
-{
-  backward::StackTrace st;
-  st.load_here(MaxStackDepth);
-  backward::Printer p;
-  p.print(st, out);
-}
+enum class VerbosityLevel {
+  quiet,
+  debug,
+  trace,
+};
+
+OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
+VerbosityLevel
+get_verbosity_level();
+
+OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
+VerbosityLevel
+set_verbosity_level(VerbosityLevel verbosity_level);
 
 }  // namespace memory_tools
 }  // namespace osrf_testing_tools_cpp
 
-#endif  // MEMORY_TOOLS__PRINT_BACKTRACE_HPP_
+#endif  // OSRF_TESTING_TOOLS_CPP__MEMORY_TOOLS__VERBOSITY_HPP_

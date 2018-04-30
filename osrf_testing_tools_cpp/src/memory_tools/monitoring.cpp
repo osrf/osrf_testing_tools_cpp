@@ -14,6 +14,7 @@
 
 #include <atomic>
 
+#include "./implementation_monitoring_override.hpp"
 #include "osrf_testing_tools_cpp/memory_tools/initialize.hpp"
 #include "osrf_testing_tools_cpp/memory_tools/monitoring.hpp"
 #include "osrf_testing_tools_cpp/scope_exit.hpp"
@@ -30,7 +31,10 @@ static std::atomic<bool> g_enabled(false);
 bool
 monitoring_enabled()
 {
-  if (!::osrf_testing_tools_cpp::memory_tools::initialized()) {
+  if (
+    !::osrf_testing_tools_cpp::memory_tools::initialized() ||
+    ::osrf_testing_tools_cpp::memory_tools::inside_implementation())
+  {
     return false;
   }
   if (g_tls_thread_specific_enable_set) {

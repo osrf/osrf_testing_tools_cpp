@@ -31,6 +31,9 @@ bool
 implementation_specific_initialize()
 {
   // call this once to get any one-time initializatin out of the way
+  static_assert(
+    count_function_occurrences_in_backtrace_is_implemented::value,
+    "linux requires the ability to count_function_occurrences_in_backtrace()");
   (void)count_function_occurrences_in_backtrace(implementation_specific_initialize);
   return true;
 }

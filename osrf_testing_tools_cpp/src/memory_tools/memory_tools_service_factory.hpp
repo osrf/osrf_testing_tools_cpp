@@ -34,7 +34,7 @@ public:
   bool
   should_ignore()
   {
-    return service_.ignored_;
+    return !service_.should_print_backtrace_ && service_.ignored_;
   }
 
   bool

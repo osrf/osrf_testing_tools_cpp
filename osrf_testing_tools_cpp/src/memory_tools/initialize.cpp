@@ -21,6 +21,7 @@
 #include "osrf_testing_tools_cpp/memory_tools/monitoring.hpp"
 #include "osrf_testing_tools_cpp/memory_tools/register_hooks.hpp"
 #include "osrf_testing_tools_cpp/memory_tools/testing_helpers.hpp"
+#include "osrf_testing_tools_cpp/memory_tools/verbosity.hpp"
 
 namespace osrf_testing_tools_cpp
 {
@@ -38,11 +39,16 @@ initialized()
 void
 initialize()
 {
-  SAFE_FWRITE(stdout, "initializing memory tools... ");
+  auto conditional_print = [](const char * msg) {
+    if (get_verbosity_level() != VerbosityLevel::quiet) {
+      SAFE_FWRITE(stdout, msg);
+    }
+  };
+  conditional_print("initializing memory tools... ");
   if (implementation_specific_initialize()) {
-    SAFE_FWRITE(stdout, "done\n");
+    conditional_print("done\n");
   } else {
-    SAFE_FWRITE(stdout, "not available\n");
+    conditional_print("not available\n");
   }
   g_initialized.store(true);
 }

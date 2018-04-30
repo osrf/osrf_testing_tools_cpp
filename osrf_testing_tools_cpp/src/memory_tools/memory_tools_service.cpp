@@ -12,7 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <stdexcept>
+
 #include "osrf_testing_tools_cpp/memory_tools/memory_tools_service.hpp"
+#include "osrf_testing_tools_cpp/memory_tools/verbosity.hpp"
 
 namespace osrf_testing_tools_cpp
 {
@@ -20,8 +23,24 @@ namespace memory_tools
 {
 
 MemoryToolsService::MemoryToolsService()
-: ignored_(false), should_print_backtrace_(false)
-{}
+{
+  switch(get_verbosity_level()) {
+    case VerbosityLevel::quiet:
+      ignored_ = true;
+      should_print_backtrace_ = false;
+      break;
+    case VerbosityLevel::debug:
+      ignored_ = false;
+      should_print_backtrace_ = false;
+      break;
+    case VerbosityLevel::trace:
+      ignored_ = false;
+      should_print_backtrace_ = true;
+      break;
+    default:
+      throw std::logic_error("unexpected case for VerbosityLevel");
+  }
+}
 
 void
 MemoryToolsService::ignore()

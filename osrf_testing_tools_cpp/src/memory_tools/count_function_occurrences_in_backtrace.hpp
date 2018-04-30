@@ -65,30 +65,11 @@ impl_count_function_occurrences_in_backtrace(void * function_address)
 
 struct count_function_occurrences_in_backtrace_is_implemented : std::true_type {};
 
-#define MY_DEBUG 0
-
-#if MY_DEBUG
-static inline
-void
-print_dl_info(void * function_address)
-{
-  Dl_info info;
-  if (!dladdr(function_address, &info)) {
-    SAFE_FWRITE(stderr, "dladdr failed\n");
-    exit(1);
-  }
-  printf("Dl_info for %p:\n", function_address);
-  printf("  dli_fname: %s\n", info.dli_fname);
-  printf("  dli_fbase: %p\n", info.dli_fbase);
-  printf("  dli_sname: %s\n", info.dli_sname);
-  printf("  dli_saddr: %p\n", info.dli_saddr);
-}
-#endif
-
 template<int MaxBacktraceSize>
 size_t
 impl_count_function_occurrences_in_backtrace(void * function_address)
 {
+  // TODO(wjwwood): consider using backward-cpp's Stacktrace objects to implement this.
   void * address_list[MaxBacktraceSize];
   int address_length = backtrace(address_list, sizeof(address_list) / sizeof(void *));
 
@@ -104,18 +85,8 @@ impl_count_function_occurrences_in_backtrace(void * function_address)
     if (!dladdr(address_list[i], &info)) {
       // do nothing, sometimes this fails on syscalls
       number_of_failed_dladdr++;
-#if MY_DEBUG
-      printf("failed to get dl_info for %p\n", address_list[i]);
-#endif
       continue;
     }
-#if MY_DEBUG
-    printf("comparing %p to %p\n\n", function_address, info.dli_saddr);
-    print_dl_info(function_address);
-    printf("\n");
-    print_dl_info(address_list[i]);
-    printf("\n");
-#endif
     if (function_address == info.dli_saddr) {
       number_of_occurences++;
     }
