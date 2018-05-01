@@ -21,6 +21,7 @@ macro(osrf_testing_tools_cpp_extract_and_build_googletest
   GOOGLETEST_ARCHIVE_LOCATION
   GOOGLETEST_VERSION
   GOOGLETEST_MD5SUM
+  GOOGLETEST_EXTERNAL_PROJECT_ADD_TEMPLATE
 )
   # Make sure this only happens once
   if(__OSRF_TESTING_TOOLS_CPP_GOOGLETEST_VERSION_BUILT)
@@ -40,7 +41,7 @@ macro(osrf_testing_tools_cpp_extract_and_build_googletest
   set(GOOGLETEST_VERSION ${GOOGLETEST_VERSION})
   set(GOOGLETEST_MD5SUM ${GOOGLETEST_MD5SUM})
   configure_file(
-    "${CMAKE_SOURCE_DIR}/vendor/google/googletest/googletest-external-project-add.cmake.in"
+    "${GOOGLETEST_EXTERNAL_PROJECT_ADD_TEMPLATE}"
     googletest-${GOOGLETEST_VERSION}-extracted/CMakeLists.txt
     @ONLY
   )

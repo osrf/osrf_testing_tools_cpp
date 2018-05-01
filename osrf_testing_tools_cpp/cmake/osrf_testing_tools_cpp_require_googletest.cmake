@@ -109,7 +109,7 @@ endfunction()
 function(_osrf_testing_tools_cpp_require_googletest return_variable)
   cmake_parse_arguments(ARG
     ""
-    "VERSION_EQ;VERSION_LT;VERSION_LTE;VERSION_GT;VERSION_GTE;VERSION_SELECTED_OUTPUT"
+    "VERSION_EQ;VERSION_LT;VERSION_LTE;VERSION_GT;VERSION_GTE;VERSION_SELECTED_OUTPUT;VENDOR_DIR"
     ""
     ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
@@ -154,13 +154,22 @@ function(_osrf_testing_tools_cpp_require_googletest return_variable)
   message(STATUS
     "googletest version '${newest_valid_version}' selected, of versions: '${valid_versions}'")
 
+  set(VENDOR_DIR "${osrf_testing_tools_cpp_DIR}/../../../share/osrf_testing_tools_cpp/vendor")
+  if(ARG_VENDOR_DIR)
+    set(VENDOR_DIR ${ARG_VENDOR_DIR})
+  endif()
+
   list(GET locations ${newest_valid_version_index} newest_valid_location)
+  set(newest_valid_location "${VENDOR_DIR}/${newest_valid_location}")
   message(STATUS "building googletest from '${newest_valid_location}'...")
 
   list(GET md5s ${newest_valid_version_index} md5)
 
+  set(add_external_project_file
+    "${VENDOR_DIR}/google/googletest/googletest-external-project-add.cmake.in")
+
   osrf_testing_tools_cpp_extract_and_build_googletest(
-    ${newest_valid_location} ${newest_valid_version} ${md5}
+    ${newest_valid_location} ${newest_valid_version} ${md5} ${add_external_project_file}
   )
   set(OSRF_TESTING_TOOLS_CPP_REQUIRE_GOOGLETEST_VERSION_SETUP ${newest_valid_version})
 endfunction()

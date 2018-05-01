@@ -66,9 +66,8 @@ function(osrf_testing_tools_cpp_add_test testname)
   endif()
 
   # wrap command with run_test script to ensure test result generation
-  set(cmd_wrapper "${PYTHON_EXECUTABLE}" "-u" "${ament_cmake_test_DIR}/run_test.py"
-    "${ARG_RESULT_FILE}"
-    "--package-name" "${PROJECT_NAME}")
+  set(test_runner_target osrf_testing_tools_cpp::test_runner)
+  set(cmd_wrapper "$<TARGET_FILE:${test_runner_target}>")
   if(ARG_ENV)
     list(APPEND cmd_wrapper "--env" ${ARG_ENV})
   endif()
@@ -89,7 +88,7 @@ function(osrf_testing_tools_cpp_add_test testname)
   if(ARG_APPEND_ENV)
     list(APPEND cmd_wrapper "--append-env" ${ARG_APPEND_ENV})
   endif()
-  list(APPEND cmd_wrapper "--command" ${ARG_COMMAND})
+  list(APPEND cmd_wrapper "--" ${ARG_COMMAND})
 
   add_test(
     NAME "${testname}"

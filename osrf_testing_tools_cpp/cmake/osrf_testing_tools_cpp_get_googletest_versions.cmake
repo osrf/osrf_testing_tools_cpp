@@ -34,9 +34,10 @@ macro(osrf_testing_tools_cpp_get_googletest_versions output_versions output_loca
     1.8.0
   )
   # Manually maintained list of googletest locations in this package, indexed the same as versions.
+  # They are relative to the VENDOR_DIR, which is configurable.
   set(${output_locations}
-    "${CMAKE_SOURCE_DIR}/vendor/google/googletest/release-1.7.0.tar.gz"
-    "${CMAKE_SOURCE_DIR}/vendor/google/googletest/release-1.8.0.tar.gz"
+    "google/googletest/release-1.7.0.tar.gz"
+    "google/googletest/release-1.8.0.tar.gz"
   )
   # Manually maintained list of MD5 sums for the archives, indexed the same as the versions.
   set(${output_md5s}

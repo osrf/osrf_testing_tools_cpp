@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.5)
 
 project(osrf_testing_tools_cpp)
 
+set(osrf_testing_tools_cpp_VERSION 0.0.0)
+
 # Default to C++11
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 11)
@@ -16,10 +18,32 @@ add_subdirectory(src)
 if(BUILD_TESTING)
   include(CTest)
   include(cmake/osrf_testing_tools_cpp_require_googletest.cmake)
-  osrf_testing_tools_cpp_require_googletest(VERSION_GTE 1.7)  # ensures target gtest_main exists
+  # ensures target gtest_main exists
+  osrf_testing_tools_cpp_require_googletest(VERSION_GTE 1.8
+    VENDOR_DIR "${CMAKE_SOURCE_DIR}/vendor")
 
   add_subdirectory(test)
 endif()
+
+configure_file(osrf_testing_tools_cppConfig.cmake.in
+  "${PROJECT_BINARY_DIR}/osrf_testing_tools_cppConfig.cmake" @ONLY)
+configure_file(osrf_testing_tools_cppConfigVersion.cmake.in
+  "${PROJECT_BINARY_DIR}/osrf_testing_tools_cppConfigVersion.cmake" @ONLY)
+
+install(FILES
+  "${PROJECT_BINARY_DIR}/osrf_testing_tools_cppConfig.cmake"
+  "${PROJECT_BINARY_DIR}/osrf_testing_tools_cppConfigVersion.cmake"
+  DESTINATION share/${PROJECT_NAME}/cmake
+)
+
+install(DIRECTORY vendor/
+  DESTINATION share/${PROJECT_NAME}/vendor
+  PATTERN ".gitattributes" EXCLUDE
+)
+
+install(DIRECTORY cmake/
+  DESTINATION share/${PROJECT_NAME}/cmake
+)
 
 install(
   DIRECTORY include/
