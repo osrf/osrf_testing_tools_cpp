@@ -35,22 +35,46 @@ typedef struct interpose_s
 
 #define OSX_INTERPOSE(newf, oldf) \
   __attribute__((used)) static const interpose_t \
-  macinterpose ## newf ## oldf __attribute__ ((section("__DATA, __interpose"))) = { \
+  macinterpose__ ## newf ## __ ## oldf __attribute__ ((section("__DATA, __interpose"))) = { \
     reinterpret_cast<void *>(newf), \
     reinterpret_cast<void *>(oldf), \
   }
 
 // End Interpose.
 
-using osrf_testing_tools_cpp::memory_tools::custom_malloc;
-using osrf_testing_tools_cpp::memory_tools::custom_realloc;
-using osrf_testing_tools_cpp::memory_tools::custom_calloc;
-using osrf_testing_tools_cpp::memory_tools::custom_free;
+extern "C"
+{
 
-OSX_INTERPOSE(custom_malloc, malloc);
-OSX_INTERPOSE(custom_realloc, realloc);
-OSX_INTERPOSE(custom_calloc, calloc);
-OSX_INTERPOSE(custom_free, free);
+void *
+replacement_malloc(size_t size)
+{
+  return osrf_testing_tools_cpp::memory_tools::custom_malloc(size);
+}
+
+void *
+replacement_realloc(void * memory_in, size_t size)
+{
+  return osrf_testing_tools_cpp::memory_tools::custom_realloc(memory_in, size);
+}
+
+void *
+replacement_calloc(size_t count, size_t size)
+{
+  return osrf_testing_tools_cpp::memory_tools::custom_calloc(count, size);
+}
+
+void
+replacement_free(void * memory)
+{
+  osrf_testing_tools_cpp::memory_tools::custom_free(memory);
+}
+
+OSX_INTERPOSE(replacement_malloc, malloc);
+OSX_INTERPOSE(replacement_realloc, realloc);
+OSX_INTERPOSE(replacement_calloc, calloc);
+OSX_INTERPOSE(replacement_free, free);
+
+}  // extern "C"
 
 namespace osrf_testing_tools_cpp
 {

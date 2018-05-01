@@ -91,6 +91,9 @@ static void __linux_memory_tools_init(void)
   g_initializing_original_functions = false;
 }
 
+extern "C"
+{
+
 void *
 malloc(size_t size) noexcept
 {
@@ -136,5 +139,7 @@ free(void * pointer) noexcept
   using osrf_testing_tools_cpp::memory_tools::custom_free_with_original;
   custom_free_with_original(pointer, g_original_free);
 }
+
+}  // extern "C"
 
 #endif  // defined(__linux__)
