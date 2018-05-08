@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(__share_dir "${osrf_testing_tools_cpp_DIR}/../../../share/osrf_testing_tools_cpp")
+set(__prefix_dir "${osrf_testing_tools_cpp_DIR}/../../..")
+set(__share_dir "${__prefix_dir}/share/osrf_testing_tools_cpp")
 
 include("${__share_dir}/cmake/memory_toolsExport.cmake")
 include("${__share_dir}/cmake/test_runnerExport.cmake")
@@ -34,4 +35,8 @@ string(REPLACE
 set_target_properties(osrf_testing_tools_cpp::memory_tools PROPERTIES
   LIBRARY_PRELOAD_ENVIRONMENT_VARIABLE ${memory_tools_extra_test_env})
 
+# setup osrf_testing_tools_cpp_INCLUDE_DIRS so that header only things can be used without linking
+set(osrf_testing_tools_cpp_INCLUDE_DIRS "${__prefix_dir}/include")
+
 unset(__share_dir)
+unset(__prefix_dir)
