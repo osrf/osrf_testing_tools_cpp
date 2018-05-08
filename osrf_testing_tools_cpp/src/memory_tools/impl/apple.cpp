@@ -15,7 +15,6 @@
 #include <cstdlib>
 
 #include "../custom_memory_functions.hpp"
-#include "../implementation_initialization.hpp"
 
 #if defined(__APPLE__)
 
@@ -75,23 +74,5 @@ OSX_INTERPOSE(replacement_calloc, calloc);
 OSX_INTERPOSE(replacement_free, free);
 
 }  // extern "C"
-
-namespace osrf_testing_tools_cpp
-{
-namespace memory_tools
-{
-
-bool
-implementation_specific_initialize()
-{
-  return true;
-}
-
-void
-implementation_specific_uninitialize() {}
-
-
-}  // namespace memory_tools
-}  // namespace osrf_testing_tools_cpp
 
 #endif  // defined(__APPLE__)

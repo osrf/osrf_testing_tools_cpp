@@ -12,9 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "osrf_testing_tools_cpp/memory_tools/memory_tools.hpp"
-#include "osrf_testing_tools_cpp/scope_exit.hpp"
-
 #if defined(__linux__)
 
 #include "./impl/linux.cpp"

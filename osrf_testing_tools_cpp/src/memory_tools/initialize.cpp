@@ -16,7 +16,6 @@
 #include <cstring>
 
 #include "./custom_memory_functions.hpp"
-#include "./implementation_initialization.hpp"
 #include "osrf_testing_tools_cpp/memory_tools/initialize.hpp"
 #include "osrf_testing_tools_cpp/memory_tools/monitoring.hpp"
 #include "osrf_testing_tools_cpp/memory_tools/register_hooks.hpp"
@@ -44,12 +43,7 @@ initialize()
       SAFE_FWRITE(stdout, msg);
     }
   };
-  conditional_print("initializing memory tools... ");
-  if (implementation_specific_initialize()) {
-    conditional_print("done\n");
-  } else {
-    conditional_print("not available\n");
-  }
+  conditional_print("initializing memory tools...\n");
   g_initialized.store(true);
 }
 
@@ -67,8 +61,6 @@ uninitialize()
   expect_no_realloc_end();
   expect_no_calloc_end();
   expect_no_free_end();
-  // implementation specific uninitialize, if any
-  implementation_specific_uninitialize();
   return g_initialized.exchange(true);
 }
 
