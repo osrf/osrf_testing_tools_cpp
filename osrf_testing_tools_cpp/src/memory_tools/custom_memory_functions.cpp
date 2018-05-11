@@ -37,18 +37,24 @@ namespace memory_tools
 void *
 custom_malloc(size_t size) noexcept
 {
-  return custom_malloc_with_original(size, std::malloc);
+  return custom_malloc_with_original(size, std::malloc, /* check recursion */ true);
 }
 
 static inline
 void *
-custom_malloc_with_original_except(size_t size, void * (*original_malloc)(size_t))
+custom_malloc_with_original_except(
+  size_t size,
+  void * (*original_malloc)(size_t),
+  bool check_recursion)
 {
   if (
     // First check that we're initialized to avoid memory fucntions called in count function
     !osrf_testing_tools_cpp::memory_tools::initialized() ||
     // we've recursed, use original directly to avoid infinite loop
-    count_function_occurrences_in_backtrace(custom_malloc_with_original_except) > 1 ||
+    (
+      check_recursion &&
+      count_function_occurrences_in_backtrace(custom_malloc_with_original_except) > 1
+    ) ||
     // monitoring not enabled, use original
     !osrf_testing_tools_cpp::memory_tools::monitoring_enabled())
   {
@@ -76,10 +82,13 @@ custom_malloc_with_original_except(size_t size, void * (*original_malloc)(size_t
 }
 
 void *
-custom_malloc_with_original(size_t size, void * (*original_malloc)(size_t)) noexcept
+custom_malloc_with_original(
+  size_t size,
+  void * (*original_malloc)(size_t),
+  bool check_recursion) noexcept
 {
   try {
-    return custom_malloc_with_original_except(size, original_malloc);
+    return custom_malloc_with_original_except(size, original_malloc, check_recursion);
   } catch (...) {
     fprintf(stderr, "unexpected error in custom malloc\n");
     return nullptr;
@@ -89,7 +98,7 @@ custom_malloc_with_original(size_t size, void * (*original_malloc)(size_t)) noex
 void *
 custom_realloc(void * memory_in, size_t size) noexcept
 {
-  return custom_realloc_with_original(memory_in, size, std::realloc);
+  return custom_realloc_with_original(memory_in, size, std::realloc, true);
 }
 
 static inline
@@ -97,13 +106,17 @@ void *
 custom_realloc_with_original_except(
   void * memory_in,
   size_t size,
-  void * (*original_realloc)(void *, size_t))
+  void * (*original_realloc)(void *, size_t),
+  bool check_recursion)
 {
   if (
     // First check that we're initialized to avoid memory fucntions called in count function
     !osrf_testing_tools_cpp::memory_tools::initialized() ||
     // we've recursed, use original directly to avoid infinite loop
-    count_function_occurrences_in_backtrace(custom_realloc_with_original_except) > 1 ||
+    (
+      check_recursion &&
+      count_function_occurrences_in_backtrace(custom_realloc_with_original_except) > 1
+    ) ||
     // monitoring not enabled, use original
     !osrf_testing_tools_cpp::memory_tools::monitoring_enabled())
   {
@@ -134,10 +147,11 @@ void *
 custom_realloc_with_original(
   void * memory_in,
   size_t size,
-  void * (*original_realloc)(void *, size_t)) noexcept
+  void * (*original_realloc)(void *, size_t),
+  bool check_recursion) noexcept
 {
   try {
-    return custom_realloc_with_original_except(memory_in, size, original_realloc);
+    return custom_realloc_with_original_except(memory_in, size, original_realloc, check_recursion);
   } catch (...) {
     fprintf(stderr, "unexpected error in custom realloc\n");
     return nullptr;
@@ -147,7 +161,7 @@ custom_realloc_with_original(
 void *
 custom_calloc(size_t count, size_t size) noexcept
 {
-  return custom_calloc_with_original(count, size, std::calloc);
+  return custom_calloc_with_original(count, size, std::calloc, true);
 }
 
 static inline
@@ -155,13 +169,17 @@ void *
 custom_calloc_with_original_except(
   size_t count,
   size_t size,
-  void * (*original_calloc)(size_t, size_t))
+  void * (*original_calloc)(size_t, size_t),
+  bool check_recursion)
 {
   if (
     // First check that we're initialized to avoid memory fucntions called in count function
     !osrf_testing_tools_cpp::memory_tools::initialized() ||
     // we've recursed, use original directly to avoid infinite loop
-    count_function_occurrences_in_backtrace(custom_calloc_with_original_except) > 1 ||
+    (
+      check_recursion &&
+      count_function_occurrences_in_backtrace(custom_calloc_with_original_except) > 1
+    ) ||
     // monitoring not enabled, use original
     !osrf_testing_tools_cpp::memory_tools::monitoring_enabled())
   {
@@ -194,10 +212,11 @@ void *
 custom_calloc_with_original(
   size_t count,
   size_t size,
-  void * (*original_calloc)(size_t, size_t)) noexcept
+  void * (*original_calloc)(size_t, size_t),
+  bool check_recursion) noexcept
 {
   try {
-    return custom_calloc_with_original_except(count, size, original_calloc);
+    return custom_calloc_with_original_except(count, size, original_calloc, check_recursion);
   } catch (...) {
     fprintf(stderr, "unexpected error in custom calloc\n");
     return nullptr;
@@ -207,18 +226,24 @@ custom_calloc_with_original(
 void
 custom_free(void * memory) noexcept
 {
-  custom_free_with_original(memory, std::free);
+  custom_free_with_original(memory, std::free, true);
 }
 
 static inline
 void
-custom_free_with_original_except(void * memory, void (*original_free)(void *))
+custom_free_with_original_except(
+  void * memory,
+  void (*original_free)(void *),
+  bool check_recursion)
 {
   if (
     // First check that we're initialized to avoid memory fucntions called in count function
     !osrf_testing_tools_cpp::memory_tools::initialized() ||
     // we've recursed, use original directly to avoid infinite loop
-    count_function_occurrences_in_backtrace(custom_free_with_original_except) > 1 ||
+    (
+      check_recursion &&
+      count_function_occurrences_in_backtrace(custom_free_with_original_except) > 1
+    ) ||
     // monitoring not enabled, use original
     !osrf_testing_tools_cpp::memory_tools::monitoring_enabled())
   {
@@ -245,10 +270,13 @@ custom_free_with_original_except(void * memory, void (*original_free)(void *))
 }
 
 void
-custom_free_with_original(void * memory, void (*original_free)(void *)) noexcept
+custom_free_with_original(
+  void * memory,
+  void (*original_free)(void *),
+  bool check_recursion) noexcept
 {
   try {
-    custom_free_with_original_except(memory, original_free);
+    custom_free_with_original_except(memory, original_free, check_recursion);
   } catch (...) {
     fprintf(stderr, "unexpected error in custom free\n");
   }

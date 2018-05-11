@@ -1,0 +1,4 @@
+env DYLD_INSERT_LIBRARIES=/Users/william/ros2_ws/install/osrf_testing_tools_cpp/lib/libmemory_tools_interpose.dylib
+b apple.cpp:191
+command script import ./my_debug.py
+br command add -F my_debug.on_replacement_malloc 1

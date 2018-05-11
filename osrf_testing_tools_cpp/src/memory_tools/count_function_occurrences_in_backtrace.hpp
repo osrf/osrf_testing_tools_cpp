@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef MEMORY_TOOLS__COUNT_FUNCTION_OCCURENCES_IN_BACKTRACE_HPP_
-#define MEMORY_TOOLS__COUNT_FUNCTION_OCCURENCES_IN_BACKTRACE_HPP_
+#ifndef MEMORY_TOOLS__COUNT_FUNCTION_OCCURRENCES_IN_BACKTRACE_HPP_
+#define MEMORY_TOOLS__COUNT_FUNCTION_OCCURRENCES_IN_BACKTRACE_HPP_
 
 #include "./safe_fwrite.hpp"
 
@@ -123,4 +123,4 @@ count_function_occurrences_in_backtrace(FunctionPointerT function_address)
 }  // namespace memory_tools
 }  // namespace osrf_testing_tools_cpp
 
-#endif  // MEMORY_TOOLS__COUNT_FUNCTION_OCCURENCES_IN_BACKTRACE_HPP_
+#endif  // MEMORY_TOOLS__COUNT_FUNCTION_OCCURRENCES_IN_BACKTRACE_HPP_

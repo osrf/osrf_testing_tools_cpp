@@ -16,6 +16,7 @@ set(__prefix_dir "${osrf_testing_tools_cpp_DIR}/../../..")
 set(__share_dir "${__prefix_dir}/share/osrf_testing_tools_cpp")
 
 include("${__share_dir}/cmake/memory_toolsExport.cmake")
+include("${__share_dir}/cmake/memory_tools_interposeExport.cmake")
 include("${__share_dir}/cmake/test_runnerExport.cmake")
 
 include("${__share_dir}/cmake/osrf_testing_tools_cpp_add_test.cmake")
