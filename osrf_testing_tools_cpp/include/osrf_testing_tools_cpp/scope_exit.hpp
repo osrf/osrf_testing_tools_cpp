@@ -17,6 +17,8 @@
 
 #include <functional>
 
+#include "./macros.hpp"
+
 namespace osrf_testing_tools_cpp
 {
 
@@ -41,6 +43,7 @@ make_scope_exit(Callable callable)
 }  // namespace osrf_testing_tools_cpp
 
 #define OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT(code) \
-  osrf_testing_tools_cpp::make_scope_exit([&]() {code;})
+  auto OSRF_TESTING_TOOLS_CPP_STRING_JOIN(scope_exit_, __LINE__) = \
+    osrf_testing_tools_cpp::make_scope_exit([&]() {code;})
 
 #endif  // OSRF_TESTING_TOOLS_CPP__SCOPE_EXIT_HPP_
