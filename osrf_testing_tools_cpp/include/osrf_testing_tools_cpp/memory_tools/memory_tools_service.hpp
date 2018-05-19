@@ -94,8 +94,12 @@ struct MemoryToolsService
   print_backtrace();
 
   /// Returns a stack trace object for introspection.
+  /**
+   * Pointer should not be used after MemoryToolsService is out of scope.
+   * Will return nullptr if a stack trace is not available, e.g. on Windows.
+   */
   OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
-  const StackTrace &
+  StackTrace *
   get_stack_trace();
 
   /// Return the address of the source memory function.

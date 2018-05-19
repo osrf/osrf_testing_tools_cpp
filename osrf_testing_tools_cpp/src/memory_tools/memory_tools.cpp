@@ -27,7 +27,6 @@
 // TODO(wjwwood): install custom malloc (and others) for Windows.
 
 #else
-// Default case: do nothing.
 
 #include "./impl/unsupported_os.cpp"
 

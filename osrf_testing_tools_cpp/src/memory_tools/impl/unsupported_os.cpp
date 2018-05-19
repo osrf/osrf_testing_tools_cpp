@@ -12,21 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "../implementation_initialization.hpp"
-
 namespace osrf_testing_tools_cpp
 {
 namespace memory_tools
 {
 
-bool
-implementation_specific_initialize()
-{
-  return false;
-}
-
-void
-implementation_specific_uninitialize() {}
+// Nothing here for now.
 
 }  // namespace memory_tools
 }  // namespace osrf_testing_tools_cpp

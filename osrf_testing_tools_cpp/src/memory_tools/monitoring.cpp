@@ -24,8 +24,8 @@ namespace osrf_testing_tools_cpp
 namespace memory_tools
 {
 
-static __thread bool g_tls_thread_specific_enable_set = false;
-static __thread bool g_tls_enabled = false;
+static thread_local bool g_tls_thread_specific_enable_set = false;
+static thread_local bool g_tls_enabled = false;
 static std::atomic<bool> g_enabled(false);
 
 bool

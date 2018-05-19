@@ -22,23 +22,14 @@
 #include "osrf_testing_tools_cpp/memory_tools/stack_trace.hpp"
 
 #ifndef _WIN32
-# pragma GCC diagnostic push
-# ifdef __clang__
-#  pragma clang diagnostic ignored "-Wgnu-include-next"
-#  pragma clang diagnostic ignored "-Wunused-parameter"
-# endif
-#else
-# pragma warning(push)
-// # pragma warning(disable : ####)
-#endif
 
+#pragma GCC diagnostic push
+#ifdef __clang__
+# pragma clang diagnostic ignored "-Wgnu-include-next"
+# pragma clang diagnostic ignored "-Wunused-parameter"
+#endif
 #include "./vendor/bombela/backward-cpp/backward.hpp"
-
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#else
-# pragma warning(pop)
-#endif
+#pragma GCC diagnostic pop
 
 namespace osrf_testing_tools_cpp
 {
@@ -115,5 +106,7 @@ struct StackTraceImpl
 
 }  // namespace memory_tools
 }  // namespace osrf_testing_tools_cpp
+
+#endif  // _WIN32
 
 #endif  // OSRF_TESTING_TOOLS_CPP__STACK_TRACE_IMPL_HPP_

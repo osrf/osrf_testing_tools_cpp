@@ -16,25 +16,6 @@
 
 #include "./stack_trace_impl.hpp"
 
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# ifdef __clang__
-#  pragma clang diagnostic ignored "-Wgnu-include-next"
-#  pragma clang diagnostic ignored "-Wunused-parameter"
-# endif
-#else
-# pragma warning(push)
-// # pragma warning(disable : ####)
-#endif
-
-#include "./vendor/bombela/backward-cpp/backward.hpp"
-
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#else
-# pragma warning(pop)
-#endif
-
 namespace osrf_testing_tools_cpp
 {
 namespace memory_tools

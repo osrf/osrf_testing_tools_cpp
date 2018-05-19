@@ -93,9 +93,10 @@ MemoryToolsService::print_backtrace()
   impl_->should_print_backtrace = true;
 }
 
-const StackTrace &
+StackTrace *
 MemoryToolsService::get_stack_trace()
 {
+#ifndef _WIN32
   if (nullptr == impl_->lazy_stack_trace) {
     backward::StackTrace st;
     st.load_here(256);
@@ -103,7 +104,10 @@ MemoryToolsService::get_stack_trace()
       new StackTraceImpl(st, std::this_thread::get_id())
     )));
   }
-  return *(impl_->lazy_stack_trace);
+  return impl_->lazy_stack_trace.get();
+#else
+  return nullptr;
+#endif
 }
 
 const char *
