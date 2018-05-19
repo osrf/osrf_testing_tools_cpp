@@ -15,6 +15,12 @@
 #ifndef OSRF_TESTING_TOOLS_CPP__VARIANT_HELPER_HPP_
 #define OSRF_TESTING_TOOLS_CPP__VARIANT_HELPER_HPP_
 
+#if defined(__has_include) && __has_include(<variant>)
+
+#include <variant>
+
+#else  // defined(__has_include) && __has_include(<variant>)
+
 // This is a header-only version of std::variant (part of C++17) for C++14.
 // In the future this could be replaced with #include <variant>.
 #include "./vendor/mpark/variant/variant.hpp"
@@ -25,5 +31,7 @@ namespace std
 using namespace mpark;  // NOLINT(build/namespaces)
 
 }  // namespace std
+
+#endif  // defined(__has_include) && __has_include(<variant>)
 
 #endif  // OSRF_TESTING_TOOLS_CPP__VARIANT_HELPER_HPP_
