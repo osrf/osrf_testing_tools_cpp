@@ -15,6 +15,7 @@
 #ifndef OSRF_TESTING_TOOLS_CPP__MEMORY_TOOLS__MEMORY_TOOLS_SERVICE_HPP_
 #define OSRF_TESTING_TOOLS_CPP__MEMORY_TOOLS__MEMORY_TOOLS_SERVICE_HPP_
 
+#include "./stack_trace.hpp"
 #include "./visibility_control.hpp"
 
 namespace osrf_testing_tools_cpp
@@ -24,6 +25,16 @@ namespace memory_tools
 
 /// Forward declaration of private MemoryToolsService factory class.
 class MemoryToolsServiceFactory;
+
+class MemoryToolsServiceImpl;
+
+enum class MemoryFunctionType
+{
+  Malloc,
+  Realloc,
+  Calloc,
+  Free,
+};
 
 /// Service injected in to user callbacks which allow them to control behavior.
 /**
@@ -53,6 +64,19 @@ class MemoryToolsServiceFactory;
  */
 struct MemoryToolsService
 {
+  OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
+  virtual ~MemoryToolsService();
+
+  /// Return the memory function type.
+  OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
+  MemoryFunctionType
+  get_memory_function_type() const;
+
+  /// Return the memory function type as a string.
+  OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
+  const char *
+  get_memory_function_type_str() const;
+
   /// If called last, no log message for the dynamic memory event will be logged.
   OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
   void
@@ -69,11 +93,22 @@ struct MemoryToolsService
   void
   print_backtrace();
 
-protected:
-  MemoryToolsService();
+  /// Returns a stack trace object for introspection.
+  OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
+  const StackTrace &
+  get_stack_trace();
 
-  bool ignored_;
-  bool should_print_backtrace_;
+  /// Return the address of the source memory function.
+  OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
+  const char *
+  get_source_function_name() const;
+
+protected:
+  explicit MemoryToolsService(
+    MemoryFunctionType memory_function_type,
+    const char * source_function_name);
+
+  std::shared_ptr<MemoryToolsServiceImpl> impl_;
 
   friend MemoryToolsServiceFactory;
 };

@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef MEMORY_TOOLS__MEMORY_TOOLS_SERVICE_FACTORY_HPP_
-#define MEMORY_TOOLS__MEMORY_TOOLS_SERVICE_FACTORY_HPP_
+#ifndef MEMORY_TOOLS__MEMORY_TOOLS_SERVICE_IMPL_HPP_
+#define MEMORY_TOOLS__MEMORY_TOOLS_SERVICE_IMPL_HPP_
 
-#include "./memory_tools_service_impl.hpp"
+#include <memory>
+
 #include "osrf_testing_tools_cpp/memory_tools/memory_tools_service.hpp"
 
 namespace osrf_testing_tools_cpp
@@ -23,38 +24,26 @@ namespace osrf_testing_tools_cpp
 namespace memory_tools
 {
 
-class MemoryToolsServiceFactory
+class MemoryToolsServiceImpl
 {
 public:
-  MemoryToolsServiceFactory(
-    MemoryFunctionType memory_function_type,
-    const char * source_function_name)
-  : service_(memory_function_type, source_function_name)
+  MemoryToolsServiceImpl(
+    MemoryFunctionType memory_function_type_in,
+    const char * source_function_name_in)
+  : memory_function_type(memory_function_type_in),
+    source_function_name(source_function_name_in),
+    lazy_stack_trace(nullptr)
   {}
 
-  MemoryToolsService &
-  get_memory_tools_service()
-  {
-    return service_;
-  }
+  MemoryFunctionType memory_function_type;
+  const char * source_function_name;
 
-  bool
-  should_ignore()
-  {
-    return !service_.impl_->should_print_backtrace && service_.impl_->ignored;
-  }
-
-  bool
-  should_print_backtrace()
-  {
-    return service_.impl_->should_print_backtrace;
-  }
-
-private:
-  MemoryToolsService service_;
+  bool ignored;
+  bool should_print_backtrace;
+  std::unique_ptr<StackTrace> lazy_stack_trace;
 };
 
 }  // namespace memory_tools
 }  // namespace osrf_testing_tools_cpp
 
-#endif  // MEMORY_TOOLS__MEMORY_TOOLS_SERVICE_FACTORY_HPP_
+#endif  // MEMORY_TOOLS__MEMORY_TOOLS_SERVICE_IMPL_HPP_
