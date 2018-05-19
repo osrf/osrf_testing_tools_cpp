@@ -29,7 +29,7 @@ namespace memory_tools
 namespace impl
 {
 
-template<std::size_t MemoryPoolSize>
+template<size_t MemoryPoolSize>
 class StaticAllocator
 {
 public:
@@ -43,15 +43,49 @@ public:
   }
 
   void *
-  allocate(std::size_t size)
+  allocate(size_t size)
   {
-    if (size <= std::size_t(std::distance(stack_pointer_, end_))) {
+    if (size <= size_t(std::distance(stack_pointer_, end_))) {
       uint8_t * result = stack_pointer_;
       stack_pointer_ += size;
       return result;
     }
     SAFE_FWRITE(stderr, "StackAllocator.allocate() -> nullptr\n");
     return nullptr;
+  }
+
+  void *
+  reallocate(void * memory_in, size_t size)
+  {
+    if (!pointer_belongs_to_allocator(memory_in)) {
+      SAFE_FWRITE(stderr,
+        "StaticAllocator::reallocate(): asked to reallocate extra-allocator memory\n");
+      return nullptr;
+    }
+    void * memory = this->allocate(size);
+    if (nullptr != memory) {
+      // This would be an unsafe opertion, because memcpy would read beyond the
+      // original size of memory_in in the case that size is bigger than the
+      // original size requested for memory_in, but since we know memory_in
+      // came from this static allocator and that we were able to allocate
+      // more memory after memory_in, then we can know that while what comes
+      // after memory_in might be unrelated or garbage, it will be safe to read
+      // from that space.
+      memcpy(memory, memory_in, size);
+      this->deallocate(memory_in);
+    }
+    return memory;
+  }
+
+  void *
+  zero_allocate(size_t count, size_t size)
+  {
+    size_t total_size = count * size;
+    void * memory = this->allocate(total_size);
+    if (nullptr != memory) {
+      memset(memory, 0x0, total_size);
+    }
+    return memory;
   }
 
   bool

@@ -5,6 +5,7 @@ add_library(memory_tools SHARED
   memory_tools_service.cpp
   monitoring.cpp
   register_hooks.cpp
+  stack_trace.cpp
   testing_helpers.cpp
   verbosity.cpp
 )
