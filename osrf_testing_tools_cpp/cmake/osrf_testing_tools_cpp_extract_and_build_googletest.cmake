@@ -74,6 +74,18 @@ macro(osrf_testing_tools_cpp_extract_and_build_googletest
   )
   unset(__prefix)
 
+  if(WIN32)
+    # Googletest has some known warnings as errors on newer versions of VS, see:
+    #   https://github.com/google/googletest/issues/1373
+    # So disable offending warnings for now.
+    if(TARGET gtest)  # Only in 1.7 and not 1.8
+      target_compile_definitions(gtest PUBLIC _SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING=1)
+    endif()
+    if(TARGET gtest_main)
+      target_compile_definitions(gtest_main PUBLIC _SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING=1)
+    endif()
+  endif()
+
   # The gtest/gtest_main targets carry header search path
   # dependencies automatically when using CMake 2.8.11 or
   # later. Otherwise we have to add them here ourselves.
