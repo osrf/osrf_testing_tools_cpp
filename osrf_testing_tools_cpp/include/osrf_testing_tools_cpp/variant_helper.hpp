@@ -18,7 +18,12 @@
 #if defined(__has_include)
 
 # if __has_include(<variant>)
-#  define __SHOULD_USE_MPARK_VARIANT 0
+#  if _MSC_VER < 2000  // this is any version @ VS 2017 and earlier
+// VS 2017 (_MSC_VER or 19XX) has <variant>, but it just contains an error macro...
+#   define __SHOULD_USE_MPARK_VARIANT 1
+#  else  // _MSC_VER < 2000
+#   define __SHOULD_USE_MPARK_VARIANT 0
+#  endif  // _MSC_VER < 2000
 # else  // __has_include(<variant>)
 #  define __SHOULD_USE_MPARK_VARIANT 1
 # endif  // __has_include(<variant>)
@@ -39,6 +44,10 @@ namespace std
 using namespace mpark;  // NOLINT(build/namespaces)
 
 }  // namespace std
+
+#else  // __SHOULD_USE_MPARK_VARIANT
+
+#include <variant>
 
 #endif  // __SHOULD_USE_MPARK_VARIANT
 
