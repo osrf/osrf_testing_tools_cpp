@@ -16,23 +16,18 @@
 #define MEMORY_TOOLS__PRINT_BACKTRACE_HPP_
 
 #ifndef _WIN32
+
 # pragma GCC diagnostic push
 # ifdef __clang__
 #  pragma clang diagnostic ignored "-Wgnu-include-next"
 #  pragma clang diagnostic ignored "-Wunused-parameter"
 # endif
-#else
-# pragma warning(push)
-// # pragma warning(disable : ####)
-#endif
 
 #include "./vendor/bombela/backward-cpp/backward.hpp"
 
-#ifndef _WIN32
 # pragma GCC diagnostic pop
-#else
-# pragma warning(pop)
-#endif
+
+#endif  // _WIN32
 
 namespace osrf_testing_tools_cpp
 {
@@ -43,10 +38,14 @@ template<int MaxStackDepth = 64>
 void
 print_backtrace(FILE * out = stderr)
 {
+#if !defined(_WIN32)
   backward::StackTrace st;
   st.load_here(MaxStackDepth);
   backward::Printer p;
   p.print(st, out);
+#else
+  fprintf(out, "backtrace unavailable on Windows\n");
+#endif
 }
 
 }  // namespace memory_tools

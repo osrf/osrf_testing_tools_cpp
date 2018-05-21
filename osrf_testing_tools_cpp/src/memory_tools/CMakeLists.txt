@@ -18,7 +18,8 @@ if(UNIX AND NOT APPLE)
   # On Linux like systems, add dl and use the normal library and LD_PRELOAD.
   target_link_libraries(memory_tools dl)
 endif()
-target_compile_definitions(memory_tools PRIVATE "TOOLS_CPP_MEMORY_TOOLS_BUILDING_DLL")
+target_compile_definitions(memory_tools
+  PRIVATE "OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_BUILDING_DLL")
 
 add_library(memory_tools_interpose SHARED
   memory_tools.cpp

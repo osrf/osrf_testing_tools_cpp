@@ -107,6 +107,22 @@ struct StackTraceImpl
 }  // namespace memory_tools
 }  // namespace osrf_testing_tools_cpp
 
+#else
+
+namespace osrf_testing_tools_cpp
+{
+namespace memory_tools
+{
+
+struct SourceLocationImpl {};
+
+struct TraceImpl {};
+
+struct StackTraceImpl {};
+
+}  // namespace memory_tools
+}  // namespace osrf_testing_tools_cpp
+
 #endif  // _WIN32
 
 #endif  // OSRF_TESTING_TOOLS_CPP__STACK_TRACE_IMPL_HPP_
