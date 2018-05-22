@@ -31,12 +31,15 @@ get_verbosity_level_from_env()
 {
 #if !defined(_WIN32)
   const char * value = std::getenv("MEMORY_TOOLS_VERBOSITY");
-  size_t size_of_value = strnlen(value, 2);
+  size_t size_of_value = 0;
+  if (value) {
+    size_of_value = strnlen(value, 2);
+  }
 #else
   char value[256];
   size_t size_of_value;
   errno_t my_errno = getenv_s(&size_of_value, value, sizeof(value), "MEMORY_TOOLS_VERBOSITY");
-  if (0 == my_errno) {
+  if (0 != my_errno) {
     throw std::runtime_error("getenv_s() falied");
   }
 #endif
