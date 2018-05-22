@@ -33,6 +33,10 @@ define_property(TARGET
 string(REPLACE
   "memory_tools" "osrf_testing_tools_cpp::memory_tools"
   memory_tools_extra_test_env "@memory_tools_extra_test_env@")
+if(NOT memory_tools_extra_test_env)
+  # On Windows, for example, this might be empty.
+  set(memory_tools_extra_test_env "NO_LIBRARY_PRELOAD=1")
+endif()
 set_target_properties(osrf_testing_tools_cpp::memory_tools PROPERTIES
   LIBRARY_PRELOAD_ENVIRONMENT_VARIABLE ${memory_tools_extra_test_env})
 
