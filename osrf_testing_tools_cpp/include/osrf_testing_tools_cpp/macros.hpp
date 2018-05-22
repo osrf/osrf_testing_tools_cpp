@@ -1,4 +1,4 @@
-// Copyright 2015 Open Source Robotics Foundation, Inc.
+// Copyright 2018 Open Source Robotics Foundation, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,18 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "osrf_testing_tools_cpp/memory_tools/visibility_control.hpp"
+#ifndef OSRF_TESTING_TOOLS_CPP__MACROS_HPP_
+#define OSRF_TESTING_TOOLS_CPP__MACROS_HPP_
 
-namespace osrf_testing_tools_cpp
-{
-namespace memory_tools
-{
+#define OSRF_TESTING_TOOLS_CPP_STRING_JOIN(arg1, arg2) \
+  OSRF_TESTING_TOOLS_CPP_DO_STRING_JOIN(arg1, arg2)
+#define OSRF_TESTING_TOOLS_CPP_DO_STRING_JOIN(arg1, arg2) arg1 ## arg2
 
-/// Function to ensure at least one symbol exists on Windows.
-OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_EXPORT
-void
-do_not_use()
-{}
-
-}  // namespace memory_tools
-}  // namespace osrf_testing_tools_cpp
+#endif  // OSRF_TESTING_TOOLS_CPP__MACROS_HPP_

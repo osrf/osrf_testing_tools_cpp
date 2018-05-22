@@ -16,15 +16,17 @@ if(BUILD_TESTING)
   find_package(osrf_testing_tools_cpp REQUIRED)
   osrf_testing_tools_cpp_require_googletest(VERSION_GTE 1.8)  # ensures target gtest_main exists
 
-  add_executable(test_example_memory_tools_gtest test/test_example_memory_tools.cpp)
-  target_link_libraries(test_example_memory_tools_gtest
-    gtest_main
-    osrf_testing_tools_cpp::memory_tools
-  )
-  get_target_property(extra_env_vars
-    osrf_testing_tools_cpp::memory_tools LIBRARY_PRELOAD_ENVIRONMENT_VARIABLE)
-  osrf_testing_tools_cpp_add_test(test_example_memory_tools
-    COMMAND "$<TARGET_FILE:test_example_memory_tools_gtest>"
-    ENV ${extra_env_vars}
-  )
+  if(NOT WIN32)  # memory_tools doesn't work on Windows right now
+    add_executable(test_example_memory_tools_gtest test/test_example_memory_tools.cpp)
+    target_link_libraries(test_example_memory_tools_gtest
+      gtest_main
+      osrf_testing_tools_cpp::memory_tools
+    )
+    get_target_property(extra_env_vars
+      osrf_testing_tools_cpp::memory_tools LIBRARY_PRELOAD_ENVIRONMENT_VARIABLE)
+    osrf_testing_tools_cpp_add_test(test_example_memory_tools
+      COMMAND "$<TARGET_FILE:test_example_memory_tools_gtest>"
+      ENV ${extra_env_vars}
+    )
+  endif()
 endif()

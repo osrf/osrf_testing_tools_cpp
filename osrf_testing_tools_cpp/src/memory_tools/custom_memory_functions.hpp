@@ -36,28 +36,43 @@ void *
 custom_malloc(size_t size) noexcept;
 
 void *
-custom_malloc_with_original(size_t size, void * (*original_malloc)(size_t)) noexcept;
+custom_malloc_with_original(
+  size_t size,
+  void * (*original_malloc)(size_t),
+  const char * replacement_malloc_function_name,
+  bool check_recursion) noexcept;
 
 void *
 custom_realloc(void * memory_in, size_t size) noexcept;
 
 void *
-custom_realloc_with_original (
+custom_realloc_with_original(
   void * memory_in,
   size_t size,
-  void * (*original_realloc)(void *, size_t)) noexcept;
+  void * (*original_realloc)(void *, size_t),
+  const char * replacement_realloc_function_name,
+  bool check_recursion) noexcept;
 
 void *
 custom_calloc(size_t count, size_t size) noexcept;
 
 void *
-custom_calloc_with_original(size_t count, size_t size, void * (*original_calloc)(size_t, size_t)) noexcept;
+custom_calloc_with_original(
+  size_t count,
+  size_t size,
+  void * (*original_calloc)(size_t, size_t),
+  const char * replacement_calloc_function_name,
+  bool check_recursion) noexcept;
 
 void
 custom_free(void * memory) noexcept;
 
 void
-custom_free_with_original(void * memory, void (*original_free)(void *)) noexcept;
+custom_free_with_original(
+  void * memory,
+  void (*original_free)(void *),
+  const char * replacement_free_function_name,
+  bool check_recursion) noexcept;
 
 }  // namespace memory_tools
 }  // namespace osrf_testing_tools_cpp

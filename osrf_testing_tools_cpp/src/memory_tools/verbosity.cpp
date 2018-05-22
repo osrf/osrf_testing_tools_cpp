@@ -15,6 +15,7 @@
 #include <atomic>
 #include <cstdlib>
 #include <cstring>
+#include <stdexcept>
 
 #include "./safe_fwrite.hpp"
 #include "osrf_testing_tools_cpp/memory_tools/verbosity.hpp"
@@ -28,8 +29,21 @@ static
 VerbosityLevel
 get_verbosity_level_from_env()
 {
+#if !defined(_WIN32)
   const char * value = std::getenv("MEMORY_TOOLS_VERBOSITY");
-  if (!value || strnlen(value, 2) == 0) {
+  size_t size_of_value = 0;
+  if (value) {
+    size_of_value = strnlen(value, 2);
+  }
+#else
+  char value[256];
+  size_t size_of_value;
+  errno_t my_errno = getenv_s(&size_of_value, value, sizeof(value), "MEMORY_TOOLS_VERBOSITY");
+  if (0 != my_errno) {
+    throw std::runtime_error("getenv_s() falied");
+  }
+#endif
+  if (!value || size_of_value == 0) {
     return VerbosityLevel::quiet;
   }
   if (0 == std::strncmp("quiet", value, 5) || 0 == std::strncmp("QUIET", value, 5)) {

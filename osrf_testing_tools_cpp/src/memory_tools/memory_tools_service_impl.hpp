@@ -12,43 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef MEMORY_TOOLS__PRINT_BACKTRACE_HPP_
-#define MEMORY_TOOLS__PRINT_BACKTRACE_HPP_
+#ifndef MEMORY_TOOLS__MEMORY_TOOLS_SERVICE_IMPL_HPP_
+#define MEMORY_TOOLS__MEMORY_TOOLS_SERVICE_IMPL_HPP_
 
-#ifndef _WIN32
+#include <memory>
 
-# pragma GCC diagnostic push
-# ifdef __clang__
-#  pragma clang diagnostic ignored "-Wgnu-include-next"
-#  pragma clang diagnostic ignored "-Wunused-parameter"
-# endif
-
-#include "./vendor/bombela/backward-cpp/backward.hpp"
-
-# pragma GCC diagnostic pop
-
-#endif  // _WIN32
+#include "osrf_testing_tools_cpp/memory_tools/memory_tools_service.hpp"
 
 namespace osrf_testing_tools_cpp
 {
 namespace memory_tools
 {
 
-template<int MaxStackDepth = 64>
-void
-print_backtrace(FILE * out = stderr)
+class MemoryToolsServiceImpl
 {
-#if !defined(_WIN32)
-  backward::StackTrace st;
-  st.load_here(MaxStackDepth);
-  backward::Printer p;
-  p.print(st, out);
-#else
-  fprintf(out, "backtrace unavailable on Windows\n");
-#endif
-}
+public:
+  MemoryToolsServiceImpl(
+    MemoryFunctionType memory_function_type_in,
+    const char * source_function_name_in)
+  : memory_function_type(memory_function_type_in),
+    source_function_name(source_function_name_in),
+    lazy_stack_trace(nullptr)
+  {}
+
+  MemoryFunctionType memory_function_type;
+  const char * source_function_name;
+
+  bool ignored;
+  bool should_print_backtrace;
+  std::unique_ptr<StackTrace> lazy_stack_trace;
+};
 
 }  // namespace memory_tools
 }  // namespace osrf_testing_tools_cpp
 
-#endif  // MEMORY_TOOLS__PRINT_BACKTRACE_HPP_
+#endif  // MEMORY_TOOLS__MEMORY_TOOLS_SERVICE_IMPL_HPP_

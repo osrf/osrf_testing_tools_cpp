@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "osrf_testing_tools_cpp/memory_tools/monitoring.hpp"
+
 #include <atomic>
 
 #include "./implementation_monitoring_override.hpp"
 #include "osrf_testing_tools_cpp/memory_tools/initialize.hpp"
-#include "osrf_testing_tools_cpp/memory_tools/monitoring.hpp"
 #include "osrf_testing_tools_cpp/scope_exit.hpp"
 
 namespace osrf_testing_tools_cpp
@@ -24,8 +25,8 @@ namespace osrf_testing_tools_cpp
 namespace memory_tools
 {
 
-static __thread bool g_tls_thread_specific_enable_set = false;
-static __thread bool g_tls_enabled = false;
+static thread_local bool g_tls_thread_specific_enable_set = false;
+static thread_local bool g_tls_enabled = false;
 static std::atomic<bool> g_enabled(false);
 
 bool

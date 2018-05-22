@@ -37,18 +37,25 @@ namespace memory_tools
 void *
 custom_malloc(size_t size) noexcept
 {
-  return custom_malloc_with_original(size, std::malloc);
+  return custom_malloc_with_original(size, std::malloc, "malloc", true);
 }
 
 static inline
 void *
-custom_malloc_with_original_except(size_t size, void * (*original_malloc)(size_t))
+custom_malloc_with_original_except(
+  size_t size,
+  void * (*original_malloc)(size_t),
+  const char * replacement_malloc_function_name,
+  bool check_recursion)
 {
   if (
     // First check that we're initialized to avoid memory fucntions called in count function
     !osrf_testing_tools_cpp::memory_tools::initialized() ||
     // we've recursed, use original directly to avoid infinite loop
-    count_function_occurrences_in_backtrace(custom_malloc_with_original_except) > 1 ||
+    (
+      check_recursion &&
+      count_function_occurrences_in_backtrace(custom_malloc_with_original_except) > 1
+    ) ||
     // monitoring not enabled, use original
     !osrf_testing_tools_cpp::memory_tools::monitoring_enabled())
   {
@@ -58,7 +65,8 @@ custom_malloc_with_original_except(size_t size, void * (*original_malloc)(size_t
   // prevent dynamic memory calls from within this function from being considered
   ScopedImplementationSection section;
 
-  osrf_testing_tools_cpp::memory_tools::MemoryToolsServiceFactory factory;
+  using osrf_testing_tools_cpp::memory_tools::MemoryToolsServiceFactory;
+  MemoryToolsServiceFactory factory(MemoryFunctionType::Malloc, replacement_malloc_function_name);
   osrf_testing_tools_cpp::memory_tools::dispatch_malloc(factory.get_memory_tools_service());
 
   void * memory = original_malloc(size);
@@ -76,10 +84,18 @@ custom_malloc_with_original_except(size_t size, void * (*original_malloc)(size_t
 }
 
 void *
-custom_malloc_with_original(size_t size, void * (*original_malloc)(size_t)) noexcept
+custom_malloc_with_original(
+  size_t size,
+  void * (*original_malloc)(size_t),
+  const char * replacement_malloc_function_name,
+  bool check_recursion) noexcept
 {
   try {
-    return custom_malloc_with_original_except(size, original_malloc);
+    return custom_malloc_with_original_except(
+      size,
+      original_malloc,
+      replacement_malloc_function_name,
+      check_recursion);
   } catch (...) {
     fprintf(stderr, "unexpected error in custom malloc\n");
     return nullptr;
@@ -89,7 +105,7 @@ custom_malloc_with_original(size_t size, void * (*original_malloc)(size_t)) noex
 void *
 custom_realloc(void * memory_in, size_t size) noexcept
 {
-  return custom_realloc_with_original(memory_in, size, std::realloc);
+  return custom_realloc_with_original(memory_in, size, std::realloc, "realloc", true);
 }
 
 static inline
@@ -97,13 +113,18 @@ void *
 custom_realloc_with_original_except(
   void * memory_in,
   size_t size,
-  void * (*original_realloc)(void *, size_t))
+  void * (*original_realloc)(void *, size_t),
+  const char * replacement_realloc_function_name,
+  bool check_recursion)
 {
   if (
     // First check that we're initialized to avoid memory fucntions called in count function
     !osrf_testing_tools_cpp::memory_tools::initialized() ||
     // we've recursed, use original directly to avoid infinite loop
-    count_function_occurrences_in_backtrace(custom_realloc_with_original_except) > 1 ||
+    (
+      check_recursion &&
+      count_function_occurrences_in_backtrace(custom_realloc_with_original_except) > 1
+    ) ||
     // monitoring not enabled, use original
     !osrf_testing_tools_cpp::memory_tools::monitoring_enabled())
   {
@@ -113,7 +134,10 @@ custom_realloc_with_original_except(
   // prevent dynamic memory calls from within this function from being considered
   ScopedImplementationSection section;
 
-  osrf_testing_tools_cpp::memory_tools::MemoryToolsServiceFactory factory;
+  using osrf_testing_tools_cpp::memory_tools::MemoryToolsServiceFactory;
+  MemoryToolsServiceFactory factory(
+    MemoryFunctionType::Realloc,
+    replacement_realloc_function_name);
   osrf_testing_tools_cpp::memory_tools::dispatch_realloc(factory.get_memory_tools_service());
 
   void * memory = original_realloc(memory_in, size);
@@ -134,10 +158,17 @@ void *
 custom_realloc_with_original(
   void * memory_in,
   size_t size,
-  void * (*original_realloc)(void *, size_t)) noexcept
+  void * (*original_realloc)(void *, size_t),
+  const char * replacement_realloc_function_name,
+  bool check_recursion) noexcept
 {
   try {
-    return custom_realloc_with_original_except(memory_in, size, original_realloc);
+    return custom_realloc_with_original_except(
+      memory_in,
+      size,
+      original_realloc,
+      replacement_realloc_function_name,
+      check_recursion);
   } catch (...) {
     fprintf(stderr, "unexpected error in custom realloc\n");
     return nullptr;
@@ -147,7 +178,7 @@ custom_realloc_with_original(
 void *
 custom_calloc(size_t count, size_t size) noexcept
 {
-  return custom_calloc_with_original(count, size, std::calloc);
+  return custom_calloc_with_original(count, size, std::calloc, "calloc", true);
 }
 
 static inline
@@ -155,13 +186,18 @@ void *
 custom_calloc_with_original_except(
   size_t count,
   size_t size,
-  void * (*original_calloc)(size_t, size_t))
+  void * (*original_calloc)(size_t, size_t),
+  const char * replacement_calloc_function_name,
+  bool check_recursion)
 {
   if (
     // First check that we're initialized to avoid memory fucntions called in count function
     !osrf_testing_tools_cpp::memory_tools::initialized() ||
     // we've recursed, use original directly to avoid infinite loop
-    count_function_occurrences_in_backtrace(custom_calloc_with_original_except) > 1 ||
+    (
+      check_recursion &&
+      count_function_occurrences_in_backtrace(custom_calloc_with_original_except) > 1
+    ) ||
     // monitoring not enabled, use original
     !osrf_testing_tools_cpp::memory_tools::monitoring_enabled())
   {
@@ -171,7 +207,8 @@ custom_calloc_with_original_except(
   // prevent dynamic memory calls from within this function from being considered
   ScopedImplementationSection section;
 
-  osrf_testing_tools_cpp::memory_tools::MemoryToolsServiceFactory factory;
+  using osrf_testing_tools_cpp::memory_tools::MemoryToolsServiceFactory;
+  MemoryToolsServiceFactory factory(MemoryFunctionType::Calloc, replacement_calloc_function_name);
   osrf_testing_tools_cpp::memory_tools::dispatch_calloc(factory.get_memory_tools_service());
 
   void * memory = original_calloc(count, size);
@@ -194,10 +231,17 @@ void *
 custom_calloc_with_original(
   size_t count,
   size_t size,
-  void * (*original_calloc)(size_t, size_t)) noexcept
+  void * (*original_calloc)(size_t, size_t),
+  const char * replacement_calloc_function_name,
+  bool check_recursion) noexcept
 {
   try {
-    return custom_calloc_with_original_except(count, size, original_calloc);
+    return custom_calloc_with_original_except(
+      count,
+      size,
+      original_calloc,
+      replacement_calloc_function_name,
+      check_recursion);
   } catch (...) {
     fprintf(stderr, "unexpected error in custom calloc\n");
     return nullptr;
@@ -207,18 +251,25 @@ custom_calloc_with_original(
 void
 custom_free(void * memory) noexcept
 {
-  custom_free_with_original(memory, std::free);
+  custom_free_with_original(memory, std::free, "free", true);
 }
 
 static inline
 void
-custom_free_with_original_except(void * memory, void (*original_free)(void *))
+custom_free_with_original_except(
+  void * memory,
+  void (*original_free)(void *),
+  const char * replacement_free_function_name,
+  bool check_recursion)
 {
   if (
     // First check that we're initialized to avoid memory fucntions called in count function
     !osrf_testing_tools_cpp::memory_tools::initialized() ||
     // we've recursed, use original directly to avoid infinite loop
-    count_function_occurrences_in_backtrace(custom_free_with_original_except) > 1 ||
+    (
+      check_recursion &&
+      count_function_occurrences_in_backtrace(custom_free_with_original_except) > 1
+    ) ||
     // monitoring not enabled, use original
     !osrf_testing_tools_cpp::memory_tools::monitoring_enabled())
   {
@@ -229,7 +280,8 @@ custom_free_with_original_except(void * memory, void (*original_free)(void *))
   // prevent dynamic memory calls from within this function from being considered
   ScopedImplementationSection section;
 
-  osrf_testing_tools_cpp::memory_tools::MemoryToolsServiceFactory factory;
+  using osrf_testing_tools_cpp::memory_tools::MemoryToolsServiceFactory;
+  MemoryToolsServiceFactory factory(MemoryFunctionType::Free, replacement_free_function_name);
   osrf_testing_tools_cpp::memory_tools::dispatch_free(factory.get_memory_tools_service());
 
   original_free(memory);
@@ -245,10 +297,18 @@ custom_free_with_original_except(void * memory, void (*original_free)(void *))
 }
 
 void
-custom_free_with_original(void * memory, void (*original_free)(void *)) noexcept
+custom_free_with_original(
+  void * memory,
+  void (*original_free)(void *),
+  const char * replacement_free_function_name,
+  bool check_recursion) noexcept
 {
   try {
-    custom_free_with_original_except(memory, original_free);
+    custom_free_with_original_except(
+      memory,
+      original_free,
+      replacement_free_function_name,
+      check_recursion);
   } catch (...) {
     fprintf(stderr, "unexpected error in custom free\n");
   }

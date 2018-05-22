@@ -25,7 +25,7 @@
  */
 TEST(TestMemoryTools, test_allocation_checking_tools) {
   osrf_testing_tools_cpp::memory_tools::initialize();
-  auto memory_tools_uninitialize = OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT({
+  OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT({
     osrf_testing_tools_cpp::memory_tools::uninitialize();
   });
 
@@ -164,7 +164,7 @@ int my_second_function(int a, int b)
 TEST(TestMemoryTools, test_example) {
   // you must initialize memory tools, but uninitialization is optional
   osrf_testing_tools_cpp::memory_tools::initialize();
-  auto memory_tools_uninitialize = OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT({
+  OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT({
     osrf_testing_tools_cpp::memory_tools::uninitialize();
   });
 

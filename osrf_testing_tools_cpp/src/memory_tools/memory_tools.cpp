@@ -15,17 +15,18 @@
 #if defined(__linux__)
 
 #include "./impl/linux.cpp"
+#include "./impl/unix_common.cpp"
 
 #elif defined(__APPLE__)
 
 #include "./impl/apple.cpp"
+#include "./impl/unix_common.cpp"
 
 // #elif defined(_WIN32)
 
 // TODO(wjwwood): install custom malloc (and others) for Windows.
 
 #else
-// Default case: do nothing.
 
 #include "./impl/unsupported_os.cpp"
 

@@ -135,7 +135,8 @@ function(_osrf_testing_tools_cpp_require_googletest return_variable)
 
   # First generate a list of versions which fit the constraints.
   _osrf_testing_tools_cpp_filter_versions(valid_version_indexes versions ${ARGN})
-  if(NOT valid_version_indexes)
+  list(LENGTH valid_version_indexes valid_version_indexes_length)
+  if(valid_version_indexes_length EQUAL 0)
     message(FATAL_ERROR
       "No valid googletest version found in provided versions: ${versions}")
   endif()

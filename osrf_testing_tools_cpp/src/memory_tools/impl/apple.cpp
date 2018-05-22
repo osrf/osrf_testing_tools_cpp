@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if defined(__APPLE__)
+
 #include <cstdlib>
 
-#include "../custom_memory_functions.hpp"
-
-#if defined(__APPLE__)
+#include "./unix_common.hpp"
 
 // Pulled from:
 //  https://github.com/emeryberger/Heap-Layers/blob/
@@ -39,40 +39,47 @@ typedef struct interpose_s
     reinterpret_cast<void *>(oldf), \
   }
 
-// End Interpose.
-
 extern "C"
 {
 
 void *
-replacement_malloc(size_t size)
+apple_replacement_malloc(size_t size)
 {
-  return osrf_testing_tools_cpp::memory_tools::custom_malloc(size);
+  return unix_replacement_malloc(size, malloc);
 }
 
 void *
-replacement_realloc(void * memory_in, size_t size)
+apple_replacement_realloc(void * memory_in, size_t size)
 {
-  return osrf_testing_tools_cpp::memory_tools::custom_realloc(memory_in, size);
+  return unix_replacement_realloc(memory_in, size, realloc);
 }
 
 void *
-replacement_calloc(size_t count, size_t size)
+apple_replacement_calloc(size_t count, size_t size)
 {
-  return osrf_testing_tools_cpp::memory_tools::custom_calloc(count, size);
+  return unix_replacement_calloc(count, size, calloc);
 }
 
 void
-replacement_free(void * memory)
+apple_replacement_free(void * memory)
 {
-  osrf_testing_tools_cpp::memory_tools::custom_free(memory);
+  return unix_replacement_free(memory, free);
 }
 
-OSX_INTERPOSE(replacement_malloc, malloc);
-OSX_INTERPOSE(replacement_realloc, realloc);
-OSX_INTERPOSE(replacement_calloc, calloc);
-OSX_INTERPOSE(replacement_free, free);
+OSX_INTERPOSE(apple_replacement_malloc, malloc);
+OSX_INTERPOSE(apple_replacement_realloc, realloc);
+OSX_INTERPOSE(apple_replacement_calloc, calloc);
+OSX_INTERPOSE(apple_replacement_free, free);
 
 }  // extern "C"
+
+// End Interpose.
+
+// on shared library load, find and store the original memory function locations
+static void __apple_memory_tools_init(void) __attribute__((constructor));
+static void __apple_memory_tools_init(void)
+{
+  get_original_functions_initialized() = true;
+}
 
 #endif  // defined(__APPLE__)

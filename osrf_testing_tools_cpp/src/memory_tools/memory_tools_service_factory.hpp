@@ -15,6 +15,7 @@
 #ifndef MEMORY_TOOLS__MEMORY_TOOLS_SERVICE_FACTORY_HPP_
 #define MEMORY_TOOLS__MEMORY_TOOLS_SERVICE_FACTORY_HPP_
 
+#include "./memory_tools_service_impl.hpp"
 #include "osrf_testing_tools_cpp/memory_tools/memory_tools_service.hpp"
 
 namespace osrf_testing_tools_cpp
@@ -25,6 +26,12 @@ namespace memory_tools
 class MemoryToolsServiceFactory
 {
 public:
+  MemoryToolsServiceFactory(
+    MemoryFunctionType memory_function_type,
+    const char * source_function_name)
+  : service_(memory_function_type, source_function_name)
+  {}
+
   MemoryToolsService &
   get_memory_tools_service()
   {
@@ -34,13 +41,13 @@ public:
   bool
   should_ignore()
   {
-    return !service_.should_print_backtrace_ && service_.ignored_;
+    return !service_.impl_->should_print_backtrace && service_.impl_->ignored;
   }
 
   bool
   should_print_backtrace()
   {
-    return service_.should_print_backtrace_;
+    return service_.impl_->should_print_backtrace;
   }
 
 private:

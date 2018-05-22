@@ -18,8 +18,8 @@
 #include <cstdlib>
 #include <dlfcn.h>
 
-#include "../count_function_occurrences_in_backtrace.hpp"
-#include "../custom_memory_functions.hpp"
+#include "./static_allocator.hpp"
+#include "./unix_common.hpp"
 
 template<typename FunctionPointerT>
 FunctionPointerT
@@ -39,15 +39,19 @@ find_original_function(const char * name)
       reinterpret_cast<void *>(original_function));
     exit(1);  // cannot throw, next best thing
   }
-  fprintf(stderr, "%s is from %s\n", name, dl_info.dli_fname);
+  // fprintf(stderr, "original '%s()' is from '%s'\n", name, dl_info.dli_fname);
   return original_function;
 }
 
+using osrf_testing_tools_cpp::memory_tools::impl::StaticAllocator;
+// the size was found experimentally on Ubuntu Linux 16.04 x86_64
+using StaticAllocatorT = StaticAllocator<8388608>;
 // used to fullfil calloc call from dlerror.c during initialization of original functions
-static uint8_t g_initialization_buffer[256];
-static bool g_initialization_buffer_used = false;
+// constructor is called on first use with a placement-new and the static storage
+static uint8_t g_static_allocator_storage[sizeof(StaticAllocatorT)];
+static StaticAllocatorT * g_static_allocator = nullptr;
 
-static bool g_initializing_original_functions = true;
+// storage for original malloc/realloc/calloc/free
 using MallocSignature = void * (*)(size_t);
 static MallocSignature g_original_malloc = nullptr;
 using ReallocSignature = void *(*)(void *, size_t);
@@ -57,6 +61,7 @@ static CallocSignature g_original_calloc = nullptr;
 using FreeSignature = void (*)(void *);
 static FreeSignature g_original_free = nullptr;
 
+// on shared library load, find and store the original memory function locations
 static void __linux_memory_tools_init(void) __attribute__((constructor));
 static void __linux_memory_tools_init(void)
 {
@@ -65,7 +70,7 @@ static void __linux_memory_tools_init(void)
   g_original_calloc = find_original_function<CallocSignature>("calloc");
   g_original_free = find_original_function<FreeSignature>("free");
 
-  g_initializing_original_functions = false;
+  get_original_functions_initialized() = true;
 }
 
 extern "C"
@@ -74,47 +79,53 @@ extern "C"
 void *
 malloc(size_t size) noexcept
 {
-  if (g_initializing_original_functions) {
-    return reinterpret_cast<MallocSignature>(dlsym(RTLD_NEXT, "malloc"))(size);
+  if (!get_original_functions_initialized()) {
+    if (nullptr == g_static_allocator) {
+      // placement-new the static allocator
+      // which is used while finding the original memory functions
+      g_static_allocator = new (g_static_allocator_storage) StaticAllocatorT;
+    }
+    return g_static_allocator->allocate(size);
   }
-  using osrf_testing_tools_cpp::memory_tools::custom_malloc_with_original;
-  return custom_malloc_with_original(size, g_original_malloc);
+  return unix_replacement_malloc(size, g_original_malloc);
 }
 
 void *
 realloc(void * pointer, size_t size) noexcept
 {
-  using osrf_testing_tools_cpp::memory_tools::custom_realloc_with_original;
-  return custom_realloc_with_original(pointer, size, g_original_realloc);
+  if (!get_original_functions_initialized()) {
+    if (nullptr == g_static_allocator) {
+      // placement-new the static allocator
+      // which is used while finding the original memory functions
+      g_static_allocator = new (g_static_allocator_storage) StaticAllocatorT;
+    }
+    return g_static_allocator->reallocate(pointer, size);
+  }
+  return unix_replacement_realloc(pointer, size, g_original_realloc);
 }
 
 void *
 calloc(size_t count, size_t size) noexcept
 {
-  if (g_initializing_original_functions) {
-    if (count * size > sizeof(g_initialization_buffer)) {
-      SAFE_FWRITE(stderr, "not enough space in buffer to satisfy some dlfnc call\n");
-      exit(1);
+  if (!get_original_functions_initialized()) {
+    if (nullptr == g_static_allocator) {
+      // placement-new the static allocator
+      // which is used while finding the original memory functions
+      g_static_allocator = new (g_static_allocator_storage) StaticAllocatorT;
     }
-    if (g_initialization_buffer_used) {
-      SAFE_FWRITE(stderr, "calloc called more than once during initialization\n");
-      exit(1);
-    }
-    g_initialization_buffer_used = true;
-    return g_initialization_buffer;
+    return g_static_allocator->zero_allocate(count, size);
   }
-  using osrf_testing_tools_cpp::memory_tools::custom_calloc_with_original;
-  return custom_calloc_with_original(count, size, g_original_calloc);
+  return unix_replacement_calloc(count, size, g_original_calloc);
 }
 
 void
 free(void * pointer) noexcept
 {
-  if (pointer == g_initialization_buffer) {
+  if (g_static_allocator->deallocate(pointer)) {
+    // memory was originally allocated by static allocator, no need to pass to "real" free
     return;
   }
-  using osrf_testing_tools_cpp::memory_tools::custom_free_with_original;
-  custom_free_with_original(pointer, g_original_free);
+  unix_replacement_free(pointer, g_original_free);
 }
 
 }  // extern "C"
