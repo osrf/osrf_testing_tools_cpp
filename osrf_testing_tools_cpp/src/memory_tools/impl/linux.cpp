@@ -121,7 +121,8 @@ calloc(size_t count, size_t size) noexcept
 void
 free(void * pointer) noexcept
 {
-  if (g_static_allocator->deallocate(pointer)) {
+  if (nullptr == pointer || g_static_allocator->deallocate(pointer)) {
+    // free of nullptr or,
     // memory was originally allocated by static allocator, no need to pass to "real" free
     return;
   }
