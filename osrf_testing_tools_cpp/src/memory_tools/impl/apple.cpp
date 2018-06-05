@@ -79,7 +79,7 @@ OSX_INTERPOSE(apple_replacement_free, free);
 static void __apple_memory_tools_init(void) __attribute__((constructor));
 static void __apple_memory_tools_init(void)
 {
-  get_original_functions_initialized() = true;
+  get_static_initialization_complete() = true;
 }
 
 #endif  // defined(__APPLE__)

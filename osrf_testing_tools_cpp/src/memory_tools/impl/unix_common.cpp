@@ -20,12 +20,12 @@
 #include "../custom_memory_functions.hpp"
 #include "osrf_testing_tools_cpp/scope_exit.hpp"
 
-static bool g_original_functions_initialized = false;
+static bool g_static_initialization_complete = false;
 
 bool &
-get_original_functions_initialized()
+get_static_initialization_complete()
 {
-  return g_original_functions_initialized;
+  return g_static_initialization_complete;
 }
 
 static size_t g_inside_custom_memory_function = 0;
@@ -38,7 +38,7 @@ void *
 unix_replacement_malloc(size_t size, void *(*original_malloc)(size_t))
 {
   // Short-circuit to original function during self-recursion, if static initialization is done.
-  if (g_original_functions_initialized && 0 != g_inside_custom_memory_function) {
+  if (!g_static_initialization_complete || 0 != g_inside_custom_memory_function) {
     return original_malloc(size);
   }
   std::lock_guard<std::recursive_mutex> lock(g_memory_function_recursive_mutex);
@@ -55,7 +55,7 @@ void *
 unix_replacement_realloc(void * memory_in, size_t size, void *(*original_realloc)(void *, size_t))
 {
   // Short-circuit to original function during self-recursion, if static initialization is done.
-  if (g_original_functions_initialized && 0 != g_inside_custom_memory_function) {
+  if (!g_static_initialization_complete || 0 != g_inside_custom_memory_function) {
     return original_realloc(memory_in, size);
   }
   std::lock_guard<std::recursive_mutex> lock(g_memory_function_recursive_mutex);
@@ -72,7 +72,7 @@ void *
 unix_replacement_calloc(size_t count, size_t size, void *(*original_calloc)(size_t, size_t))
 {
   // Short-circuit to original function during self-recursion, if static initialization is done.
-  if (g_original_functions_initialized && 0 != g_inside_custom_memory_function) {
+  if (!g_static_initialization_complete || 0 != g_inside_custom_memory_function) {
     return original_calloc(count, size);
   }
   std::lock_guard<std::recursive_mutex> lock(g_memory_function_recursive_mutex);
@@ -92,7 +92,7 @@ unix_replacement_free(void * memory, void (*original_free)(void *))
     return;
   }
   // Short-circuit to original function during self-recursion, if static initialization is done.
-  if (g_original_functions_initialized && 0 != g_inside_custom_memory_function) {
+  if (!g_static_initialization_complete || 0 != g_inside_custom_memory_function) {
     return original_free(memory);
   }
   std::lock_guard<std::recursive_mutex> lock(g_memory_function_recursive_mutex);

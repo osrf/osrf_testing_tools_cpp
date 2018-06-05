@@ -70,7 +70,7 @@ static void __linux_memory_tools_init(void)
   g_original_calloc = find_original_function<CallocSignature>("calloc");
   g_original_free = find_original_function<FreeSignature>("free");
 
-  get_original_functions_initialized() = true;
+  get_static_initialization_complete() = true;
 }
 
 extern "C"
@@ -79,7 +79,7 @@ extern "C"
 void *
 malloc(size_t size) noexcept
 {
-  if (!get_original_functions_initialized()) {
+  if (!get_static_initialization_complete()) {
     if (nullptr == g_static_allocator) {
       // placement-new the static allocator
       // which is used while finding the original memory functions
@@ -93,7 +93,7 @@ malloc(size_t size) noexcept
 void *
 realloc(void * pointer, size_t size) noexcept
 {
-  if (!get_original_functions_initialized()) {
+  if (!get_static_initialization_complete()) {
     if (nullptr == g_static_allocator) {
       // placement-new the static allocator
       // which is used while finding the original memory functions
@@ -107,7 +107,7 @@ realloc(void * pointer, size_t size) noexcept
 void *
 calloc(size_t count, size_t size) noexcept
 {
-  if (!get_original_functions_initialized()) {
+  if (!get_static_initialization_complete()) {
     if (nullptr == g_static_allocator) {
       // placement-new the static allocator
       // which is used while finding the original memory functions

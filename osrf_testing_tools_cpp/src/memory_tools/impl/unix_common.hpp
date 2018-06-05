@@ -18,7 +18,7 @@
 #include <cstddef>
 
 bool &
-get_original_functions_initialized();
+get_static_initialization_complete();
 
 extern "C"
 {
