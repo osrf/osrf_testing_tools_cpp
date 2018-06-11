@@ -26,12 +26,16 @@ add_library(memory_tools_interpose SHARED
 )
 target_link_libraries(memory_tools_interpose memory_tools)
 
-if(APPLE)
-  list(APPEND memory_tools_extra_test_env
-    DYLD_INSERT_LIBRARIES=$<TARGET_FILE:memory_tools_interpose>)
-elseif(UNIX)
-  list(APPEND memory_tools_extra_test_env
-    LD_PRELOAD=$<TARGET_FILE:memory_tools_interpose>)
+# TODO(wjwwood): If on aarch64, so not set the preload environment variables, until fixed.
+# see: https://github.com/osrf/osrf_testing_tools_cpp/issues/3
+if(NOT CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+  if(APPLE)
+    list(APPEND memory_tools_extra_test_env
+      DYLD_INSERT_LIBRARIES=$<TARGET_FILE:memory_tools_interpose>)
+  elseif(UNIX)
+    list(APPEND memory_tools_extra_test_env
+      LD_PRELOAD=$<TARGET_FILE:memory_tools_interpose>)
+  endif()
 endif()
 
 install(TARGETS memory_tools
