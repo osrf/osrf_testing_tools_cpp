@@ -15,8 +15,8 @@ endif()
 
 add_subdirectory(src)
 
+include(CTest)
 if(BUILD_TESTING)
-  include(CTest)
   include(cmake/osrf_testing_tools_cpp_require_googletest.cmake)
   # ensures target gtest_main exists
   osrf_testing_tools_cpp_require_googletest(VERSION_GTE 1.8

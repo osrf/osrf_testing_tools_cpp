@@ -21,9 +21,8 @@ There are a few CMake macros which can provide access to one of a few versions o
 ###### Example
 
 ```cmake
-
+include(CTest)
 if(BUILD_TESTING)
-  include(CTest)
   find_package(osrf_testing_tools_cpp REQUIRED)
   osrf_testing_tools_cpp_require_googletest(VERSION_GTE 1.8)  # ensures target gtest_main exists
 
@@ -174,8 +173,8 @@ You can use the above `osrf_testing_tools_cpp_add_test()` macro to set this envi
 For example, here is some CMake code that will build a test and add a CTest for it that properly sets the library pre-load environment variable on all support OS's:
 
 ```cmake
+include(CTest)
 if(BUILD_TESTING)
-  include(CTest)
   find_package(osrf_testing_tools_cpp REQUIRED)
   osrf_testing_tools_cpp_require_googletest(VERSION_GTE 1.8)  # ensures target gtest_main exists
 
