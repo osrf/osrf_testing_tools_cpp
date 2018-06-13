@@ -149,10 +149,13 @@ TEST(TestMemoryTools, test_allocation_checking_tools) {
   EXPECT_EQ(4u, unexpected_frees);
 }
 
-void my_first_function()
+void my_first_function(const std::string& str)
 {
   void * some_memory = std::malloc(1024);
-  // .. do something with it
+  // We need to do something with the malloc'ed memory to make sure this
+  // function doesn't get optimized away.  memset isn't enough, so we do a
+  // memcpy from a passed in string, which is enough to keep the optimizer away.
+  memcpy(some_memory, str.c_str(), str.length());
   std::free(some_memory);
 }
 
@@ -162,6 +165,9 @@ int my_second_function(int a, int b)
 }
 
 TEST(TestMemoryTools, test_example) {
+  // See the comment in my_first_function() for why we need this.
+  const std::string dummy("hello");
+
   // you must initialize memory tools, but uninitialization is optional
   osrf_testing_tools_cpp::memory_tools::initialize();
   OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT({
@@ -180,20 +186,20 @@ TEST(TestMemoryTools, test_example) {
 
   // at this point, you'll still not get callbacks, since monitoring is not enabled
   // so calling either user function should not fail
-  my_first_function();
+  my_first_function(dummy);
   EXPECT_EQ(my_second_function(1, 2), 3);
 
   // enabling monitoring will allow checking to begin, but the default state is
   // that dynamic memory calls are expected, so again either function will pass
   osrf_testing_tools_cpp::memory_tools::enable_monitoring();
-  my_first_function();
+  my_first_function(dummy);
   EXPECT_EQ(my_second_function(1, 2), 3);
 
   // if you then tell memory tools that malloc is unexpected, then it will call
   // your above callback, at least until you indicate malloc is expected again
   EXPECT_NONFATAL_FAILURE({
     EXPECT_NO_MALLOC({
-      my_first_function();
+      my_first_function(dummy);
     });
   }, "unexpected malloc");
   // There are also explicit begin/end functions if you need variables to leave the scope
@@ -204,10 +210,10 @@ TEST(TestMemoryTools, test_example) {
 
   // enable monitoring only works in the current thread, but you can enable it for all threads
   osrf_testing_tools_cpp::memory_tools::enable_monitoring_in_all_threads();
-  std::thread t1([]() {
+  std::thread t1([&dummy]() {
     EXPECT_NONFATAL_FAILURE({
       EXPECT_NO_MALLOC({
-        my_first_function();
+        my_first_function(dummy);
       });
     }, "unexpected malloc");
     osrf_testing_tools_cpp::memory_tools::expect_no_malloc_begin();
@@ -220,9 +226,9 @@ TEST(TestMemoryTools, test_example) {
   // disabling monitoring in all threads should not catch the malloc in my_first_function()
   osrf_testing_tools_cpp::memory_tools::disable_monitoring_in_all_threads();
   osrf_testing_tools_cpp::memory_tools::enable_monitoring();
-  std::thread t2([]() {
+  std::thread t2([&dummy]() {
     EXPECT_NO_MALLOC({
-      my_first_function();
+      my_first_function(dummy);
     });
     osrf_testing_tools_cpp::memory_tools::expect_no_malloc_begin();
     int result = my_second_function(1, 2);
