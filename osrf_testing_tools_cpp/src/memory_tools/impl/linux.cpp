@@ -39,7 +39,6 @@ find_original_function(const char * name)
       reinterpret_cast<void *>(original_function));
     exit(1);  // cannot throw, next best thing
   }
-  // fprintf(stderr, "original '%s()' is from '%s'\n", name, dl_info.dli_fname);
   return original_function;
 }
 
@@ -62,15 +61,14 @@ using FreeSignature = void (*)(void *);
 static FreeSignature g_original_free = nullptr;
 
 // on shared library load, find and store the original memory function locations
-static void __linux_memory_tools_init(void) __attribute__((constructor));
-static void __linux_memory_tools_init(void)
+static __attribute__((constructor)) void __linux_memory_tools_init(void)
 {
   g_original_malloc = find_original_function<MallocSignature>("malloc");
   g_original_realloc = find_original_function<ReallocSignature>("realloc");
   g_original_calloc = find_original_function<CallocSignature>("calloc");
   g_original_free = find_original_function<FreeSignature>("free");
 
-  get_static_initialization_complete() = true;
+  complete_static_initialization();
 }
 
 extern "C"

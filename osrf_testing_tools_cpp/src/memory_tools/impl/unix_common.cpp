@@ -22,6 +22,15 @@
 
 static bool g_static_initialization_complete = false;
 
+static std::recursive_mutex* g_memory_function_recursive_mutex;
+
+void
+complete_static_initialization()
+{
+  g_memory_function_recursive_mutex = new std::recursive_mutex;
+  g_static_initialization_complete = true;
+}
+
 bool &
 get_static_initialization_complete()
 {
@@ -29,7 +38,6 @@ get_static_initialization_complete()
 }
 
 static size_t g_inside_custom_memory_function = 0;
-static std::recursive_mutex g_memory_function_recursive_mutex;
 
 extern "C"
 {
@@ -41,7 +49,7 @@ unix_replacement_malloc(size_t size, void *(*original_malloc)(size_t))
   if (!g_static_initialization_complete || 0 != g_inside_custom_memory_function) {
     return original_malloc(size);
   }
-  std::lock_guard<std::recursive_mutex> lock(g_memory_function_recursive_mutex);
+  std::lock_guard<std::recursive_mutex> lock(*g_memory_function_recursive_mutex);
   g_inside_custom_memory_function++;
   OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT({
     g_inside_custom_memory_function--;
@@ -58,7 +66,7 @@ unix_replacement_realloc(void * memory_in, size_t size, void *(*original_realloc
   if (!g_static_initialization_complete || 0 != g_inside_custom_memory_function) {
     return original_realloc(memory_in, size);
   }
-  std::lock_guard<std::recursive_mutex> lock(g_memory_function_recursive_mutex);
+  std::lock_guard<std::recursive_mutex> lock(*g_memory_function_recursive_mutex);
   g_inside_custom_memory_function++;
   OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT({
     g_inside_custom_memory_function--;
@@ -75,7 +83,7 @@ unix_replacement_calloc(size_t count, size_t size, void *(*original_calloc)(size
   if (!g_static_initialization_complete || 0 != g_inside_custom_memory_function) {
     return original_calloc(count, size);
   }
-  std::lock_guard<std::recursive_mutex> lock(g_memory_function_recursive_mutex);
+  std::lock_guard<std::recursive_mutex> lock(*g_memory_function_recursive_mutex);
   g_inside_custom_memory_function++;
   OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT({
     g_inside_custom_memory_function--;
@@ -95,7 +103,7 @@ unix_replacement_free(void * memory, void (*original_free)(void *))
   if (!g_static_initialization_complete || 0 != g_inside_custom_memory_function) {
     return original_free(memory);
   }
-  std::lock_guard<std::recursive_mutex> lock(g_memory_function_recursive_mutex);
+  std::lock_guard<std::recursive_mutex> lock(*g_memory_function_recursive_mutex);
   g_inside_custom_memory_function++;
   OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT({
     g_inside_custom_memory_function--;

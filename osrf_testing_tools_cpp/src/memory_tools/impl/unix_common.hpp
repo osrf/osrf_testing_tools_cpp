@@ -17,6 +17,9 @@
 
 #include <cstddef>
 
+void
+complete_static_initialization();
+
 bool &
 get_static_initialization_complete();
 
