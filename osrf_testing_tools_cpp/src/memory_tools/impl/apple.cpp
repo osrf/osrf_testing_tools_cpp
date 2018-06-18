@@ -76,10 +76,9 @@ OSX_INTERPOSE(apple_replacement_free, free);
 // End Interpose.
 
 // on shared library load, find and store the original memory function locations
-static void __apple_memory_tools_init(void) __attribute__((constructor));
-static void __apple_memory_tools_init(void)
+static __attribute__((constructor,used)) void __apple_memory_tools_init(void)
 {
-  get_static_initialization_complete() = true;
+  complete_static_initialization();
 }
 
 #endif  // defined(__APPLE__)
