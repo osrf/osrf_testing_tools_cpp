@@ -21,7 +21,7 @@
 #include "osrf_testing_tools_cpp/memory_tools/memory_tools.hpp"
 #include "osrf_testing_tools_cpp/scope_exit.hpp"
 
-char side_effect[1024];
+volatile char side_effect[1024];
 void my_first_function(const std::string& str)
 {
   void * some_memory = std::malloc(1024);
@@ -31,7 +31,7 @@ void my_first_function(const std::string& str)
   // is globally visible (assuring we have a side-effect).  This is enough to
   // keep the optimizer away.
   memcpy(some_memory, str.c_str(), str.length());
-  memcpy(side_effect, some_memory, str.length());
+  memcpy((void *)side_effect, some_memory, str.length());
   std::free(some_memory);
 }
 
