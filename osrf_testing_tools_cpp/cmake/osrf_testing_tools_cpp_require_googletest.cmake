@@ -158,6 +158,11 @@ function(_osrf_testing_tools_cpp_require_googletest return_variable)
   if(ARG_VENDOR_DIR)
     set(VENDOR_DIR ${ARG_VENDOR_DIR})
   else()
+    if(NOT DEFINED osrf_testing_tools_cpp_DIR)
+      message(FATAL_ERROR
+        "Cannot locate the googletest vendor directory because osrf_testing_tools_cpp "
+        "was not found and the VENDOR_DIR argument was not used.")
+    endif()
     set(VENDOR_DIR "${osrf_testing_tools_cpp_DIR}/../../../share/osrf_testing_tools_cpp/vendor")
   endif()
 
