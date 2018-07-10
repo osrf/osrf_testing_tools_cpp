@@ -155,9 +155,10 @@ function(_osrf_testing_tools_cpp_require_googletest return_variable)
   message(STATUS
     "googletest version '${newest_valid_version}' selected, of versions: '${valid_versions}'")
 
-  set(VENDOR_DIR "${osrf_testing_tools_cpp_DIR}/../../../share/osrf_testing_tools_cpp/vendor")
   if(ARG_VENDOR_DIR)
     set(VENDOR_DIR ${ARG_VENDOR_DIR})
+  else()
+    set(VENDOR_DIR "${osrf_testing_tools_cpp_DIR}/../../../share/osrf_testing_tools_cpp/vendor")
   endif()
 
   list(GET locations ${newest_valid_version_index} newest_valid_location)
