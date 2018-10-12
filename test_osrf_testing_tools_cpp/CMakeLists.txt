@@ -31,5 +31,14 @@ if(BUILD_TESTING)
       COMMAND "$<TARGET_FILE:test_example_memory_tools_gtest>"
       ENV ${extra_env_vars}
     )
+
+    add_executable(test_is_not_working_gtest test/test_is_not_working.cpp)
+    target_link_libraries(test_is_not_working_gtest
+      gtest_main
+      osrf_testing_tools_cpp::memory_tools
+    )
+    osrf_testing_tools_cpp_add_test(test_is_not_working_gtest
+      COMMAND "$<TARGET_FILE:test_is_not_working_gtest>"
+    )
   endif()
 endif()
