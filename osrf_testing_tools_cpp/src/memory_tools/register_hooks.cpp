@@ -38,6 +38,16 @@ on_malloc(AnyMemoryToolsCallback callback)
   }
 }
 
+AnyMemoryToolsCallback
+get_on_malloc()
+{
+  auto current = g_on_malloc_callback.load();
+  if (current) {
+    return *current;
+  }
+  return nullptr;
+}
+
 void
 dispatch_malloc(MemoryToolsService & service)
 {
@@ -51,6 +61,16 @@ on_realloc(AnyMemoryToolsCallback callback)
   ScopedImplementationSection implementation_section;
   // duplicate user callback and then delete the old one
   delete g_on_realloc_callback.exchange(new AnyMemoryToolsCallback(callback));
+}
+
+AnyMemoryToolsCallback
+get_on_realloc()
+{
+  auto current = g_on_realloc_callback.load();
+  if (current) {
+    return *current;
+  }
+  return nullptr;
 }
 
 void
@@ -68,6 +88,16 @@ on_calloc(AnyMemoryToolsCallback callback)
   delete g_on_calloc_callback.exchange(new AnyMemoryToolsCallback(callback));
 }
 
+AnyMemoryToolsCallback
+get_on_calloc()
+{
+  auto current = g_on_calloc_callback.load();
+  if (current) {
+    return *current;
+  }
+  return nullptr;
+}
+
 void
 dispatch_calloc(MemoryToolsService & service)
 {
@@ -81,6 +111,16 @@ on_free(AnyMemoryToolsCallback callback)
   ScopedImplementationSection implementation_section;
   // duplicate user callback and then delete the old one
   delete g_on_free_callback.exchange(new AnyMemoryToolsCallback(callback));
+}
+
+AnyMemoryToolsCallback
+get_on_free()
+{
+  auto current = g_on_free_callback.load();
+  if (current) {
+    return *current;
+  }
+  return nullptr;
 }
 
 void
