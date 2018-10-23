@@ -12,19 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Code to do replacing of malloc/free/etc... inspired by:
-//   https://dxr.mozilla.org/mozilla-central/rev/
-//    cc9c6cd756cb744596ba039dcc5ad3065a7cc3ea/memory/build/replace_malloc.c
+#include <gtest/gtest.h>
+#include <gtest/gtest-spi.h>
 
-#ifndef OSRF_TESTING_TOOLS_CPP__MEMORY_TOOLS__MEMORY_TOOLS_HPP_
-#define OSRF_TESTING_TOOLS_CPP__MEMORY_TOOLS__MEMORY_TOOLS_HPP_
+#include "osrf_testing_tools_cpp/memory_tools/memory_tools.hpp"
+#include "osrf_testing_tools_cpp/scope_exit.hpp"
 
-#include "./initialize.hpp"
-#include "./is_working.hpp"
-#include "./memory_tools_service.hpp"
-#include "./monitoring.hpp"
-#include "./register_hooks.hpp"
-#include "./testing_helpers.hpp"
-#include "./visibility_control.hpp"
+TEST(TestMemoryTools, test_is_not_working) {
 
-#endif  // OSRF_TESTING_TOOLS_CPP__MEMORY_TOOLS__MEMORY_TOOLS_HPP_
+  // you must initialize memory tools, but uninitialization is optional
+  osrf_testing_tools_cpp::memory_tools::initialize();
+  OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT({
+    osrf_testing_tools_cpp::memory_tools::uninitialize();
+  });
+
+  osrf_testing_tools_cpp::memory_tools::enable_monitoring();
+
+  ASSERT_FALSE(osrf_testing_tools_cpp::memory_tools::is_working());
+}

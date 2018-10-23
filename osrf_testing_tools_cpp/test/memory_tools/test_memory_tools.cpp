@@ -149,18 +149,9 @@ TEST(TestMemoryTools, test_allocation_checking_tools) {
   EXPECT_EQ(4u, unexpected_frees);
 }
 
-volatile char side_effect[1024];
 void my_first_function(const std::string& str)
 {
-  void * some_memory = std::malloc(1024);
-  // We need to do something with the malloc'ed memory to make sure this
-  // function doesn't get optimized away.  memset isn't enough, so we do a
-  // memcpy from a passed in string, and then copy *that* out to an array that
-  // is globally visible (assuring we have a side-effect).  This is enough to
-  // keep the optimizer away.
-  memcpy(some_memory, str.c_str(), str.length());
-  memcpy((void *)side_effect, some_memory, str.length());
-  std::free(some_memory);
+  osrf_testing_tools_cpp::memory_tools::guaranteed_malloc(str);
 }
 
 int my_second_function(int a, int b)

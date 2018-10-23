@@ -2,6 +2,7 @@ add_library(memory_tools SHARED
   custom_memory_functions.cpp
   implementation_monitoring_override.cpp
   initialize.cpp
+  is_working.cpp
   memory_tools_service.cpp
   monitoring.cpp
   register_hooks.cpp

@@ -50,6 +50,11 @@ OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
 void
 on_malloc(AnyMemoryToolsCallback callback);
 
+/// Get the current on_malloc callback if set, otherwise null.
+OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
+AnyMemoryToolsCallback
+get_on_malloc();
+
 /// Call the registered callback for malloc.
 OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
 void
@@ -64,6 +69,11 @@ dispatch_malloc(MemoryToolsService & service);
 OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
 void
 on_realloc(AnyMemoryToolsCallback callback);
+
+/// Get the current on_realloc callback if set, otherwise null.
+OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
+AnyMemoryToolsCallback
+get_on_realloc();
 
 /// Call the registered callback for realloc.
 OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
@@ -80,6 +90,11 @@ OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
 void
 on_calloc(AnyMemoryToolsCallback callback);
 
+/// Get the current on_calloc callback if set, otherwise null.
+OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
+AnyMemoryToolsCallback
+get_on_calloc();
+
 /// Call the registered callback for calloc.
 OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
 void
@@ -94,6 +109,11 @@ dispatch_calloc(MemoryToolsService & service);
 OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
 void
 on_free(AnyMemoryToolsCallback callback);
+
+/// Get the current on_free callback if set, otherwise null.
+OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
+AnyMemoryToolsCallback
+get_on_free();
 
 /// Call the registered callback for free.
 OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
