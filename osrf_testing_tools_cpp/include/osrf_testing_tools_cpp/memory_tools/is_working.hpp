@@ -16,6 +16,7 @@
 #define OSRF_TESTING_TOOLS_CPP__MEMORY_TOOLS__IS_WORKING_HPP_
 
 #include <string>
+#include <cstdlib>
 
 #include "./visibility_control.hpp"
 
@@ -36,8 +37,9 @@ is_working();
 /// Copy an input string into allocated memory, guaranteeing malloc is called.
 /**
  * Makes sure that the compiler doesn't optimize the malloc and free out.
- * Input string contents doesn't matter, but should be non-empty.
+ * The content of the input string doesn't matter, but should be non-empty.
  */
+OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
 void
 guaranteed_malloc(const std::string & str);
 
