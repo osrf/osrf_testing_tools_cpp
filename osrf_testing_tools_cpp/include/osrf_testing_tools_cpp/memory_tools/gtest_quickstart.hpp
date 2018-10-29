@@ -107,7 +107,7 @@ public:
   QuickstartConfiguration(const ConfigMap & config)
   : QuickstartConfiguration()
   {
-    for (auto & kv_pair : config) {
+    for (const auto & kv_pair : config) {
       if (config_.count(kv_pair.first) == 0) {
         throw std::runtime_error("unexpected QuickstartConfiguration key '" + kv_pair.first + "'");
       }
@@ -120,7 +120,7 @@ public:
   QuickstartConfiguration(const std::map<std::string, std::string> & config_with_error_message)
   : QuickstartConfiguration()
   {
-    for (auto & kv_pair : config_with_error_message) {
+    for (const auto & kv_pair : config_with_error_message) {
       if (config_.count(kv_pair.first) == 0) {
         throw std::runtime_error("unexpected QuickstartConfiguration key '" + kv_pair.first + "'");
       }
@@ -133,7 +133,7 @@ public:
   QuickstartConfiguration(const std::map<std::string, bool> & config_with_error_message)
   : QuickstartConfiguration()
   {
-    for (auto & kv_pair : config_with_error_message) {
+    for (const auto & kv_pair : config_with_error_message) {
       if (config_.count(kv_pair.first) == 0) {
         throw std::runtime_error("unexpected QuickstartConfiguration key '" + kv_pair.first + "'");
       }
@@ -176,7 +176,7 @@ bool
 quickstart_gtest_setup(Args &&... args)
 {
   QuickstartConfiguration quickstart_config(std::forward<Args>(args)...);
-  auto & config_map = quickstart_config.get_config();
+  const auto & config_map = quickstart_config.get_config();
   osrf_testing_tools_cpp::memory_tools::initialize();
 
   auto callback_factory = [](const std::string & message, bool should_print_backtrace) {
@@ -191,7 +191,7 @@ quickstart_gtest_setup(Args &&... args)
       };
   };
 
-  for (auto & kv_pair : config_map) {
+  for (const auto & kv_pair : config_map) {
     if ("malloc" == kv_pair.first) {
       osrf_testing_tools_cpp::memory_tools::on_unexpected_malloc(
         callback_factory(kv_pair.second.first, kv_pair.second.second));
