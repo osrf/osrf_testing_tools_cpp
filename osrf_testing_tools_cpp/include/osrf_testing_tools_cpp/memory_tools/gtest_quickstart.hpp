@@ -70,6 +70,7 @@ namespace osrf_testing_tools_cpp
 namespace memory_tools
 {
 
+/// Wrapper for configuration information used during memory tools setup.
 class QuickstartConfiguration
 {
 public:
@@ -81,6 +82,7 @@ public:
     >
   >;
 
+  /// Default settings.
   QuickstartConfiguration()
   : config_({
     {"malloc", {"unexpected call to malloc", false}},
@@ -90,6 +92,7 @@ public:
   })
   {}
 
+  /// Custom setting which only changes the print backtrace behavior.
   explicit
   QuickstartConfiguration(bool should_print_backtrace)
   : QuickstartConfiguration()
@@ -99,6 +102,7 @@ public:
     }
   }
 
+  /// Completely custom settings for some or all memory operations.
   explicit
   QuickstartConfiguration(const ConfigMap & config)
   : QuickstartConfiguration()
@@ -111,6 +115,7 @@ public:
     }
   }
 
+  /// Custom settings where only the error message changes for some or all memory operations.
   explicit
   QuickstartConfiguration(const std::map<std::string, std::string> & config_with_error_message)
   : QuickstartConfiguration()
@@ -123,6 +128,7 @@ public:
     }
   }
 
+  /// Custom settings where only the print backtrace changes for some or all memory operations.
   explicit
   QuickstartConfiguration(const std::map<std::string, bool> & config_with_error_message)
   : QuickstartConfiguration()
@@ -135,6 +141,7 @@ public:
     }
   }
 
+  /// Return the internally stored configuration map.
   const ConfigMap &
   get_config() const
   {
@@ -149,7 +156,7 @@ private:
 /**
  * This function will initialize memory tools, setup callbacks for unexpected
  * calls to each memory function and make gtest fail (non-fatal, i.e. EXPECT
- * and no ASSERT) if unexpected memory calls are made, and then enable
+ * and not ASSERT) if unexpected memory calls are made, and then enable
  * in the current thread monitoring.
  *
  * If you want monitoring in all threads you will need to enable that yourself.
@@ -231,6 +238,7 @@ public:
     quickstart_gtest_teardown();
   }
 
+  /// Return true if memory tools was installed correctly and working.
   bool
   memory_tools_is_working() const
   {
