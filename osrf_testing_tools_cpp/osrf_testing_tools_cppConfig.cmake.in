@@ -40,6 +40,10 @@ endif()
 set_target_properties(osrf_testing_tools_cpp::memory_tools PROPERTIES
   LIBRARY_PRELOAD_ENVIRONMENT_VARIABLE ${memory_tools_extra_test_env})
 
+# Define option to skip tests which interfere with address sanitizer. This includes memory tool tests
+# which override LD_PRELOAD variable.
+option(SKIP_ASAN_INCOMPATIBLE_TESTS "Skip tests which are address sanitizer incompatible" OFF)
+
 # setup osrf_testing_tools_cpp_INCLUDE_DIRS so that header only things can be used without linking
 set(osrf_testing_tools_cpp_INCLUDE_DIRS "${__prefix_dir}/include")
 

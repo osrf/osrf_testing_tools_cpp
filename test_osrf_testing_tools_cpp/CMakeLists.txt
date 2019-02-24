@@ -11,6 +11,10 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic -Werror)
 endif()
 
+# Define option to skip tests which interfere with address sanitizer. This includes memory tool tests
+# which override LD_PRELOAD variable.
+option(SKIP_ASAN_INCOMPATIBLE_TESTS "Skip tests which are address sanitizer incompatible" OFF)
+
 include(CTest)
 if(BUILD_TESTING)
   find_package(osrf_testing_tools_cpp REQUIRED)
@@ -19,7 +23,7 @@ if(BUILD_TESTING)
   # memory_tools doesn't work on Windows right now
   # TODO(wjwwood): disable on aarch64 for now, until fixed, see:
   #   https://github.com/osrf/osrf_testing_tools_cpp/issues/3
-  if(NOT WIN32 AND NOT CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+  if(NOT WIN32 AND NOT CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64" AND NOT SKIP_ASAN_INCOMPATIBLE_TESTS)
     add_executable(test_example_memory_tools_gtest test/test_example_memory_tools.cpp)
     target_link_libraries(test_example_memory_tools_gtest
       gtest_main

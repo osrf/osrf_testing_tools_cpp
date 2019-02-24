@@ -8,7 +8,8 @@ target_link_libraries(test_memory_tools
 # memory_tools doesn't work on Windows right now
 # TODO(wjwwood): disable on aarch64 for now, until fixed, see:
 #   https://github.com/osrf/osrf_testing_tools_cpp/issues/3
-if(NOT WIN32 AND NOT CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+# Memory tool tests are address sanitizer incompatible as they override LD_PRELOAD
+if(NOT WIN32 AND NOT CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64" AND NOT SKIP_ASAN_INCOMPATIBLE_TESTS)
   add_test(
     NAME "test_memory_tools"
     COMMAND

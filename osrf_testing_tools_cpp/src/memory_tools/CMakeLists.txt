@@ -50,7 +50,8 @@ endif()
 
 # TODO(wjwwood): If on aarch64, so not set the preload environment variables, until fixed.
 # see: https://github.com/osrf/osrf_testing_tools_cpp/issues/3
-if(NOT CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+# Memory tool tests are address sanitizer incompatible as they override LD_PRELOAD
+if(NOT CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64" AND NOT SKIP_ASAN_INCOMPATIBLE_TESTS)
   if(APPLE)
     list(APPEND memory_tools_extra_test_env
       DYLD_INSERT_LIBRARIES=$<TARGET_FILE:memory_tools_interpose>)
