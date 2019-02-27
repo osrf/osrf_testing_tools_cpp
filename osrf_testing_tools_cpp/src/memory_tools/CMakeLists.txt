@@ -48,6 +48,9 @@ if(BFD_LIBRARY)
   target_compile_definitions(memory_tools_interpose PRIVATE BACKWARD_HAS_BFD=1)
 endif()
 
+# Define option to add address sanitizer path to LD_PRELOAD before adding memory tools to the same
+option(OPTIONAL_ASAN_LD_PRELOAD_OVERRIDE "Adds asan lib as a prefix to LD_PRELOAD environment variable" OFF)
+
 # TODO(wjwwood): If on aarch64, so not set the preload environment variables, until fixed.
 # see: https://github.com/osrf/osrf_testing_tools_cpp/issues/3
 if(NOT CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
@@ -55,8 +58,16 @@ if(NOT CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
     list(APPEND memory_tools_extra_test_env
       DYLD_INSERT_LIBRARIES=$<TARGET_FILE:memory_tools_interpose>)
   elseif(UNIX)
-    list(APPEND memory_tools_extra_test_env
-      LD_PRELOAD=$<TARGET_FILE:memory_tools_interpose>)
+    set(memory_tools_path $<TARGET_FILE:memory_tools_interpose>)
+    if(OPTIONAL_ASAN_LD_PRELOAD_OVERRIDE)
+      execute_process(COMMAND bash "-c" "ldconfig -p | grep -e "libasan.*x86_64" | awk '{print $NF}'"
+      OUTPUT_VARIABLE libasan_path OUTPUT_STRIP_TRAILING_WHITESPACE)
+      list(APPEND memory_tools_extra_test_env
+        LD_PRELOAD=${libasan_path}:${memory_tools_path})
+    else()
+      list(APPEND memory_tools_extra_test_env
+        LD_PRELOAD=${memory_tools_path})
+    endif()
   endif()
 endif()
 
