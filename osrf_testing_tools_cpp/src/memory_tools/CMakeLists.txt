@@ -52,10 +52,10 @@ endif()
 # see: https://github.com/osrf/osrf_testing_tools_cpp/issues/3
 if(NOT CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
   # Option to add ASan lib path prefix to enable ASan to work as expected without interference from memory tools
-  option(OPTIONAL_ASAN_PRELOAD_ENV_VAR_OVERRIDE "Adds ASan lib path as a prefix to preload environment variable" OFF)
+  option(ASAN_PRELOAD_ENV_VAR_OVERRIDE "Adds ASan lib path as a prefix to preload environment variable" OFF)
   set(optional_preload_env_prefix "")
 
-  if(OPTIONAL_ASAN_PRELOAD_ENV_VAR_OVERRIDE)
+  if(ASAN_PRELOAD_ENV_VAR_OVERRIDE)
     execute_process(COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libasan.so
       OUTPUT_VARIABLE libasan_path OUTPUT_STRIP_TRAILING_WHITESPACE)
     if(libasan_path STREQUAL "libasan.so")
