@@ -29,6 +29,8 @@ if(UNIX AND NOT APPLE)
 
   if(DL_LIBRARY)
     target_link_libraries(memory_tools ${DL_LIBRARY})
+  else()
+    target_link_libraries(memory_tools dl)
   endif()
 
   if(BFD_LIBRARY)
