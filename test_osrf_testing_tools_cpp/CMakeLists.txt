@@ -13,13 +13,15 @@ endif()
 
 include(CTest)
 if(BUILD_TESTING)
+  get_target_property(memory_tools_enabled
+    osrf_testing_tools_cpp::memory_tools ENABLE_MEMORY_TOOLS_PRELOAD)
   find_package(osrf_testing_tools_cpp REQUIRED)
   osrf_testing_tools_cpp_require_googletest(VERSION_GTE 1.8)  # ensures target gtest_main exists
 
   # memory_tools doesn't work on Windows right now
   # TODO(wjwwood): disable on aarch64 for now, until fixed, see:
   #   https://github.com/osrf/osrf_testing_tools_cpp/issues/3
-  if(NOT WIN32 AND NOT CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+  if(memory_tools_enabled)
     add_executable(test_example_memory_tools_gtest test/test_example_memory_tools.cpp)
     target_link_libraries(test_example_memory_tools_gtest
       gtest_main

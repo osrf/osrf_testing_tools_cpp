@@ -30,6 +30,11 @@ define_property(TARGET
   BRIEF_DOCS "Environment variable needed to preload the associated library."
   FULL_DOCS "Environment variable needed to preload the associated library."
 )
+define_property(TARGET
+  PROPERTY LIBRARY_PRELOAD_ENVIRONMENT_IS_AVAILABLE
+  BRIEF_DOCS "Indicator of whether memory_tools is available in the current build configuration."
+  FULL_DOCS "Indicator of whether memory_tools is available in the current build configuration."
+)
 string(REPLACE
   "memory_tools" "osrf_testing_tools_cpp::memory_tools"
   memory_tools_extra_test_env "@memory_tools_extra_test_env@")
@@ -39,6 +44,8 @@ if(NOT memory_tools_extra_test_env)
 endif()
 set_target_properties(osrf_testing_tools_cpp::memory_tools PROPERTIES
   LIBRARY_PRELOAD_ENVIRONMENT_VARIABLE ${memory_tools_extra_test_env})
+set_target_properties(osrf_testing_tools_cpp::memory_tools PROPERTIES
+  LIBRARY_PRELOAD_ENVIRONMENT_IS_AVAILABLE "@memory_tools_is_enabled@")
 
 # setup osrf_testing_tools_cpp_INCLUDE_DIRS so that header only things can be used without linking
 set(osrf_testing_tools_cpp_INCLUDE_DIRS "${__prefix_dir}/include")

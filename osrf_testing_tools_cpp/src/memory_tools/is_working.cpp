@@ -40,8 +40,21 @@ guaranteed_malloc(const std::string & str)
 }
 
 bool
+is_installed()
+{
+#ifdef ENABLE_MEMORY_TESTING_TOOLS
+  return true;
+#else
+  return false;
+#endif
+}
+
+bool
 is_working()
 {
+  if (!is_installed()) {
+    return false;
+  }
   auto original_on_malloc = get_on_malloc();
   bool malloc_was_called = false;
   on_malloc([&]() {malloc_was_called = true;});
