@@ -42,7 +42,7 @@ guaranteed_malloc(const std::string & str)
 bool
 is_installed()
 {
-#ifdef ENABLE_MEMORY_TESTING_TOOLS
+#ifdef ENABLE_MEMORY_TOOLS_PRELOAD
   return true;
 #else
   return false;

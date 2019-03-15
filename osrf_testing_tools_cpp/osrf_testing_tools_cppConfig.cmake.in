@@ -45,7 +45,7 @@ endif()
 set_target_properties(osrf_testing_tools_cpp::memory_tools PROPERTIES
   LIBRARY_PRELOAD_ENVIRONMENT_VARIABLE ${memory_tools_extra_test_env})
 set_target_properties(osrf_testing_tools_cpp::memory_tools PROPERTIES
-  LIBRARY_PRELOAD_ENVIRONMENT_IS_AVAILABLE "@memory_tools_is_enabled@")
+  LIBRARY_PRELOAD_ENVIRONMENT_IS_AVAILABLE "@memory_tools_is_available@")
 
 # setup osrf_testing_tools_cpp_INCLUDE_DIRS so that header only things can be used without linking
 set(osrf_testing_tools_cpp_INCLUDE_DIRS "${__prefix_dir}/include")
