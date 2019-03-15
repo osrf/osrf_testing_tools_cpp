@@ -13,10 +13,10 @@ endif()
 
 include(CTest)
 if(BUILD_TESTING)
-  get_target_property(memory_tools_enabled
-    osrf_testing_tools_cpp::memory_tools ENABLE_MEMORY_TOOLS_PRELOAD)
   find_package(osrf_testing_tools_cpp REQUIRED)
   osrf_testing_tools_cpp_require_googletest(VERSION_GTE 1.8)  # ensures target gtest_main exists
+  get_target_property(memory_tools_enabled
+    osrf_testing_tools_cpp::memory_tools ENABLE_MEMORY_TOOLS_PRELOAD)
 
   # memory_tools doesn't work on Windows right now
   # TODO(wjwwood): disable on aarch64 for now, until fixed, see:
