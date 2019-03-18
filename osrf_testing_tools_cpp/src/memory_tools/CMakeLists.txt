@@ -52,9 +52,10 @@ option(ENABLE_MEMORY_TOOLS_PRELOAD
   "Enable preload environment configuration for memory tools"
   ON)
 
+# Memory tools doesn't work on Windows right now.
 # TODO(wjwwood): If on aarch64, so not set the preload environment variables, until fixed.
 # see: https://github.com/osrf/osrf_testing_tools_cpp/issues/3
-if(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+if(WIN32 OR CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
   set(ENABLE_MEMORY_TOOLS_PRELOAD OFF)
 endif()
 
