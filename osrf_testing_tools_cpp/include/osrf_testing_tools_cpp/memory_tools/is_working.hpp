@@ -25,15 +25,6 @@ namespace osrf_testing_tools_cpp
 namespace memory_tools
 {
 
-/// Return true if memory tools is installed (LD_PRELOAD was done) regardless of whether it is working.
-/**
- * TODO(nuclearsandwich) figure out how this will work and update docs.
- * This works by dark magic that was not meant for human eyes.
- */
-OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
-bool
-is_installed();
-
 /// Return true if memory tools is enabled, installed (LD_PRELOAD was done), and working.
 /**
  * This works by temporarily installing a on_malloc hook and then calling
