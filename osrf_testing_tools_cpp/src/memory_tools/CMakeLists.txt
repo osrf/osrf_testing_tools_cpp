@@ -48,18 +48,18 @@ if(BFD_LIBRARY)
   target_compile_definitions(memory_tools_interpose PRIVATE BACKWARD_HAS_BFD=1)
 endif()
 
-option(ENABLE_MEMORY_TOOLS_PRELOAD
-  "Enable preload environment configuration for memory tools"
-  ON)
+option(OSRF_TESTING_TOOLS_CPP_DISABLE_MEMORY_TOOLS
+  "Disable environment configuration for memory tools"
+  OFF)
 
 # Memory tools doesn't work on Windows right now.
 # TODO(wjwwood): If on aarch64, so not set the preload environment variables, until fixed.
 # see: https://github.com/osrf/osrf_testing_tools_cpp/issues/3
 if(WIN32 OR CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
-  set(ENABLE_MEMORY_TOOLS_PRELOAD OFF)
+  set(OSRF_TESTING_TOOLS_CPP_DISABLE_MEMORY_TOOLS ON)
 endif()
 
-if (ENABLE_MEMORY_TOOLS_PRELOAD)
+if (NOT OSRF_TESTING_TOOLS_CPP_DISABLE_MEMORY_TOOLS)
   set(memory_tools_is_available TRUE)
   if(APPLE)
     list(APPEND memory_tools_extra_test_env
