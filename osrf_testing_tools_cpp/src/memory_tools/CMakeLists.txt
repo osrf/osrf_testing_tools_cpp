@@ -61,7 +61,6 @@ endif()
 
 if (ENABLE_MEMORY_TOOLS_PRELOAD)
   set(memory_tools_is_available TRUE)
-  target_compile_definitions(memory_tools PRIVATE ENABLE_MEMORY_TOOLS_PRELOAD)
   if(APPLE)
     list(APPEND memory_tools_extra_test_env
       DYLD_INSERT_LIBRARIES=$<TARGET_FILE:memory_tools_interpose>)
