@@ -45,9 +45,10 @@ public:
   void *
   allocate(size_t size)
   {
-    if (size <= size_t(std::distance(stack_pointer_, end_))) {
+    auto const aligned_size = align_up(size);
+    if (aligned_size <= static_cast<decltype(aligned_size)>(std::distance(end_, stack_pointer_))) {
       uint8_t * result = stack_pointer_;
-      stack_pointer_ += size;
+      stack_pointer_ += aligned_size;
       return result;
     }
     SAFE_FWRITE(stderr, "StackAllocator.allocate() -> nullptr\n");
@@ -105,7 +106,14 @@ public:
   }
 
 private:
-  uint8_t memory_pool_[MemoryPoolSize];
+  static std::size_t
+  align_up(std::size_t n) noexcept
+  {
+    return (n+(alignment-1)) & ~(alignment-1);
+  }
+
+  static auto constexpr alignment = alignof(std::max_align_t);
+  alignas(alignment) uint8_t memory_pool_[MemoryPoolSize];
   uint8_t * begin_;
   uint8_t * end_;
   uint8_t * stack_pointer_;
@@ -114,13 +122,5 @@ private:
 }  // namespace impl
 }  // namespace memory_tools
 }  // namespace osrf_testing_tools_cpp
-
-int main(void)
-{
-  osrf_testing_tools_cpp::memory_tools::impl::StaticAllocator<64> sa;
-  void * mem = sa.allocate(16);
-  (void)mem;
-  return 0;
-}
 
 #endif  // MEMORY_TOOLS__IMPL__STATIC_ALLOCATOR_HPP_
