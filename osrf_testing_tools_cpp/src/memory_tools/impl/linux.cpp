@@ -45,8 +45,8 @@ find_original_function(const char * name)
 // An amount of memory that is greater than what is needed for static initialization
 // for any test we run. It was found experimentally on Ubuntu Linux 16.04 x86_64.
 static const size_t STATIC_ALLOCATOR_SIZE = 0x800000;
-using StaticAllocatorT =
-  osrf_testing_tools_cpp::memory_tools::impl::StaticAllocator<STATIC_ALLOCATOR_SIZE>;
+using osrf_testing_tools_cpp::memory_tools::impl::StaticAllocator;
+using StaticAllocatorT = StaticAllocator<STATIC_ALLOCATOR_SIZE>;
 static uint8_t g_static_allocator_storage[sizeof(StaticAllocatorT)];
 
 // Contains global allocator to make 100% sure to avoid Static Initialization Order Fiasco.
@@ -86,7 +86,7 @@ void *
 malloc(size_t size) noexcept
 {
   if (!get_static_initialization_complete()) {
-     return g_static_allocator()->allocate(size);
+    return g_static_allocator()->allocate(size);
   }
   return unix_replacement_malloc(size, g_original_malloc);
 }
