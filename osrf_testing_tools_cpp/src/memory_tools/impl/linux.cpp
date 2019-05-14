@@ -51,7 +51,9 @@ static uint8_t g_static_allocator_storage[sizeof(StaticAllocatorT)];
 
 // Contains global allocator to make 100% sure to avoid Static Initialization Order Fiasco.
 // "Construct on first use" idiom
-StaticAllocatorT * get_static_allocator() {
+static StaticAllocatorT *
+get_static_allocator()
+{
   // placement-new the static allocator in preallocated storage
   // which is used while finding the original memory functions
   static StaticAllocatorT * alloc = new (g_static_allocator_storage) StaticAllocatorT;

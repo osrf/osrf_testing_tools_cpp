@@ -32,15 +32,15 @@ namespace impl
 // Alignment of the largest primitive type for this system.
 static constexpr size_t MAX_ALIGN = alignof(std::max_align_t);
 
-/// Bump n up to a multiple of alignment.
+/// Round value up to a multiple of alignment.
 /**
-  * Bit twiddling trick cribbed from Boost.
+  * Implementation cribbed from Boost.
   * https://github.com/boostorg/align/blob/develop/include/boost/align/align_up.hpp
   */
-inline size_t
-align_up(size_t n, size_t alignment) noexcept
+static constexpr inline std::size_t
+align_up(std::size_t value, std::size_t alignment) noexcept
 {
-  return (n+(alignment-1)) & ~(alignment-1);
+  return (value + alignment - 1) & ~(alignment - 1);
 }
 
 template<size_t MemoryPoolSize>
