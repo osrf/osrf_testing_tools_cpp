@@ -29,6 +29,20 @@ namespace memory_tools
 namespace impl
 {
 
+// Alignment of the largest primitive type for this system.
+static constexpr size_t MAX_ALIGN = alignof(std::max_align_t);
+
+/// Bump n up to a multiple of alignment.
+/**
+  * Bit twiddling trick cribbed from Boost.
+  * https://github.com/boostorg/align/blob/develop/include/boost/align/align_up.hpp
+  */
+inline size_t
+align_up(size_t n, size_t alignment) noexcept
+{
+  return (n+(alignment-1)) & ~(alignment-1);
+}
+
 template<size_t MemoryPoolSize>
 class StaticAllocator
 {
@@ -45,8 +59,8 @@ public:
   void *
   allocate(size_t size)
   {
-    auto const aligned_size = align_up(size);
-    if (aligned_size <= static_cast<decltype(aligned_size)>(std::distance(end_, stack_pointer_))) {
+    const size_t aligned_size = align_up(size, MAX_ALIGN);
+    if (aligned_size <= static_cast<size_t>(std::distance(end_, stack_pointer_))) {
       uint8_t * result = stack_pointer_;
       stack_pointer_ += aligned_size;
       return result;
@@ -106,14 +120,8 @@ public:
   }
 
 private:
-  static std::size_t
-  align_up(std::size_t n) noexcept
-  {
-    return (n+(alignment-1)) & ~(alignment-1);
-  }
-
-  static auto constexpr alignment = alignof(std::max_align_t);
-  alignas(alignment) uint8_t memory_pool_[MemoryPoolSize];
+  // Make sure that our memory pool is aligned to the maximum primitive size for this system.
+  alignas(MAX_ALIGN) uint8_t memory_pool_[MemoryPoolSize];
   uint8_t * begin_;
   uint8_t * end_;
   uint8_t * stack_pointer_;
