@@ -19,6 +19,7 @@
 
 #include "osrf_testing_tools_cpp/memory_tools/memory_tools.hpp"
 #include "osrf_testing_tools_cpp/scope_exit.hpp"
+#include "memory_tools/impl/static_allocator.hpp"
 
 /**
  * Tests the dynamic memory checking tools.
@@ -231,4 +232,26 @@ TEST(TestMemoryTools, test_example) {
     EXPECT_EQ(result, 3);
   });
   t2.join();
+}
+
+/**
+ * Tests the static allocator used during dynamic library loading.
+ */
+TEST(TestMemoryTools, test_static_allocation_alignment) {
+  static constexpr size_t allocator_size = 0x1000;
+  // Arbitrarily chosen values (somewhat observed values from OpenSSL static initialization).
+  // Not all aligned to std::max_align_t on most platforms.
+  static const std::vector<size_t> request_sizes = {
+    24, 24, 24, 7, 82, 2424
+  };
+  static constexpr size_t max_align = alignof(std::max_align_t);
+
+  osrf_testing_tools_cpp::memory_tools::impl::StaticAllocator<allocator_size> allocator;
+
+  // Check that all returned memory blocks are aligned with the max_align type.
+  for (const size_t request : request_sizes) {
+    void * memory = allocator.allocate(request);
+    ASSERT_EQ(reinterpret_cast<size_t>(memory) % max_align, size_t(0));
+    ASSERT_TRUE(allocator.deallocate(memory));
+  }
 }
