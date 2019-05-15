@@ -4,6 +4,8 @@ target_link_libraries(test_memory_tools
   memory_tools
   gtest_main
 )
+target_include_directories(test_memory_tools
+  PRIVATE ${memory_tools_src_dir_internal_testing_only})
 
 if(memory_tools_is_available)
   add_test(
