@@ -48,14 +48,14 @@ macro(osrf_testing_tools_cpp_extract_and_build_googletest
 
   execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
     RESULT_VARIABLE result
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-${GOOGLETEST_VERSION}-extracted)
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/googletest-${GOOGLETEST_VERSION}-extracted)
   if(result)
     message(FATAL_ERROR "CMake step for googletest failed: ${result}")
   endif()
 
   execute_process(COMMAND ${CMAKE_COMMAND} --build .
     RESULT_VARIABLE result
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-${GOOGLETEST_VERSION}-extracted)
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/googletest-${GOOGLETEST_VERSION}-extracted)
   if(result)
     message(FATAL_ERROR "Build step for googletest failed: ${result}")
   endif()
@@ -74,13 +74,13 @@ macro(osrf_testing_tools_cpp_extract_and_build_googletest
     # add the -pthread flag for Linux machines so it will always work
     execute_process(COMMAND bash "-c" "sed -i 's@\${CMAKE_THREAD_LIBS_INIT}@\${CMAKE_THREAD_LIBS_INIT} -pthread@' ${__prefix}-src/googletest/cmake/internal_utils.cmake"
       RESULT_VARIABLE result
-      WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/${__prefix}-extracted)
+      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${__prefix}-extracted)
   endif()
   # Add googletest directly to our build. This defines
   # the gtest and gtest_main targets.
   add_subdirectory(
-    ${CMAKE_BINARY_DIR}/${__prefix}-extracted/${__prefix}-src
-    ${CMAKE_BINARY_DIR}/${__prefix}-extracted/${__prefix}-build
+    ${CMAKE_CURRENT_BINARY_DIR}/${__prefix}-extracted/${__prefix}-src
+    ${CMAKE_CURRENT_BINARY_DIR}/${__prefix}-extracted/${__prefix}-build
     EXCLUDE_FROM_ALL
   )
   unset(__prefix)

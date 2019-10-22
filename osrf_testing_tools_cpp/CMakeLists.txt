@@ -20,7 +20,7 @@ if(BUILD_TESTING)
   include(cmake/osrf_testing_tools_cpp_require_googletest.cmake)
   # ensures target gtest_main exists
   osrf_testing_tools_cpp_require_googletest(VERSION_GTE 1.8
-    VENDOR_DIR "${CMAKE_SOURCE_DIR}/vendor")
+    VENDOR_DIR "${PROJECT_SOURCE_DIR}/vendor")
 
   add_subdirectory(test)
 endif()
