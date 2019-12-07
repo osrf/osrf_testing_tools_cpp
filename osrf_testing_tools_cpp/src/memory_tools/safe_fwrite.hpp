@@ -18,7 +18,7 @@
 #include <cstdio>
 #include <cstring>
 
-#if defined(_WIN32)
+#if defined(_MSC_VER)
 // Limit the buffer size in the `fwrite` call to give an upper bound to buffer overrun in the case
 // of non-null terminated `msg`.
 #define SAFE_FWRITE(out, msg) fwrite(msg, sizeof(char), strnlen_s(msg, 4096), out)
