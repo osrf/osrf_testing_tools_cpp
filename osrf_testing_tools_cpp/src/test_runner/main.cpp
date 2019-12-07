@@ -121,7 +121,7 @@ main(int argc, char const * argv[])
 
   // Set the environment variables.
   for (auto pair : env_variables) {
-#if defined(_WIN32)
+#if defined(_MSC_VER)
     if (0 != _putenv_s(pair.first.c_str(), pair.second.c_str())) {
 #else
     if (0 != setenv(pair.first.c_str(), pair.second.c_str(), 1)) {
@@ -151,7 +151,7 @@ main(int argc, char const * argv[])
       new_value += path_sep;
     }
     new_value += pair.second;
-#if defined(_WIN32)
+#if defined(_MSC_VER)
     if (0 != _putenv_s(pair.first.c_str(), new_value.c_str())) {
 #else
     if (0 != setenv(pair.first.c_str(), new_value.c_str(), 1)) {

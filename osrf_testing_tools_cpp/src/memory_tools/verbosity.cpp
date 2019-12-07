@@ -29,7 +29,7 @@ static
 VerbosityLevel
 get_verbosity_level_from_env()
 {
-#if !defined(_WIN32)
+#if !defined(_MSC_VER)
   const char * value = std::getenv("MEMORY_TOOLS_VERBOSITY");
   size_t size_of_value = 0;
   if (value) {
@@ -40,7 +40,7 @@ get_verbosity_level_from_env()
   size_t size_of_value;
   errno_t my_errno = getenv_s(&size_of_value, value, sizeof(value), "MEMORY_TOOLS_VERBOSITY");
   if (0 != my_errno) {
-    throw std::runtime_error("getenv_s() falied");
+    throw std::runtime_error("getenv_s() failed");
   }
 #endif
   if (!value || size_of_value == 0) {

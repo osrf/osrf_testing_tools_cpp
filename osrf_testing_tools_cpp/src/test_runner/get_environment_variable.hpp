@@ -26,7 +26,7 @@ std::string
 get_environment_variable(const std::string & env_var_name)
 {
   const char * env_value = nullptr;
-#if defined(_WIN32)
+#if defined(_MSC_VER)
   char * dup_env_value = nullptr;
   size_t dup_env_value_len = 0;
   errno_t ret = _dupenv_s(&dup_env_value, &dup_env_value_len, env_var_name.c_str());
@@ -41,7 +41,7 @@ get_environment_variable(const std::string & env_var_name)
     env_value = "";
   }
   std::string return_value = env_value;
-#if defined(_WIN32)
+#if defined(_MSC_VER)
   // also done with env_value, so free dup_env_value
   free(dup_env_value);
 #endif
