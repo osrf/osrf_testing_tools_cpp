@@ -58,6 +58,7 @@ template<int MaxBacktraceSize>
 size_t
 impl_count_function_occurrences_in_backtrace(void * function_address)
 {
+  (void) function_address;
   throw not_implemented();
 }
 

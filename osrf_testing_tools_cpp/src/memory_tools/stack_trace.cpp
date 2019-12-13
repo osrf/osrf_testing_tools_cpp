@@ -182,6 +182,7 @@ StackTrace::get_traces_from_function_name(const char * function_name) const
   }
   return result;
 #else
+  (void) function_name;
   throw std::runtime_error("not implemented on Windows");
 #endif
 }
