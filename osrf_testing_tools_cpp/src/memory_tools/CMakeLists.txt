@@ -13,7 +13,7 @@ add_library(memory_tools SHARED
 
 target_include_directories(memory_tools
   PUBLIC
-    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
 
@@ -97,4 +97,4 @@ install(EXPORT memory_tools_interpose
 set(memory_tools_extra_test_env "${memory_tools_extra_test_env}" PARENT_SCOPE)
 set(memory_tools_is_available "${memory_tools_is_available}" PARENT_SCOPE)
 set(memory_tools_src_dir_internal_testing_only
-  "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>" PARENT_SCOPE)
+  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>" PARENT_SCOPE)
