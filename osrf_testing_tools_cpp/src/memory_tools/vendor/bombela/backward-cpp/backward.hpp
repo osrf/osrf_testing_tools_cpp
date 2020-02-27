@@ -65,6 +65,17 @@
 # endif
 #endif
 
+// binutils 2.34 compatibility
+#ifndef bfd_get_section_flags
+#define bfd_get_section_flags(H, S) bfd_section_flags(S)
+#endif
+#ifndef bfd_get_section_size
+#define bfd_get_section_size(S) bfd_section_size(S)
+#endif
+#ifndef bfd_get_section_vma
+#define bfd_get_section_vma(H, S) bfd_section_vma(S)
+#endif
+
 #include <algorithm>
 #include <cctype>
 #include <cstdio>
