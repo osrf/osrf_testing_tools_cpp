@@ -1,3 +1,8 @@
+# Integrate backward-cpp according to:
+#   https://github.com/bombela/backward-cpp/tree/v1.5#as-a-subdirectory
+
+add_subdirectory(vendor/bombela/backward-cpp)
+
 add_library(memory_tools SHARED
   custom_memory_functions.cpp
   implementation_monitoring_override.cpp
@@ -9,6 +14,7 @@ add_library(memory_tools SHARED
   stack_trace.cpp
   testing_helpers.cpp
   verbosity.cpp
+  ${BACKWARD_ENABLE}
 )
 
 target_include_directories(memory_tools
@@ -17,25 +23,8 @@ target_include_directories(memory_tools
     $<INSTALL_INTERFACE:include>
 )
 
-find_library(DL_LIBRARY NAMES dl)
-find_library(BFD_LIBRARY NAMES bfd)
+add_backward(memory_tools)
 
-if(DL_LIBRARY AND BFD_LIBRARY)
-  message(STATUS "Found bfd: ${BFD_LIBRARY}")
-endif()
-
-if(UNIX AND NOT APPLE)
-  # On Linux like systems, add dl and use the normal library and LD_PRELOAD.
-
-  if(DL_LIBRARY)
-    target_link_libraries(memory_tools ${DL_LIBRARY})
-  endif()
-
-  if(BFD_LIBRARY)
-    target_link_libraries(memory_tools ${BFD_LIBRARY})
-    target_compile_definitions(memory_tools PRIVATE BACKWARD_HAS_BFD=1)
-  endif()
-endif()
 target_compile_definitions(memory_tools
   PRIVATE "OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_BUILDING_DLL")
 
@@ -44,9 +33,7 @@ add_library(memory_tools_interpose SHARED
 )
 target_link_libraries(memory_tools_interpose memory_tools)
 
-if(BFD_LIBRARY)
-  target_compile_definitions(memory_tools_interpose PRIVATE BACKWARD_HAS_BFD=1)
-endif()
+add_backward(memory_tools_interpose)
 
 option(OSRF_TESTING_TOOLS_CPP_DISABLE_MEMORY_TOOLS
   "Disable environment configuration for memory tools"
