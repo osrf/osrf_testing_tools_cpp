@@ -1,7 +1,10 @@
 # Integrate backward-cpp according to:
-#   https://github.com/bombela/backward-cpp/tree/v1.5#as-a-subdirectory
+#   https://github.com/bombela/backward-cpp/tree/v1.5#modifying-cmake_module_path
 
-add_subdirectory(vendor/bombela/backward-cpp)
+# Note, I had to use Backward_DIR since they provide a config file rather than a module...
+# list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/vendor/bombela/backward-cpp")
+set(Backward_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vendor/bombela/backward-cpp")
+find_package(Backward REQUIRED)
 
 add_library(memory_tools SHARED
   custom_memory_functions.cpp
@@ -14,7 +17,6 @@ add_library(memory_tools SHARED
   stack_trace.cpp
   testing_helpers.cpp
   verbosity.cpp
-  ${BACKWARD_ENABLE}
 )
 
 target_include_directories(memory_tools
@@ -22,8 +24,17 @@ target_include_directories(memory_tools
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
+target_link_libraries(memory_tools PUBLIC Backward::Backward)
 
-add_backward(memory_tools)
+find_library(DL_LIBRARY NAMES dl)
+
+if(UNIX AND NOT APPLE)
+  # On Linux like systems, add dl and use the normal library and LD_PRELOAD.
+
+  if(DL_LIBRARY)
+    target_link_libraries(memory_tools PUBLIC ${DL_LIBRARY})
+  endif()
+endif()
 
 target_compile_definitions(memory_tools
   PRIVATE "OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_BUILDING_DLL")
@@ -32,8 +43,6 @@ add_library(memory_tools_interpose SHARED
   memory_tools.cpp
 )
 target_link_libraries(memory_tools_interpose memory_tools)
-
-add_backward(memory_tools_interpose)
 
 option(OSRF_TESTING_TOOLS_CPP_DISABLE_MEMORY_TOOLS
   "Disable environment configuration for memory tools"
