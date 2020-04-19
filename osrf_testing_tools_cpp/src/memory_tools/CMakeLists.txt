@@ -24,7 +24,7 @@ target_include_directories(memory_tools
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
-target_link_libraries(memory_tools PUBLIC Backward::Backward)
+target_link_libraries(memory_tools PRIVATE Backward::Backward)
 
 find_library(DL_LIBRARY NAMES dl)
 
