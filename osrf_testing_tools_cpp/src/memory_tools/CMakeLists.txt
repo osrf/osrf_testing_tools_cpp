@@ -4,10 +4,6 @@
 # Note, I had to use Backward_DIR since they provide a config file rather than a module...
 # list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/vendor/bombela/backward-cpp")
 set(Backward_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vendor/bombela/backward-cpp")
-if(WIN32)
-  # Disabled detection of stack libraries, like libdw, on Windows to avoid CMake warnings.
-  set(STACK_DETAILS_AUTO_DETECT FALSE)
-endif()
 find_package(Backward REQUIRED)
 
 add_library(memory_tools SHARED

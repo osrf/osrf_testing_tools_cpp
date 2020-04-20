@@ -50,7 +50,7 @@ endif()
 ###############################################################################
 # CONFIGS
 ###############################################################################
-if (${STACK_DETAILS_AUTO_DETECT})
+if (${STACK_DETAILS_AUTO_DETECT} AND NOT WIN32)
 	include(FindPackageHandleStandardArgs)
 
 	# find libdw
