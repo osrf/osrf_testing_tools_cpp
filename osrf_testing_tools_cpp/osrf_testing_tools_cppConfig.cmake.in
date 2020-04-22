@@ -50,5 +50,9 @@ set_target_properties(osrf_testing_tools_cpp::memory_tools PROPERTIES
 # setup osrf_testing_tools_cpp_INCLUDE_DIRS so that header only things can be used without linking
 set(osrf_testing_tools_cpp_INCLUDE_DIRS "${__prefix_dir}/include")
 
+set(osrf_testing_tools_cpp_TARGETS
+  osrf_testing_tools_cpp::memory_tools
+  osrf_testing_tools_cpp::memory_tools_interpose)
+
 unset(__share_dir)
 unset(__prefix_dir)
