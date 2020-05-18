@@ -4,7 +4,9 @@
 # Note, I had to use Backward_DIR since they provide a config file rather than a module...
 # list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/vendor/bombela/backward-cpp")
 set(Backward_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vendor/bombela/backward-cpp")
+set(FPHSA_NAME_MISMATCHED TRUE)
 find_package(Backward REQUIRED)
+unset(FPHSA_NAME_MISMATCHED)
 
 add_library(memory_tools SHARED
   custom_memory_functions.cpp
