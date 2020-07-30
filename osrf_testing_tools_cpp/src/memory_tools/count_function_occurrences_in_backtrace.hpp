@@ -17,11 +17,11 @@
 
 #include "./safe_fwrite.hpp"
 
-#if defined(_WIN32)
+#if defined(_WIN32) || defined(__ANDROID__)
 
 // Include nothing for now.
 
-#else  // defined(_WIN32)
+#else  // defined(_WIN32) || defined(__ANDROID__)
 
 #include <cstdio>
 #include <cstdlib>
@@ -30,7 +30,7 @@
 #include <execinfo.h>
 #include <stdexcept>
 
-#endif  // defined(_WIN32)
+#endif  // defined(_WIN32) || defined(__ANDROID__)
 
 namespace osrf_testing_tools_cpp
 {
@@ -50,7 +50,7 @@ struct is_function_pointer
   >
 {};
 
-#if defined(_WIN32)
+#if defined(_WIN32) || defined(__ANDROID__)
 
 struct count_function_occurrences_in_backtrace_is_implemented : std::false_type {};
 
@@ -58,10 +58,11 @@ template<int MaxBacktraceSize>
 size_t
 impl_count_function_occurrences_in_backtrace(void * function_address)
 {
+  (void) function_address;
   throw not_implemented();
 }
 
-#else  // defined(_WIN32)
+#else  // defined(_WIN32) || defined(__ANDROID__)
 
 struct count_function_occurrences_in_backtrace_is_implemented : std::true_type {};
 

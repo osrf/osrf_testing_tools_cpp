@@ -96,7 +96,7 @@ MemoryToolsService::print_backtrace()
 StackTrace *
 MemoryToolsService::get_stack_trace()
 {
-#ifndef _WIN32
+#if !defined(_WIN32) && !defined(__ANDROID__)
   if (nullptr == impl_->lazy_stack_trace) {
     backward::StackTrace st;
     st.load_here(256);
@@ -107,7 +107,7 @@ MemoryToolsService::get_stack_trace()
   return impl_->lazy_stack_trace.get();
 #else
   return nullptr;
-#endif
+#endif  // !defined(_WIN32) && !defined(__ANDROID__)
 }
 
 const char *

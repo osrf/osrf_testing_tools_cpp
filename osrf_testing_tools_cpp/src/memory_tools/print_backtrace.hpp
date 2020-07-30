@@ -15,7 +15,7 @@
 #ifndef MEMORY_TOOLS__PRINT_BACKTRACE_HPP_
 #define MEMORY_TOOLS__PRINT_BACKTRACE_HPP_
 
-#ifndef _WIN32
+#if !defined(_WIN32) && !defined(__ANDROID__)
 
 # pragma GCC diagnostic push
 # ifdef __clang__
@@ -27,7 +27,7 @@
 
 # pragma GCC diagnostic pop
 
-#endif  // _WIN32
+#endif  // !defined(_WIN32) && !defined(__ANDROID__)
 
 namespace osrf_testing_tools_cpp
 {
@@ -38,14 +38,14 @@ template<int MaxStackDepth = 64>
 void
 print_backtrace(FILE * out = stderr)
 {
-#if !defined(_WIN32)
+#if !defined(_WIN32) && !defined(__ANDROID__)
   backward::StackTrace st;
   st.load_here(MaxStackDepth);
   backward::Printer p;
   p.print(st, out);
 #else
-  fprintf(out, "backtrace unavailable on Windows\n");
-#endif
+  fprintf(out, "backtrace unavailable on Windows and Android\n");
+#endif  // !defined(_WIN32) && !defined(__ANDROID__)
 }
 
 }  // namespace memory_tools
