@@ -31,40 +31,40 @@ SourceLocation::~SourceLocation()
 const std::string &
 SourceLocation::function() const
 {
-#if !defined(_WIN32)
+#if !defined(_WIN32) && !defined(__ANDROID__)
   return impl_->source_location->function;
 #else
-  throw std::runtime_error("not implemented on Windows");
+  throw std::runtime_error("not implemented on Windows or Android");
 #endif
 }
 
 const std::string &
 SourceLocation::filename() const
 {
-#if !defined(_WIN32)
+#if !defined(_WIN32) && !defined(__ANDROID__)
   return impl_->source_location->filename;
 #else
-  throw std::runtime_error("not implemented on Windows");
+  throw std::runtime_error("not implemented on Windows or Android");
 #endif
 }
 
 size_t
 SourceLocation::line() const
 {
-#if !defined(_WIN32)
+#if !defined(_WIN32) && !defined(__ANDROID__)
   return impl_->source_location->line;
 #else
-  throw std::runtime_error("not implemented on Windows");
+  throw std::runtime_error("not implemented on Windows or Android");
 #endif
 }
 
 size_t
 SourceLocation::column() const
 {
-#if !defined(_WIN32)
+#if !defined(_WIN32) && !defined(__ANDROID__)
   return impl_->source_location->col;
 #else
-  throw std::runtime_error("not implemented on Windows");
+  throw std::runtime_error("not implemented on Windows or Android");
 #endif
 }
 
@@ -82,60 +82,60 @@ Trace::~Trace()
 void *
 Trace::address() const
 {
-#if !defined(_WIN32)
+#if !defined(_WIN32) && !defined(__ANDROID__)
   return impl_->resolved_trace.addr;
 #else
-  throw std::runtime_error("not implemented on Windows");
+  throw std::runtime_error("not implemented on Windows or Android");
 #endif
 }
 
 size_t
 Trace::index_in_stack() const
 {
-#if !defined(_WIN32)
+#if !defined(_WIN32) && !defined(__ANDROID__)
   return impl_->resolved_trace.idx;
 #else
-  throw std::runtime_error("not implemented on Windows");
+  throw std::runtime_error("not implemented on Windows or Android");
 #endif
 }
 
 const std::string &
 Trace::object_filename() const
 {
-#if !defined(_WIN32)
+#if !defined(_WIN32) && !defined(__ANDROID__)
   return impl_->resolved_trace.object_filename;
 #else
-  throw std::runtime_error("not implemented on Windows");
+  throw std::runtime_error("not implemented on Windows or Android");
 #endif
 }
 
 const std::string &
 Trace::object_function() const
 {
-#if !defined(_WIN32)
+#if !defined(_WIN32) && !defined(__ANDROID__)
   return impl_->resolved_trace.object_function;
 #else
-  throw std::runtime_error("not implemented on Windows");
+  throw std::runtime_error("not implemented on Windows or Android");
 #endif
 }
 
 const SourceLocation &
 Trace::source_location() const
 {
-#if !defined(_WIN32)
+#if !defined(_WIN32) && !defined(__ANDROID__)
   return impl_->source_location;
 #else
-  throw std::runtime_error("not implemented on Windows");
+  throw std::runtime_error("not implemented on Windows or Android");
 #endif
 }
 
 const std::vector<SourceLocation> &
 Trace::inlined_source_locations() const
 {
-#if !defined(_WIN32)
+#if !defined(_WIN32) && !defined(__ANDROID__)
   return impl_->inlined_source_locations;
 #else
-  throw std::runtime_error("not implemented on Windows");
+  throw std::runtime_error("not implemented on Windows or Android");
 #endif
 }
 
@@ -149,27 +149,27 @@ StackTrace::~StackTrace()
 std::thread::id
 StackTrace::thread_id() const
 {
-#if !defined(_WIN32)
+#if !defined(_WIN32) && !defined(__ANDROID__)
   return impl_->thread_id;
 #else
-  throw std::runtime_error("not implemented on Windows");
+  throw std::runtime_error("not implemented on Windows or Android");
 #endif
 }
 
 const std::vector<Trace> &
 StackTrace::get_traces() const
 {
-#if !defined(_WIN32)
+#if !defined(_WIN32) && !defined(__ANDROID__)
   return impl_->traces;
 #else
-  throw std::runtime_error("not implemented on Windows");
+  throw std::runtime_error("not implemented on Windows or Android");
 #endif
 }
 
 std::vector<Trace>
 StackTrace::get_traces_from_function_name(const char * function_name) const
 {
-#if !defined(_WIN32)
+#if !defined(_WIN32) && !defined(__ANDROID__)
   std::vector<Trace> result;
   bool function_found = false;
   for (const Trace & trace : impl_->traces) {
@@ -182,7 +182,8 @@ StackTrace::get_traces_from_function_name(const char * function_name) const
   }
   return result;
 #else
-  throw std::runtime_error("not implemented on Windows");
+  (void) function_name;
+  throw std::runtime_error("not implemented on Windows or Android");
 #endif
 }
 
