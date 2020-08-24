@@ -21,7 +21,7 @@
 #include <string>
 #include <vector>
 
-#if defined(WIN32)
+#if defined(_WIN32)
 #include <Windows.h>
 #else
 #include <sys/types.h>
@@ -35,7 +35,7 @@ namespace test_runner
 namespace impl
 {
 
-#if defined(WIN32)
+#if defined(_WIN32)
 int execute_process_win32(const std::vector<std::string> & commands);
 #else
 int execute_process_unix(const std::vector<std::string> & commands);
@@ -47,14 +47,14 @@ int execute_process_unix(const std::vector<std::string> & commands);
 int
 execute_process(const std::vector<std::string> & commands)
 {
-#if defined(WIN32)
+#if defined(_WIN32)
   return impl::execute_process_win32(commands);
 #else
   return impl::execute_process_unix(commands);
 #endif
 }
 
-#if defined(WIN32)
+#if defined(_WIN32)
 
 int impl::execute_process_win32(const std::vector<std::string> & commands)
 {
