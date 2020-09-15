@@ -20,19 +20,19 @@ if(BUILD_TESTING)
   include(cmake/osrf_testing_tools_cpp_require_googletest.cmake)
   # ensures target gtest_main exists
   osrf_testing_tools_cpp_require_googletest(VERSION_GTE 1.8
-    VENDOR_DIR "${CMAKE_SOURCE_DIR}/vendor")
+    VENDOR_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vendor")
 
   add_subdirectory(test)
 endif()
 
 configure_file(osrf_testing_tools_cppConfig.cmake.in
-  "${PROJECT_BINARY_DIR}/osrf_testing_tools_cppConfig.cmake" @ONLY)
+  "${CMAKE_CURRENT_BINARY_DIR}/osrf_testing_tools_cppConfig.cmake" @ONLY)
 configure_file(osrf_testing_tools_cppConfigVersion.cmake.in
-  "${PROJECT_BINARY_DIR}/osrf_testing_tools_cppConfigVersion.cmake" @ONLY)
+  "${CMAKE_CURRENT_BINARY_DIR}/osrf_testing_tools_cppConfigVersion.cmake" @ONLY)
 
 install(FILES
-  "${PROJECT_BINARY_DIR}/osrf_testing_tools_cppConfig.cmake"
-  "${PROJECT_BINARY_DIR}/osrf_testing_tools_cppConfigVersion.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/osrf_testing_tools_cppConfig.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/osrf_testing_tools_cppConfigVersion.cmake"
   DESTINATION share/${PROJECT_NAME}/cmake
 )
 

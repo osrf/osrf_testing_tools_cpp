@@ -45,6 +45,9 @@ set(OSRF_TESTING_TOOLS_CPP_REQUIRE_GOOGLETEST_VERSION_SETUP)
 # @public
 #
 macro(osrf_testing_tools_cpp_require_googletest)
+  if (TARGET gtest OR TARGET gtest_main)
+    return()
+  endif()
   # Make sure this was only called once.
   if(OSRF_TESTING_TOOLS_CPP_REQUIRE_GOOGLETEST_VERSION_SETUP)
     set(error_msg "osrf_testing_tools_cpp_require_googletest():")

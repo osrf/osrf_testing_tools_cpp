@@ -9,8 +9,8 @@ include(ExternalProject)
 ExternalProject_Add(googletest
   URL               "@GOOGLETEST_ARCHIVE_LOCATION@"
   URL_MD5           "@GOOGLETEST_MD5SUM@"
-  SOURCE_DIR        "${CMAKE_BINARY_DIR}/googletest-@GOOGLETEST_VERSION@-src"
-  BINARY_DIR        "${CMAKE_BINARY_DIR}/googletest-@GOOGLETEST_VERSION@-build"
+  SOURCE_DIR        "${CMAKE_CURRENT_BINARY_DIR}/googletest-@GOOGLETEST_VERSION@-src"
+  BINARY_DIR        "${CMAKE_CURRENT_BINARY_DIR}/googletest-@GOOGLETEST_VERSION@-build"
   CONFIGURE_COMMAND ""
   BUILD_COMMAND     ""
   INSTALL_COMMAND   ""
