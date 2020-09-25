@@ -39,8 +39,8 @@ namespace memory_tools
 struct SourceLocationImpl
 {
   SourceLocationImpl() = delete;
-  explicit SourceLocationImpl(const backward::ResolvedTrace::SourceLoc * source_location)
-  : source_location(source_location)
+  explicit SourceLocationImpl(const backward::ResolvedTrace::SourceLoc * sl)
+  : source_location(sl)
   {}
 
   virtual ~SourceLocationImpl() {}
@@ -83,8 +83,8 @@ struct TraceImpl
 struct StackTraceImpl
 {
   StackTraceImpl() = delete;
-  explicit StackTraceImpl(backward::StackTrace stack_trace, std::thread::id thread_id)
-  : stack_trace(stack_trace), thread_id(thread_id)
+  explicit StackTraceImpl(backward::StackTrace st, std::thread::id tid)
+  : stack_trace(st), thread_id(tid)
   {
     trace_resolver.load_stacktrace(stack_trace);
     traces.reserve(stack_trace.size());

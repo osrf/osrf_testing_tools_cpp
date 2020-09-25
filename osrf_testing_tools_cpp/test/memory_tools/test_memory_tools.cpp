@@ -200,9 +200,9 @@ TEST(TestMemoryTools, test_example) {
   }, "unexpected malloc");
   // There are also explicit begin/end functions if you need variables to leave the scope
   osrf_testing_tools_cpp::memory_tools::expect_no_malloc_begin();
-  int result = my_second_function(1, 2);
+  int output = my_second_function(1, 2);
   osrf_testing_tools_cpp::memory_tools::expect_no_malloc_end();
-  EXPECT_EQ(result, 3);
+  EXPECT_EQ(output, 3);
 
   // enable monitoring only works in the current thread, but you can enable it for all threads
   osrf_testing_tools_cpp::memory_tools::enable_monitoring_in_all_threads();
