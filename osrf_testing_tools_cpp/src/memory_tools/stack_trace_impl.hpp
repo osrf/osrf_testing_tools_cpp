@@ -21,7 +21,7 @@
 
 #include "osrf_testing_tools_cpp/memory_tools/stack_trace.hpp"
 
-#ifndef _WIN32
+#if !defined(_WIN32) && !defined(__ANDROID__)
 
 #pragma GCC diagnostic push
 #ifdef __clang__
@@ -123,6 +123,6 @@ struct StackTraceImpl {};
 }  // namespace memory_tools
 }  // namespace osrf_testing_tools_cpp
 
-#endif  // _WIN32
+#endif  // !defined(_WIN32) && !defined(__ANDROID__)
 
 #endif  // OSRF_TESTING_TOOLS_CPP__STACK_TRACE_IMPL_HPP_
