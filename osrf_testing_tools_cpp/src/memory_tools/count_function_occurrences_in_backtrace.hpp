@@ -17,7 +17,7 @@
 
 #include "./safe_fwrite.hpp"
 
-#if defined(_WIN32)
+#if defined(_WIN32) || defined(__QNXNTO__)
 
 // Include nothing for now.
 
@@ -50,7 +50,7 @@ struct is_function_pointer
   >
 {};
 
-#if defined(_WIN32)
+#if defined(_WIN32) || defined(__QNXNTO__)
 
 struct count_function_occurrences_in_backtrace_is_implemented : std::false_type {};
 
