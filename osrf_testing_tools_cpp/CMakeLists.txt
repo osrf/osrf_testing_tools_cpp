@@ -17,10 +17,6 @@ add_subdirectory(src)
 
 include(CTest)
 if(BUILD_TESTING)
-  # The currently archived versions of googletest set cmake_minimum_required
-  # to < 2.8.12, which causes a deprecation policy warning for this policy
-  # with cmake 3.19.1
-  cmake_policy(SET CMP0022 NEW)
   include(cmake/osrf_testing_tools_cpp_require_googletest.cmake)
   # ensures target gtest_main exists
   osrf_testing_tools_cpp_require_googletest(VERSION_GTE 1.10
