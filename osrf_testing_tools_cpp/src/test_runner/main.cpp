@@ -39,7 +39,7 @@ int
 main(int argc, char const * argv[])
 {
   std::vector<std::string> args;
-  args.reserve(argc);
+  args.reserve(static_cast<unsigned long>(argc));
   for (int i = 0; i < argc; ++i) {
     if (i == 0) {
       continue;
