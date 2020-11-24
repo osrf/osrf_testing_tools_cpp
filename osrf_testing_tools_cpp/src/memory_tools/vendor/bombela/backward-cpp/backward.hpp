@@ -3199,7 +3199,7 @@ public:
     if (st.size() == 0) {
       return;
     }
-    _symbols.reset(backtrace_symbols(st.begin(), st.size()));
+    _symbols.reset(backtrace_symbols(st.begin(), static_cast<int>(st.size())));
   }
 
   ResolvedTrace resolve(ResolvedTrace trace) {
