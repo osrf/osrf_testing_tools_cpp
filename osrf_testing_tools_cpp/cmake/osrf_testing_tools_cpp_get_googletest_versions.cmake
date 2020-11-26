@@ -33,6 +33,8 @@ macro(osrf_testing_tools_cpp_get_googletest_versions output_versions output_loca
     1.7.0
     1.8.1
     1.10.0
+    # Manually patched by osrf
+    1.10.0.1
   )
   # Manually maintained list of googletest locations in this package, indexed the same as versions.
   # They are relative to the VENDOR_DIR, which is configurable.
@@ -40,11 +42,13 @@ macro(osrf_testing_tools_cpp_get_googletest_versions output_versions output_loca
     "google/googletest/release-1.7.0.tar.gz"
     "google/googletest/release-1.8.1.tar.gz"
     "google/googletest/release-1.10.0.tar.gz"
+    "google/googletest/release-1.10.0.1.tar.gz"
   )
   # Manually maintained list of MD5 sums for the archives, indexed the same as the versions.
   set(${output_md5s}
     "4ff6353b2560df0afecfbda3b2763847"
     "2e6fbeb6a91310a16efe181886c59596"
     "ecd1fa65e7de707cd5c00bdac56022cd"
+    "4e8365c807e1ba7814234460d30ef939"
   )
 endmacro()
