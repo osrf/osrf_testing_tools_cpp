@@ -91,7 +91,7 @@ int main(int argc, char * argv[])
 {
   ::testing::InitGoogleTest(&argc, argv);
 
-  g_args.reserve(static_cast<unsigned long>(argc));
+  g_args.reserve(static_cast<size_t>(argc));
   for (int i = 0; i < argc; ++i) {
     if (i == 0) {
       continue;
