@@ -2,8 +2,8 @@
 Changelog for package osrf_testing_tools_cpp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.4.0 (2020-12-08)
+------------------
 * [osrf_testing_tools_cpp] Add warnings (`#54 <https://github.com/osrf/osrf_testing_tools_cpp/issues/54>`_)
 * Update cmake minimum version to 2.8.12 (`#61 <https://github.com/osrf/osrf_testing_tools_cpp/issues/61>`_)
 * Add googletest v1.10.0 (`#55 <https://github.com/osrf/osrf_testing_tools_cpp/issues/55>`_)
