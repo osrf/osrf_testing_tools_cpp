@@ -2,6 +2,11 @@
 Changelog for package osrf_testing_tools_cpp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.3.4 (2021-08-31)
+------------------
+* Update cmake minimum version to 2.8.12 (`#61 <https://github.com/osrf/osrf_testing_tools_cpp/issues/61>`_) (`#63 <https://github.com/osrf/osrf_testing_tools_cpp/issues/63>`_)
+* Contributors: Louise Poubel, Stephen Brawner
+
 1.3.3 (2020-12-07)
 ------------------
 * Workarounds for Android (`#52 <https://github.com/osrf/osrf_testing_tools_cpp/issues/52>`_) (`#59 <https://github.com/osrf/osrf_testing_tools_cpp/issues/59>`_)
