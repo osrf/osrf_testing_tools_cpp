@@ -2,6 +2,12 @@
 Changelog for package osrf_testing_tools_cpp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.5.0 (2022-01-14)
+------------------
+* Update backward-cpp to latest master commit (`#64 <https://github.com/osrf/osrf_testing_tools_cpp/issues/64>`_)
+* Patch googletest to 1.10.0.2 (`#65 <https://github.com/osrf/osrf_testing_tools_cpp/issues/65>`_)
+* Contributors: Christophe Bedard, Homalozoa X
+
 1.4.0 (2020-12-08)
 ------------------
 * [osrf_testing_tools_cpp] Add warnings (`#54 <https://github.com/osrf/osrf_testing_tools_cpp/issues/54>`_)
