@@ -28,14 +28,8 @@ target_include_directories(memory_tools
 )
 target_link_libraries(memory_tools PRIVATE Backward::Backward)
 
-find_library(DL_LIBRARY NAMES dl)
-
-if(UNIX AND NOT APPLE)
-  # On Linux like systems, add dl and use the normal library and LD_PRELOAD.
-
-  if(DL_LIBRARY)
-    target_link_libraries(memory_tools PUBLIC ${DL_LIBRARY})
-  endif()
+if(CMAKE_DL_LIBS)
+  target_link_libraries(memory_tools PUBLIC ${CMAKE_DL_LIBS})
 endif()
 
 target_compile_definitions(memory_tools
