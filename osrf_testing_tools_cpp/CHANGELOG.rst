@@ -2,6 +2,11 @@
 Changelog for package osrf_testing_tools_cpp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Changed to use ``CMAKE_DL_LIBS`` CMake library to link library that provides dlopen (`#68 <https://github.com/osrf/osrf_testing_tools_cpp/issues/68>`_)
+* Contributors: Silvio Traversaro
+
 1.5.0 (2022-01-14)
 ------------------
 * Update backward-cpp to latest master commit (`#64 <https://github.com/osrf/osrf_testing_tools_cpp/issues/64>`_)
