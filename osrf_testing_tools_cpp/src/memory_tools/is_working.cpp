@@ -14,6 +14,7 @@
 
 #include "osrf_testing_tools_cpp/memory_tools/is_working.hpp"
 
+#include <cstring>
 #include <string>
 
 #include "osrf_testing_tools_cpp/memory_tools/register_hooks.hpp"
