@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <atomic>
+#include <variant>
+
 #include "./dispatch_callback.hpp"
 #include "./implementation_monitoring_override.hpp"
 #include "osrf_testing_tools_cpp/memory_tools/register_hooks.hpp"
@@ -32,7 +35,17 @@ on_malloc(AnyMemoryToolsCallback callback)
   // prevents new from triggering existing hooks
   ScopedImplementationSection implementation_section;
   // duplicate user callback and then delete the old one
-  auto old = g_on_malloc_callback.exchange(new AnyMemoryToolsCallback(callback));
+  std::atomic<AnyMemoryToolsCallback *> old{nullptr};
+  // This is fairly unintuitive, but necessary since AnyMemoryToolsCallback
+  // is a std::variant.  Basically std::get_if returns a nullptr if it can't
+  // get the variant at the type requested.  Thus, to check if it is nullptr
+  // (and thus should be completely destroyed), we ask for it as std::nullptr_t,
+  // and if we get a nullptr back, that means it is *not* nullptr.
+  if (std::get_if<std::nullptr_t>(&callback) != nullptr) {
+    old = g_on_malloc_callback.exchange(nullptr);
+  } else {
+    old = g_on_malloc_callback.exchange(new AnyMemoryToolsCallback(callback));
+  }
   if (nullptr != old) {
     delete old;
   }
@@ -60,7 +73,20 @@ on_realloc(AnyMemoryToolsCallback callback)
   // prevents new from triggering existing hooks
   ScopedImplementationSection implementation_section;
   // duplicate user callback and then delete the old one
-  delete g_on_realloc_callback.exchange(new AnyMemoryToolsCallback(callback));
+  std::atomic<AnyMemoryToolsCallback *> old{nullptr};
+  // This is fairly unintuitive, but necessary since AnyMemoryToolsCallback
+  // is a std::variant.  Basically std::get_if returns a nullptr if it can't
+  // get the variant at the type requested.  Thus, to check if it is nullptr
+  // (and thus should be completely destroyed), we ask for it as std::nullptr_t,
+  // and if we get a nullptr back, that means it is *not* nullptr.
+  if (std::get_if<std::nullptr_t>(&callback) != nullptr) {
+    old = g_on_realloc_callback.exchange(nullptr);
+  } else {
+    old = g_on_realloc_callback.exchange(new AnyMemoryToolsCallback(callback));
+  }
+  if (nullptr != old) {
+    delete old;
+  }
 }
 
 AnyMemoryToolsCallback
@@ -85,7 +111,20 @@ on_calloc(AnyMemoryToolsCallback callback)
   // prevents new from triggering existing hooks
   ScopedImplementationSection implementation_section;
   // duplicate user callback and then delete the old one
-  delete g_on_calloc_callback.exchange(new AnyMemoryToolsCallback(callback));
+  std::atomic<AnyMemoryToolsCallback *> old{nullptr};
+  // This is fairly unintuitive, but necessary since AnyMemoryToolsCallback
+  // is a std::variant.  Basically std::get_if returns a nullptr if it can't
+  // get the variant at the type requested.  Thus, to check if it is nullptr
+  // (and thus should be completely destroyed), we ask for it as std::nullptr_t,
+  // and if we get a nullptr back, that means it is *not* nullptr.
+  if (std::get_if<std::nullptr_t>(&callback) != nullptr) {
+    old = g_on_calloc_callback.exchange(nullptr);
+  } else {
+    old = g_on_calloc_callback.exchange(new AnyMemoryToolsCallback(callback));
+  }
+  if (nullptr != old) {
+    delete old;
+  }
 }
 
 AnyMemoryToolsCallback
@@ -110,7 +149,20 @@ on_free(AnyMemoryToolsCallback callback)
   // prevents new from triggering existing hooks
   ScopedImplementationSection implementation_section;
   // duplicate user callback and then delete the old one
-  delete g_on_free_callback.exchange(new AnyMemoryToolsCallback(callback));
+  std::atomic<AnyMemoryToolsCallback *> old{nullptr};
+  // This is fairly unintuitive, but necessary since AnyMemoryToolsCallback
+  // is a std::variant.  Basically std::get_if returns a nullptr if it can't
+  // get the variant at the type requested.  Thus, to check if it is nullptr
+  // (and thus should be completely destroyed), we ask for it as std::nullptr_t,
+  // and if we get a nullptr back, that means it is *not* nullptr.
+  if (std::get_if<std::nullptr_t>(&callback) != nullptr) {
+    old = g_on_free_callback.exchange(nullptr);
+  } else {
+    old = g_on_free_callback.exchange(new AnyMemoryToolsCallback(callback));
+  }
+  if (nullptr != old) {
+    delete old;
+  }
 }
 
 AnyMemoryToolsCallback
