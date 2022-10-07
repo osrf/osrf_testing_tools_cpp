@@ -16,8 +16,8 @@
 #define OSRF_TESTING_TOOLS_CPP__MEMORY_TOOLS__REGISTER_HOOKS_HPP_
 
 #include <functional>
+#include <variant>
 
-#include "../variant_helper.hpp"
 #include "./memory_tools_service.hpp"
 #include "./visibility_control.hpp"
 
