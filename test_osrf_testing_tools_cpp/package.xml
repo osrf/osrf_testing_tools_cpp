@@ -6,8 +6,12 @@
   <name>test_osrf_testing_tools_cpp</name>
   <version>1.5.2</version>
   <description>Test package, which uses things exported by osrf_testing_tools_cpp.</description>
-  <maintainer email="william@osrfoundation.org">William Woodall</maintainer>
+
+  <maintainer email="geoff@openrobotics.org">Geoffrey Biggs</maintainer>
+
   <license>Apache License 2.0</license>
+
+  <author email="william@osrfoundation.org">William Woodall</author>
 
   <buildtool_depend>cmake</buildtool_depend>
 
