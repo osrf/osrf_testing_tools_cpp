@@ -15,7 +15,7 @@
 #include "./dispatch_callback.hpp"
 #include "osrf_testing_tools_cpp/memory_tools/register_hooks.hpp"
 #include "osrf_testing_tools_cpp/memory_tools/testing_helpers.hpp"
-#include "osrf_testin_tools_cpp/memory_tools/visibility_control.hpp"
+#include "osrf_testing_tools_cpp/memory_tools/visibility_control.hpp"
 
 namespace osrf_testing_tools_cpp
 {
