@@ -32,7 +32,7 @@ namespace memory_tools
  */
 OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
 void
-on_unexpected_malloc(AnyMemoryToolsCallback callback);
+on_unexpected_malloc(bool callback);
 
 /// Call corresponding callback if the given statements call malloc.
 #define EXPECT_NO_MALLOC(statements) \
@@ -175,3 +175,4 @@ expect_no_free_end();
 }  // namespace osrf_testing_tools_cpp
 
 #endif  // OSRF_TESTING_TOOLS_CPP__MEMORY_TOOLS__TESTING_HELPERS_HPP_
+
