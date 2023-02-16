@@ -15,7 +15,6 @@
 #include "./dispatch_callback.hpp"
 #include "osrf_testing_tools_cpp/memory_tools/register_hooks.hpp"
 #include "osrf_testing_tools_cpp/memory_tools/testing_helpers.hpp"
-#include "osrf_testing_tools_cpp/memory_tools/visibility_control.hpp"
 
 namespace osrf_testing_tools_cpp
 {
@@ -28,16 +27,15 @@ static std::atomic<bool> g_calloc_unexpected(false);
 static std::atomic<bool> g_free_unexpected(false);
 
 void
-on_unexpected_malloc(bool callback)
+on_unexpected_malloc(AnyMemoryToolsCallback callback)
 {
-/*  on_malloc(
+  on_malloc(
     [callback](MemoryToolsService & service) {
       if (g_malloc_unexpected.load()) {
         service.unignore();
         dispatch_callback(&callback, service);
       }
     });
-*/
 }
 
 bool
