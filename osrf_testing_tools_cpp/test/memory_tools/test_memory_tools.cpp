@@ -35,7 +35,7 @@ TEST(TestMemoryTools, test_allocation_checking_tools) {
     [&unexpected_mallocs]() {
       unexpected_mallocs++;
     };
-  osrf_testing_tools_cpp::memory_tools::on_unexpected_malloc(on_unexpected_malloc);
+  osrf_testing_tools_cpp::memory_tools::on_unexpected_malloc(false);
   size_t unexpected_reallocs = 0;
   auto on_unexpected_realloc =
     [&unexpected_reallocs]() {
