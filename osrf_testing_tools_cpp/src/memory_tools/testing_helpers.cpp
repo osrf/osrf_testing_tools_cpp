@@ -27,7 +27,7 @@ static std::atomic<bool> g_calloc_unexpected(false);
 static std::atomic<bool> g_free_unexpected(false);
 
 void
-on_unexpected_malloc(AnyMemoryToolsCallback callback)
+on_unexpected_malloc(int callback)
 {
   on_malloc(
     [callback](MemoryToolsService & service) {
