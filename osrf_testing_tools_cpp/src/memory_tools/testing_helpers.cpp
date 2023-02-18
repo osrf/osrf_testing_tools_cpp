@@ -89,7 +89,7 @@ expect_no_realloc_end()
 void
 on_unexpected_calloc(AnyMemoryToolsCallback callback)
 {
-  osrf_testing_tools_cpp::memory_tools::on_unexpected_calloc(std::function<void()>);
+  osrf_testing_tools_cpp::memory_tools::on_unexpected_calloc(std::function<void()>());
   on_calloc(
     [callback](MemoryToolsService & service) {
       if (g_calloc_unexpected.load()) {
