@@ -33,7 +33,7 @@ on_unexpected_malloc(int callback)
     [callback](MemoryToolsService & service) {
       if (g_malloc_unexpected.load()) {
         service.unignore();
-        dispatch_callback(&callback, service);
+        //dispatch_callback(&callback, service);
       }
     });
 }
