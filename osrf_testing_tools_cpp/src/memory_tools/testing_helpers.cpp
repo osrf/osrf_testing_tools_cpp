@@ -26,7 +26,7 @@ static std::atomic<bool> g_realloc_unexpected(false);
 static std::atomic<bool> g_calloc_unexpected(false);
 static std::atomic<bool> g_free_unexpected(false);
 
-void
+inline void
 on_unexpected_malloc(AnyMemoryToolsCallback callback)
 {
   on_malloc(
@@ -56,7 +56,7 @@ expect_no_malloc_end()
   g_malloc_unexpected.store(false);
 }
 
-void
+inline void
 on_unexpected_realloc(AnyMemoryToolsCallback callback)
 {
   on_realloc(
@@ -86,7 +86,7 @@ expect_no_realloc_end()
   g_realloc_unexpected.store(false);
 }
 
-void
+inline void
 on_unexpected_calloc(AnyMemoryToolsCallback callback)
 {
   on_calloc(
@@ -116,7 +116,7 @@ expect_no_calloc_end()
   g_calloc_unexpected.store(false);
 }
 
-void
+inline void
 on_unexpected_free(AnyMemoryToolsCallback callback)
 {
   on_free(

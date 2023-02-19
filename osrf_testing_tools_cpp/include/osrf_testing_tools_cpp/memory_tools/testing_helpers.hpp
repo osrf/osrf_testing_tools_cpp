@@ -31,7 +31,7 @@ namespace memory_tools
  * \sa expect_no_malloc_end()
  */
 OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
-void
+inline void
 on_unexpected_malloc(AnyMemoryToolsCallback callback);
 
 /// Call corresponding callback if the given statements call malloc.
@@ -63,7 +63,7 @@ expect_no_malloc_end();
  * \sa expect_no_realloc_end()
  */
 OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
-void
+inline void
 on_unexpected_realloc(AnyMemoryToolsCallback callback);
 
 /// Call corresponding callback if the given statements call realloc.
@@ -95,7 +95,7 @@ expect_no_realloc_end();
  * \sa expect_no_calloc_end()
  */
 OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
-void
+inline void
 on_unexpected_calloc(AnyMemoryToolsCallback callback);
 
 /// Call corresponding callback if the given statements call calloc.
@@ -127,7 +127,7 @@ expect_no_calloc_end();
  * \sa expect_no_free_end()
  */
 OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
-void
+inline void
 on_unexpected_free(AnyMemoryToolsCallback callback);
 
 /// Call corresponding callback if the given statements call free.
