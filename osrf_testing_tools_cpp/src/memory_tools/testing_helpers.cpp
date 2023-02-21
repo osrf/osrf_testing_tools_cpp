@@ -13,8 +13,9 @@
 // limitations under the License.
 
 #include "./dispatch_callback.hpp"
-#include "osrf_testing_tools_cpp/memory_tools/register_hooks.hpp"
+//#include "osrf_testing_tools_cpp/memory_tools/register_hooks.hpp"
 //#include "osrf_testing_tools_cpp/memory_tools/testing_helpers.hpp"
+#include "../../../osrf_testing_tools_cpp/include/osrf_testing_tools_cpp/memory_tools/register_hooks.hpp"  
 #include "../../../osrf_testing_tools_cpp/include/osrf_testing_tools_cpp/memory_tools/testing_helpers.hpp"  
 
 namespace osrf_testing_tools_cpp
