@@ -19,12 +19,12 @@
 #ifndef OSRF_TESTING_TOOLS_CPP__MEMORY_TOOLS__MEMORY_TOOLS_HPP_
 #define OSRF_TESTING_TOOLS_CPP__MEMORY_TOOLS__MEMORY_TOOLS_HPP_
 
-#include "./visibility_control.hpp"
 #include "./initialize.hpp"
 #include "./is_working.hpp"
 #include "./memory_tools_service.hpp"
 #include "./monitoring.hpp"
 #include "./register_hooks.hpp"
 #include "./testing_helpers.hpp"
+#include "./visibility_control.hpp"
 
 #endif  // OSRF_TESTING_TOOLS_CPP__MEMORY_TOOLS__MEMORY_TOOLS_HPP_
