@@ -47,7 +47,7 @@ option(OSRF_TESTING_TOOLS_CPP_DISABLE_MEMORY_TOOLS
 # Memory tools doesn't work on Windows right now.
 # TODO(wjwwood): If on aarch64, so not set the preload environment variables, until fixed.
 # see: https://github.com/osrf/osrf_testing_tools_cpp/issues/3
-if(WIN32 OR CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "aarm64")
+if(WIN32 OR CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
   set(OSRF_TESTING_TOOLS_CPP_DISABLE_MEMORY_TOOLS ON)
 endif()
 
