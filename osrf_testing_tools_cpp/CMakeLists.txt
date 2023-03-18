@@ -4,9 +4,9 @@ project(osrf_testing_tools_cpp)
 
 set(osrf_testing_tools_cpp_VERSION 1.5.1)
 
-# Default to C++11
+# Default to C++17
 if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 11)
+  set(CMAKE_CXX_STANDARD 17)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
