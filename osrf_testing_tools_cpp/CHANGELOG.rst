@@ -2,6 +2,13 @@
 Changelog for package osrf_testing_tools_cpp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.5.3 (2023-04-11)
+------------------
+* Fix mpark/variant conditional for MSVC (`#77 <https://github.com/osrf/osrf_testing_tools_cpp/issues/77>`_)
+* Changing C++ Compile Version (`#76 <https://github.com/osrf/osrf_testing_tools_cpp/issues/76>`_)
+* Update maintainers (`#74 <https://github.com/osrf/osrf_testing_tools_cpp/issues/74>`_)
+* Contributors: Audrow Nash, Lucas Wendland, Scott K Logan
+
 1.5.2 (2022-11-07)
 ------------------
 * Sets CMP0135 policy behavior to NEW (`#73 <https://github.com/osrf/osrf_testing_tools_cpp/issues/73>`_)
