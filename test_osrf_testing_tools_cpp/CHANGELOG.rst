@@ -2,6 +2,9 @@
 Changelog for package test_osrf_testing_tools_cpp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.5.3 (2023-04-11)
 ------------------
 * Changing C++ Compile Version (`#76 <https://github.com/osrf/osrf_testing_tools_cpp/issues/76>`_)

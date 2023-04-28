@@ -2,6 +2,9 @@
 Changelog for package osrf_testing_tools_cpp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.5.3 (2023-04-11)
 ------------------
 * Fix mpark/variant conditional for MSVC (`#77 <https://github.com/osrf/osrf_testing_tools_cpp/issues/77>`_)
