@@ -93,6 +93,22 @@ MemoryToolsService::print_backtrace()
   impl_->should_print_backtrace = true;
 }
 
+
+std::ostringstream
+MemoryToolsService::get_backtrace()
+{
+  std::ostringstream oss;
+#if !defined(_WIN32) && !defined(__ANDROID__)
+  backward::StackTrace st;
+  st.load_here(256);
+  backward::Printer p;
+  p.print(st, oss);
+#else
+  oss << "backtrace unavailable on Windows and Android\n";
+#endif  // !defined(_WIN32) && !defined(__ANDROID__)
+  return oss;
+}
+
 StackTrace *
 MemoryToolsService::get_stack_trace()
 {
