@@ -87,10 +87,22 @@ MemoryToolsService::unignore()
   impl_->ignored = false;
 }
 
+bool
+MemoryToolsService::get_ignored()
+{
+  return impl_->ignored;
+}
+
 void
 MemoryToolsService::print_backtrace()
 {
   impl_->should_print_backtrace = true;
+}
+
+bool
+MemoryToolsService::get_print_backtrace()
+{
+  return impl_->should_print_backtrace;
 }
 
 StackTrace *
