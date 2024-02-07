@@ -2,6 +2,11 @@
 Changelog for package osrf_testing_tools_cpp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Upgrade to Google test 1.14.0 (`#84 <https://github.com/osrf/osrf_testing_tools_cpp/issues/84>`_)
+* Contributors: Chris Lalancette
+
 1.7.0 (2023-04-28)
 ------------------
 

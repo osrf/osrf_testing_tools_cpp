@@ -2,6 +2,9 @@
 Changelog for package test_osrf_testing_tools_cpp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.7.0 (2023-04-28)
 ------------------
 
