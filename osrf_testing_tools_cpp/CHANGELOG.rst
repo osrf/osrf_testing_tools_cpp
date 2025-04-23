@@ -2,6 +2,11 @@
 Changelog for package osrf_testing_tools_cpp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.2.0 (2024-06-17)
+------------------
+* Update CMakeLists.txt (`#85 <https://github.com/osrf/osrf_testing_tools_cpp/issues/85>`_)
+* Contributors: mosfet80
+
 2.1.0 (2024-04-26)
 ------------------
 
