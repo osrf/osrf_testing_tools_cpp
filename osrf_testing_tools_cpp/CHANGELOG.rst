@@ -2,6 +2,9 @@
 Changelog for package osrf_testing_tools_cpp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.3.0 (2025-04-24)
+------------------
+
 2.2.0 (2024-06-17)
 ------------------
 * Update CMakeLists.txt (`#85 <https://github.com/osrf/osrf_testing_tools_cpp/issues/85>`_)
