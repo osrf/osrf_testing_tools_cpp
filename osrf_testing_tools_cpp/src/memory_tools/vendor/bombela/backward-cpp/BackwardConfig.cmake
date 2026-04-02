@@ -139,7 +139,7 @@ if (${STACK_DETAILS_AUTO_DETECT} AND NOT WIN32)
 		# If we attempt to link against static bfd, make sure to link its dependencies, too
 		get_filename_component(bfd_lib_ext "${LIBBFD_LIBRARY}" EXT)
 		if (bfd_lib_ext STREQUAL "${CMAKE_STATIC_LIBRARY_SUFFIX}")
-			list(APPEND _BACKWARD_LIBRARIES iberty z)
+			list(APPEND _BACKWARD_LIBRARIES iberty z sframe)
 		endif()
 
 		set(STACK_DETAILS_DW FALSE)
