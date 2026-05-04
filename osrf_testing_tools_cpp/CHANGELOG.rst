@@ -2,6 +2,12 @@
 Changelog for package osrf_testing_tools_cpp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.3.1 (2026-04-30)
+------------------
+* fix cmake min version (`#96 <https://github.com/osrf/osrf_testing_tools_cpp/issues/96>`_)
+* fix cmake deprecation  (`#94 <https://github.com/osrf/osrf_testing_tools_cpp/issues/94>`_)
+* Contributors: mosfet80
+
 2.3.0 (2025-04-24)
 ------------------
 
