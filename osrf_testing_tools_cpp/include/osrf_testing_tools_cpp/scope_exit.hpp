@@ -15,8 +15,6 @@
 #ifndef OSRF_TESTING_TOOLS_CPP__SCOPE_EXIT_HPP_
 #define OSRF_TESTING_TOOLS_CPP__SCOPE_EXIT_HPP_
 
-#include <functional>
-
 #include "./macros.hpp"
 
 namespace osrf_testing_tools_cpp
