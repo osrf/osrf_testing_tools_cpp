@@ -93,6 +93,11 @@ struct MemoryToolsService
   void
   print_backtrace();
 
+  /// Returns a backtrace stream for logging.
+  OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
+  std::ostringstream
+  get_backtrace();
+
   /// Returns a stack trace object for introspection.
   /**
    * Pointer should not be used after MemoryToolsService is out of scope.
