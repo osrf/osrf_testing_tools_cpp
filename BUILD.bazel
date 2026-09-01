@@ -1,0 +1,113 @@
+load("@bazel_skylib//lib:selects.bzl", "selects")
+load("//osrf_testing_tools_cpp/bazel:defs.bzl", "test_runner_sh_test")
+
+cc_library(
+  name = "backward-cpp",
+  srcs = [
+    "osrf_testing_tools_cpp/src/memory_tools/vendor/bombela/backward-cpp/backward.cpp",
+    "osrf_testing_tools_cpp/src/memory_tools/vendor/bombela/backward-cpp/backward.hpp"
+  ],
+  includes = ["osrf_testing_tools_cpp/src"]
+)
+
+cc_library(
+  name = "memory_tools",
+  srcs = glob(include = [
+    "osrf_testing_tools_cpp/src/memory_tools/*.cpp",
+    "osrf_testing_tools_cpp/src/memory_tools/*.hpp"
+  ],
+  exclude = [
+    "osrf_testing_tools_cpp/src/memory_tools/memory_tools.cpp"
+  ]),
+  textual_hdrs = selects.with_or(
+    {
+      ("@platforms//os:linux"): [
+          "osrf_testing_tools_cpp/src/memory_tools/impl/linux.cpp",
+          "osrf_testing_tools_cpp/src/memory_tools/impl/static_allocator.hpp",
+          "osrf_testing_tools_cpp/src/memory_tools/impl/unix_common.cpp",
+          "osrf_testing_tools_cpp/src/memory_tools/impl/unix_common.hpp",
+        ],
+    }
+  ),
+  hdrs = glob([
+    "osrf_testing_tools_cpp/include/**/*.hpp"
+  ]),
+  linkopts = ["-ldl"],
+  includes = ["osrf_testing_tools_cpp/include"],
+  deps = [":backward-cpp"],
+  visibility = ["//visibility:public"]
+)
+
+cc_library(
+  name = "test_runner_headers",
+  hdrs = [
+    "osrf_testing_tools_cpp/src/test_runner/execute_process.hpp",
+    "osrf_testing_tools_cpp/src/test_runner/get_environment_variable.hpp",
+    "osrf_testing_tools_cpp/src/test_runner/parse_environment_variable.hpp",
+    "osrf_testing_tools_cpp/src/test_runner/starts_with.hpp",
+  ],
+  includes = [
+    "osrf_testing_tools_cpp/src",
+  ],
+)
+
+cc_binary(
+  name = "test_runner",
+  srcs = [
+    "osrf_testing_tools_cpp/src/test_runner/main.cpp",
+  ],
+  deps = [
+    ":test_runner_headers",
+  ]
+)
+
+cc_test(
+  name = "test_parse_environment",
+  srcs = [
+    "osrf_testing_tools_cpp/test/test_runner/test_parse_environment_variable.cpp",
+  ],
+  deps = [
+    ":test_runner_headers",
+    "@googletest//:gtest_main"
+  ]
+)
+
+cc_binary(
+  name = "assert_env_vars_main",
+  srcs = [
+    "osrf_testing_tools_cpp/test/test_runner/assert_env_vars.cpp",
+  ],
+  deps = [
+    ":test_runner_headers",
+    "@googletest//:gtest_main"
+  ]
+)
+
+test_runner_sh_test(
+  name = "assert_env_vars",
+  test_runner = ":test_runner",
+  test_binary = ":assert_env_vars_main",
+  test_runner_args = [
+    "--env", "FOO=bar", "PING=pong",
+    "--append-env", "FOO=baz"
+  ],
+  test_args = [
+    "--env", "FOO=bar:baz", "PING=pong"
+  ]
+)
+
+cc_library(
+  name = "memory_tools_interpose",
+  srcs = ["osrf_testing_tools_cpp/src/memory_tools/memory_tools.cpp"],
+  deps = [":memory_tools"]
+)
+
+cc_test(
+  name = "test_memory_tools_main",
+  srcs = ["osrf_testing_tools_cpp/test/memory_tools/test_memory_tools.cpp"],
+  malloc = ":memory_tools_interpose",
+  deps = [
+    ":memory_tools",
+    "@googletest//:gtest"
+  ],
+)

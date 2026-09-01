@@ -255,3 +255,9 @@ TEST(TestMemoryTools, test_static_allocation_alignment) {
     ASSERT_TRUE(allocator.deallocate(memory));
   }
 }
+
+int main(int argc, char * argv[])
+{
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}
