@@ -87,6 +87,11 @@ struct MemoryToolsService
   void
   unignore();
 
+  // Return ignored or not.
+  OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
+  bool
+  get_ignored();
+
   /// Adds a backtrace to the log message.
   /** Repeated calls do nothing, and only prints if a log is also printed. */
   OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_PUBLIC
